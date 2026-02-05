@@ -4,7 +4,6 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import TiltCard from './TiltCard'
 import MagneticButton from './MagneticButton'
-import './Projects.css'
 
 gsap.registerPlugin(ScrollTrigger)
 

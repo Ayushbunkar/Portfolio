@@ -1,6 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { motion } from 'framer-motion'
-import './TextReveal.css'
 
 const TextReveal = ({ children, delay = 0, className = '' }) => {
   return (

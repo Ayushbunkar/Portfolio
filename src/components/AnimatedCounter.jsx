@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import './AnimatedCounter.css'
 
 const AnimatedCounter = ({ target, duration = 2, suffix = '', prefix = '' }) => {
   const [count, setCount] = useState(0)

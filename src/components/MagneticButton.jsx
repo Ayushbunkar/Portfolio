@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import './MagneticButton.css'
 
 const MagneticButton = ({ children, className = '', onClick, href }) => {
   const ref = useRef(null)

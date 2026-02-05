@@ -2,7 +2,6 @@ import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import MagneticButton from './MagneticButton'
 import { ScrambleText } from './GlitchText'
-import './Contact.css'
 
 const Contact = () => {
   const sectionRef = useRef(null)

@@ -3,7 +3,6 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import gsap from 'gsap'
 import MagneticButton from './MagneticButton'
 import { TypewriterText } from './GlitchText'
-import './Hero.css'
 
 const Hero = () => {
   const heroRef = useRef(null)

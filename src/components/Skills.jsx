@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import AnimatedCounter from './AnimatedCounter'
-import './Skills.css'
 
 const Skills = () => {
   const sectionRef = useRef(null)

@@ -1,6 +1,5 @@
 import { useRef } from 'react'
 import { motion, useMotionTemplate, useMotionValue, useSpring } from 'framer-motion'
-import './TiltCard.css'
 
 const TiltCard = ({ children, className = '' }) => {
   const ref = useRef(null)

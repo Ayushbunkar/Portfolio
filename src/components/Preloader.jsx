@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import './Preloader.css'
 
 const Preloader = () => {
   const name = "AYUSH"

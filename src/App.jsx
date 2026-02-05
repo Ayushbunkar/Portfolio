@@ -12,7 +12,6 @@ import Contact from './components/Contact'
 import Cursor from './components/Cursor'
 import Preloader from './components/Preloader'
 import { useState } from 'react'
-import './App.css'
 
 gsap.registerPlugin(ScrollTrigger)
 

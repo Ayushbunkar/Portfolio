@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import './Marquee.css'
 
 const Marquee = ({ items, direction = 'left', speed = 30 }) => {
   const duplicatedItems = [...items, ...items, ...items]
