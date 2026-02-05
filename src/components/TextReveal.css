@@ -1,0 +1,27 @@
+.text-reveal-container {
+  overflow: hidden;
+  display: inline-block;
+}
+
+.text-reveal-mask {
+  display: inline-block;
+}
+
+.split-text {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.split-word {
+  display: inline-block;
+}
+
+.char-reveal {
+  display: inline-flex;
+  perspective: 1000px;
+}
+
+.char {
+  display: inline-block;
+  transform-origin: bottom;
+}

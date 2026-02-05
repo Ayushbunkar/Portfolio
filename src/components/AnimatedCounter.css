@@ -1,0 +1,5 @@
+.animated-counter {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 800;
+}
