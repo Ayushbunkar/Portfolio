@@ -232,23 +232,6 @@ const Hero = () => {
         </motion.div>
       </motion.div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        className="scroll-indicator"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.5, duration: 1 }}
-      >
-        <motion.div
-          className="scroll-mouse"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <div className="scroll-wheel" />
-        </motion.div>
-        <span className="scroll-text">Scroll to explore</span>
-      </motion.div>
-
       {/* Side Text */}
       <motion.div
         className="hero-side-text left"

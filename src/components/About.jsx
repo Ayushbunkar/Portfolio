@@ -63,11 +63,35 @@ const About = () => {
     { number: 100, suffix: '%', label: 'Client Satisfaction' },
   ]
 
+  // Professional SVG Icons for services
+  const serviceIcons = {
+    design: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8 text-accent">
+        <path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+      </svg>
+    ),
+    code: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8 text-accent">
+        <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+      </svg>
+    ),
+    responsive: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8 text-accent">
+        <path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+      </svg>
+    ),
+    performance: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8 text-accent">
+        <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    ),
+  }
+
   const services = [
-    { icon: '🎨', title: 'UI/UX Design', desc: 'Beautiful interfaces' },
-    { icon: '💻', title: 'Web Development', desc: 'Modern websites' },
-    { icon: '📱', title: 'Responsive', desc: 'All devices' },
-    { icon: '⚡', title: 'Performance', desc: 'Lightning fast' },
+    { icon: serviceIcons.design, title: 'UI/UX Design', desc: 'Beautiful interfaces' },
+    { icon: serviceIcons.code, title: 'Web Development', desc: 'Modern websites' },
+    { icon: serviceIcons.responsive, title: 'Responsive', desc: 'All devices' },
+    { icon: serviceIcons.performance, title: 'Performance', desc: 'Lightning fast' },
   ]
 
   return (
