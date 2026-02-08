@@ -4,8 +4,20 @@ import gsap from 'gsap'
 import MagneticButton from './MagneticButton'
 import { TypewriterText } from './GlitchText'
 
+// Floating gallery images - using placeholder gradients
+const galleryItems = [
+  { id: 1, gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', rotation: -15, x: -180, y: -120, z: 0, scale: 0.85 },
+  { id: 2, gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', rotation: -8, x: -80, y: -180, z: 50, scale: 0.9 },
+  { id: 3, gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', rotation: 0, x: 40, y: -100, z: 100, scale: 1.1, main: true },
+  { id: 4, gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', rotation: 8, x: 150, y: -160, z: 50, scale: 0.9 },
+  { id: 5, gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', rotation: 15, x: 240, y: -100, z: 0, scale: 0.85 },
+  { id: 6, gradient: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)', rotation: -20, x: -150, y: 40, z: -50, scale: 0.75 },
+  { id: 7, gradient: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)', rotation: 20, x: 200, y: 60, z: -50, scale: 0.75 },
+]
+
 const Hero = () => {
   const heroRef = useRef(null)
+  const galleryRef = useRef(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   
   const { scrollYProgress } = useScroll({
@@ -51,10 +63,71 @@ const Hero = () => {
         duration: 1.2,
         ease: 'power2.out',
       })
+      
+      // Floating gallery parallax
+      gsap.to('.gallery-card', {
+        x: (i) => mousePosition.x * (15 + i * 5),
+        y: (i) => mousePosition.y * (10 + i * 3),
+        rotateY: mousePosition.x * 5,
+        rotateX: -mousePosition.y * 5,
+        duration: 1.2,
+        ease: 'power2.out',
+      })
     }, heroRef)
 
     return () => ctx.revert()
   }, [mousePosition])
+
+  // Floating animation for gallery cards
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Initial entrance animation
+      gsap.fromTo('.gallery-card', 
+        { 
+          opacity: 0, 
+          scale: 0.5,
+          y: 100,
+          rotateX: 45,
+        },
+        { 
+          opacity: 1, 
+          scale: 1,
+          y: 0,
+          rotateX: 0,
+          duration: 1.2,
+          stagger: 0.1,
+          delay: 1.5,
+          ease: 'back.out(1.7)',
+        }
+      )
+      
+      // Continuous floating animation
+      gsap.to('.gallery-card', {
+        y: '+=15',
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        stagger: {
+          each: 0.2,
+          from: 'random',
+        }
+      })
+      
+      // Subtle rotation animation
+      gsap.to('.gallery-card-inner', {
+        rotateY: '+=5',
+        rotateX: '-=3',
+        duration: 4,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        stagger: 0.3,
+      })
+    }, galleryRef)
+
+    return () => ctx.revert()
+  }, [])
 
   const roles = [
     'Frontend Developer',
@@ -249,6 +322,54 @@ const Hero = () => {
       >
         <span>BASED IN INDIA</span>
       </motion.div>
+
+      {/* Floating 3D Gallery */}
+      <div className="floating-gallery" ref={galleryRef}>
+        <div className="gallery-container">
+          {galleryItems.map((item, index) => (
+            <motion.div
+              key={item.id}
+              className={`gallery-card ${item.main ? 'gallery-card-main' : ''}`}
+              style={{
+                '--card-x': `${item.x}px`,
+                '--card-y': `${item.y}px`,
+                '--card-rotation': `${item.rotation}deg`,
+                '--card-scale': item.scale,
+                '--card-z': `${item.z}px`,
+              }}
+              whileHover={{ 
+                scale: item.scale * 1.15, 
+                zIndex: 100,
+                rotateY: 0,
+                rotateX: 0,
+              }}
+            >
+              <div className="gallery-card-inner">
+                <div 
+                  className="gallery-card-image"
+                  style={{ background: item.gradient }}
+                >
+                  <div className="gallery-card-shine" />
+                  <div className="gallery-card-content">
+                    <span className="gallery-card-number">0{item.id}</span>
+                    <div className="gallery-card-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div className="gallery-card-glow" style={{ background: item.gradient }} />
+              </div>
+            </motion.div>
+          ))}
+          
+          {/* Decorative elements */}
+          <div className="gallery-orbit gallery-orbit-1" />
+          <div className="gallery-orbit gallery-orbit-2" />
+          <div className="gallery-center-glow" />
+        </div>
+      </div>
     </section>
   )
 }
