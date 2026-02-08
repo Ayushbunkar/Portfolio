@@ -1,24 +1,21 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import gsap from 'gsap'
 import MagneticButton from './MagneticButton'
 import { TypewriterText } from './GlitchText'
 
-// Floating gallery images - using placeholder gradients
+// Floating gallery images - using placeholder gradients (5 cards with proper spacing)
 const galleryItems = [
-  { id: 1, gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', rotation: -15, x: -180, y: -120, z: 0, scale: 0.85 },
-  { id: 2, gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', rotation: -8, x: -80, y: -180, z: 50, scale: 0.9 },
-  { id: 3, gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', rotation: 0, x: 40, y: -100, z: 100, scale: 1.1, main: true },
-  { id: 4, gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', rotation: 8, x: 150, y: -160, z: 50, scale: 0.9 },
-  { id: 5, gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', rotation: 15, x: 240, y: -100, z: 0, scale: 0.85 },
-  { id: 6, gradient: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)', rotation: -20, x: -150, y: 40, z: -50, scale: 0.75 },
-  { id: 7, gradient: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)', rotation: 20, x: 200, y: 60, z: -50, scale: 0.75 },
+  { id: 1, gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', rotation: -12, x: -120, y: -140, z: 20, scale: 0.9 },
+  { id: 2, gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', rotation: -5, x: 60, y: -180, z: 60, scale: 0.95 },
+  { id: 3, gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', rotation: 0, x: 0, y: 0, z: 100, scale: 1.15, main: true },
+  { id: 4, gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', rotation: 6, x: -80, y: 160, z: 50, scale: 0.9 },
+  { id: 5, gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', rotation: 10, x: 100, y: 120, z: 30, scale: 0.85 },
 ]
 
 const Hero = () => {
   const heroRef = useRef(null)
   const galleryRef = useRef(null)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -28,55 +25,6 @@ const Hero = () => {
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%'])
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8])
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      const { clientX, clientY } = e
-      const { innerWidth, innerHeight } = window
-      setMousePosition({
-        x: (clientX / innerWidth - 0.5) * 2,
-        y: (clientY / innerHeight - 0.5) * 2,
-      })
-    }
-
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.to('.orb-1', {
-        x: mousePosition.x * 50,
-        y: mousePosition.y * 50,
-        duration: 1,
-        ease: 'power2.out',
-      })
-      gsap.to('.orb-2', {
-        x: mousePosition.x * -30,
-        y: mousePosition.y * -30,
-        duration: 1.5,
-        ease: 'power2.out',
-      })
-      gsap.to('.orb-3', {
-        x: mousePosition.x * 40,
-        y: mousePosition.y * -40,
-        duration: 1.2,
-        ease: 'power2.out',
-      })
-      
-      // Floating gallery parallax
-      gsap.to('.gallery-card', {
-        x: (i) => mousePosition.x * (15 + i * 5),
-        y: (i) => mousePosition.y * (10 + i * 3),
-        rotateY: mousePosition.x * 5,
-        rotateX: -mousePosition.y * 5,
-        duration: 1.2,
-        ease: 'power2.out',
-      })
-    }, heroRef)
-
-    return () => ctx.revert()
-  }, [mousePosition])
 
   // Floating animation for gallery cards
   useEffect(() => {
@@ -176,7 +124,7 @@ const Hero = () => {
         />
       </div>
 
-      <motion.div className="hero-content" style={{ y, opacity, scale }}>
+      <motion.div className="hero-content" style={{ y }}>
         {/* Status Badge */}
         <motion.div
           className="hero-badge"
