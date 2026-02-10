@@ -134,7 +134,14 @@ const Hero = () => {
         >
           <span className="badge-dot" />
           <span className="badge-text">Available for work</span>
-          <span className="badge-location">📍 India</span>
+          <span className="badge-divider">|</span>
+          <span className="badge-location">
+            <svg className="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            India
+          </span>
         </motion.div>
 
         {/* Main Title */}

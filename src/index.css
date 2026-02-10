@@ -390,15 +390,23 @@
   }
 
   .badge-dot {
-    @apply w-2 h-2 bg-emerald-500 rounded-full animate-pulse;
+    @apply w-2 h-2 bg-emerald-500 rounded-full animate-pulse flex-shrink-0;
   }
 
   .badge-text {
-    @apply text-emerald-400 font-medium text-sm;
+    @apply text-emerald-400 font-medium text-sm leading-none;
+  }
+
+  .badge-divider {
+    @apply text-text-secondary/40 text-sm leading-none;
   }
 
   .badge-location {
-    @apply text-text-secondary text-sm;
+    @apply inline-flex items-center gap-1.5 text-text-secondary text-sm leading-none;
+  }
+
+  .location-icon {
+    @apply w-3.5 h-3.5 flex-shrink-0;
   }
 
   .hero-title {
