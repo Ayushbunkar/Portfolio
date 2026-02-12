@@ -287,16 +287,7 @@ const Contact = () => {
                     <span className="social-icon">{social.icon}</span>
                     <span className="social-name">{social.name}</span>
                   </motion.a>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div className="availability-card" variants={itemVariants}>
-              <div className="availability-status">
-                <span className="status-dot" />
-                <span>Available for freelance</span>
-              </div>
-              <p>Currently accepting new projects. Let's discuss your ideas!</p>
+                ))}              </div>
             </motion.div>
           </motion.div>
         </div>

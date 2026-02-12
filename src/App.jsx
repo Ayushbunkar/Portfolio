@@ -1,7 +1,5 @@
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Marquee from './components/Marquee'
@@ -13,8 +11,6 @@ import Cursor from './components/Cursor'
 import Preloader from './components/Preloader'
 import { useState } from 'react'
 
-gsap.registerPlugin(ScrollTrigger)
-
 function App() {
   const [loading, setLoading] = useState(true)
 
@@ -24,20 +20,6 @@ function App() {
     }, 2500)
     return () => clearTimeout(timer)
   }, [])
-
-  useEffect(() => {
-    if (!loading) {
-      // Smooth scroll effect
-      gsap.to('.smooth-scroll', {
-        scrollTrigger: {
-          trigger: 'body',
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 1,
-        },
-      })
-    }
-  }, [loading])
 
   const marqueeItems = [
     'CREATIVE DEVELOPER',
