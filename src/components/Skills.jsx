@@ -199,27 +199,27 @@ const Skills = () => {
   }
 
   return (
-    <section id="skills" className="skills" ref={sectionRef}>
-      <div className="skills-container">
+    <section id="skills" className="py-36 px-[5%] relative overflow-hidden bg-[#0a0a0f]" ref={sectionRef}>
+      <div className="max-w-7xl mx-auto">
         <motion.div 
-          className="skills-header"
+          className="text-center mb-16"
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <span className="section-label">My Expertise</span>
-          <h2 className="section-title">
-            Skills & <span className="gradient">Technologies</span>
+          <span className="text-indigo-500 font-mono text-sm uppercase tracking-wider mb-6 block">My Expertise</span>
+          <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6">
+            Skills & <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Technologies</span>
           </h2>
-          <p className="section-subtitle">
+          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
             A comprehensive toolkit of modern technologies I use to bring ideas to life.
           </p>
         </motion.div>
 
-        <div className="skills-content">
+        <div className="grid lg:grid-cols-[280px_1fr] gap-8 lg:gap-12">
           {/* Category Tabs */}
           <motion.div 
-            className="skills-tabs"
+            className="flex flex-col gap-2"
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -227,17 +227,17 @@ const Skills = () => {
             {skillCategories.map((category, index) => (
               <motion.button
                 key={index}
-                className={`skill-tab ${activeCategory === index ? 'active' : ''}`}
+                className={`relative flex items-center gap-3 px-5 py-4 bg-white/[0.02] border rounded-xl text-left transition-all duration-300 ${activeCategory === index ? 'border-indigo-500/50 bg-indigo-500/10 text-white' : 'border-white/[0.06] text-gray-400 hover:border-white/[0.12] hover:text-white'}`}
                 onClick={() => setActiveCategory(index)}
                 whileHover={{ x: 10 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <span className="tab-icon">{category.icon}</span>
-                <span className="tab-name">{category.name}</span>
-                <span className="tab-count">{category.skills.length}</span>
+                <span className="text-indigo-500">{category.icon}</span>
+                <span className="flex-1 font-medium">{category.name}</span>
+                <span className="text-sm font-mono text-gray-500">{category.skills.length}</span>
                 {activeCategory === index && (
                   <motion.div
-                    className="tab-indicator"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-indigo-500 rounded-r-full"
                     layoutId="skillTabIndicator"
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   />
@@ -246,25 +246,25 @@ const Skills = () => {
             ))}
 
             {/* Experience Stats */}
-            <div className="skills-stats">
-              <div className="stat-item">
-                <span className="stat-number">
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              <div className="text-center p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl">
+                <span className="font-display text-2xl font-bold text-white block">
                   <AnimatedCounter target={15} suffix="+" duration={1.5} />
                 </span>
-                <span className="stat-label">Technologies</span>
+                <span className="text-gray-500 text-sm">Technologies</span>
               </div>
-              <div className="stat-item">
-                <span className="stat-number">
+              <div className="text-center p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl">
+                <span className="font-display text-2xl font-bold text-white block">
                   <AnimatedCounter target={3} suffix="+" duration={1.5} />
                 </span>
-                <span className="stat-label">Years Exp.</span>
+                <span className="text-gray-500 text-sm">Years Exp.</span>
               </div>
             </div>
           </motion.div>
 
           {/* Skills Grid */}
           <motion.div
-            className="skills-grid"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
             key={activeCategory}
             variants={containerVariants}
             initial="hidden"
@@ -273,22 +273,23 @@ const Skills = () => {
             {skillCategories[activeCategory].skills.map((skill, index) => (
               <motion.div
                 key={skill.name}
-                className="skill-card"
+                className="group p-5 bg-white/[0.02] border border-white/[0.06] rounded-2xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
                 variants={itemVariants}
                 whileHover={{ y: -8, scale: 1.02 }}
                 transition={{ type: 'spring', stiffness: 300 }}
               >
-                <div className="skill-header">
-                  <span className="skill-icon">{skill.icon}</span>
-                  <div className="skill-info">
-                    <h4 className="skill-name">{skill.name}</h4>
-                    <span className="skill-percentage">{skill.level}%</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-lg">{skill.icon}</span>
+                  <div className="flex-1">
+                    <h4 className="font-display text-sm font-semibold text-white">{skill.name}</h4>
+                    <span className="text-xs font-mono text-indigo-500">{skill.level}%</span>
                   </div>
                 </div>
                 
-                <div className="skill-bar-container">
+                <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                   <motion.div
-                    className="skill-bar"
+                    className="relative h-full rounded-full"
+                    style={{ background: 'linear-gradient(90deg, #6366f1, #a855f7, #ec4899)' }}
                     initial={{ width: 0 }}
                     animate={isInView ? { width: `${skill.level}%` } : { width: 0 }}
                     transition={{ 
@@ -297,28 +298,17 @@ const Skills = () => {
                       ease: [0.76, 0, 0.24, 1] 
                     }}
                   >
-                    <motion.div 
-                      className="skill-bar-glow"
-                      animate={{ 
-                        opacity: [0.5, 1, 0.5],
-                        x: ['0%', '100%', '0%']
-                      }}
-                      transition={{ 
-                        duration: 3, 
-                        repeat: Infinity,
-                        ease: 'easeInOut'
-                      }}
-                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent bg-[length:200%_100%] group-hover:animate-[skill-shine_2s_linear_infinite]" />
                   </motion.div>
                 </div>
 
-                <div className="skill-level-indicator">
+                <div className="mt-3">
                   {skill.level >= 90 ? (
-                    <span className="level expert">Expert</span>
+                    <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-green-500/10 text-green-500 border border-green-500/20">Expert</span>
                   ) : skill.level >= 80 ? (
-                    <span className="level advanced">Advanced</span>
+                    <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20">Advanced</span>
                   ) : (
-                    <span className="level intermediate">Intermediate</span>
+                    <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">Intermediate</span>
                   )}
                 </div>
               </motion.div>
@@ -328,17 +318,17 @@ const Skills = () => {
 
         {/* Bottom Decoration */}
         <motion.div 
-          className="skills-decoration"
+          className="mt-16 text-center"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          <div className="decoration-text">
-            <span>Always Learning</span>
-            <span className="dot">•</span>
-            <span>Always Growing</span>
-            <span className="dot">•</span>
-            <span>Always Building</span>
+          <div className="inline-flex items-center gap-4 px-6 py-3 bg-white/[0.02] border border-white/[0.06] rounded-full">
+            <span className="text-gray-400 text-sm">Always Learning</span>
+            <span className="text-indigo-500">•</span>
+            <span className="text-gray-400 text-sm">Always Growing</span>
+            <span className="text-indigo-500">•</span>
+            <span className="text-gray-400 text-sm">Always Building</span>
           </div>
         </motion.div>
       </div>

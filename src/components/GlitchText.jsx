@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 const GlitchText = ({ children, className = '' }) => {
   return (
     <motion.span
-      className={`glitch-text ${className}`}
+      className={`relative inline-block ${className}`}
       data-text={children}
       whileHover={{ scale: 1.02 }}
     >
@@ -42,10 +42,10 @@ export const TypewriterText = ({ texts, speed = 100, deleteSpeed = 50, delay = 2
   }, [displayText, isDeleting, currentIndex, texts, speed, deleteSpeed, delay])
 
   return (
-    <span className="typewriter">
+    <span className="inline-flex items-center">
       {displayText}
       <motion.span
-        className="typewriter-cursor"
+        className="ml-0.5 text-indigo-500"
         animate={{ opacity: [1, 0] }}
         transition={{ duration: 0.5, repeat: Infinity, repeatType: 'reverse' }}
       >
@@ -92,7 +92,7 @@ export const ScrambleText = ({ children, className = '' }) => {
 
   return (
     <span
-      className={`scramble-text ${className}`}
+      className={`cursor-pointer transition-colors duration-300 hover:text-indigo-500 ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

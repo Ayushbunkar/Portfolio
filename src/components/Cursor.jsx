@@ -69,26 +69,26 @@ const Cursor = () => {
     default: {
       width: 12,
       height: 12,
-      backgroundColor: 'var(--accent)',
+      backgroundColor: '#6366f1',
       mixBlendMode: 'difference',
     },
     hover: {
       width: 60,
       height: 60,
       backgroundColor: 'rgba(99, 102, 241, 0.2)',
-      border: '1px solid var(--accent)',
+      border: '1px solid #6366f1',
       mixBlendMode: 'normal',
     },
     project: {
       width: 80,
       height: 80,
-      backgroundColor: 'var(--accent)',
+      backgroundColor: '#6366f1',
       mixBlendMode: 'normal',
     },
     text: {
       width: 100,
       height: 100,
-      backgroundColor: 'var(--accent)',
+      backgroundColor: '#6366f1',
       mixBlendMode: 'normal',
     }
   }
@@ -96,7 +96,7 @@ const Cursor = () => {
   return (
     <>
       <motion.div
-        className={`cursor-dot ${cursorVariant}`}
+        className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full flex items-center justify-center -translate-x-1/2 -translate-y-1/2 hidden md:flex"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
@@ -106,11 +106,11 @@ const Cursor = () => {
         transition={{ type: 'spring', stiffness: 500, damping: 28 }}
       >
         {cursorText && (
-          <span className="cursor-text">{cursorText}</span>
+          <span className="text-white text-xs font-semibold">{cursorText}</span>
         )}
       </motion.div>
       <motion.div
-        className="cursor-trail"
+        className="fixed top-0 left-0 w-8 h-8 pointer-events-none z-[9998] rounded-full border border-indigo-500/50 -translate-x-1/2 -translate-y-1/2 hidden md:block"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,

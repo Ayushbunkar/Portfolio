@@ -43,36 +43,38 @@ const Preloader = () => {
 
   return (
     <motion.div
-      className="preloader"
+      className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[#0a0a0f]"
       initial="initial"
       exit="exit"
       variants={slideUp}
     >
-      <div className="preloader-content">
+      <div className="flex flex-col items-center">
         <motion.div
-          className="preloader-text"
+          className="flex flex-col items-center"
           variants={container}
           initial="hidden"
           animate="visible"
           exit="exit"
         >
-          <div className="preloader-name">
+          <div className="flex items-center justify-center mb-2">
             {name.split('').map((char, index) => (
               <motion.span
                 key={index}
                 variants={letter}
-                className="preloader-letter"
+                className="font-display text-5xl md:text-7xl font-extrabold text-white inline-block"
+                style={{ transformStyle: 'preserve-3d' }}
               >
                 {char}
               </motion.span>
             ))}
           </div>
-          <div className="preloader-lastname">
+          <div className="flex items-center justify-center">
             {lastName.split('').map((char, index) => (
               <motion.span
                 key={index}
                 variants={letter}
-                className="preloader-letter gradient"
+                className="font-display text-5xl md:text-7xl font-extrabold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent inline-block"
+                style={{ transformStyle: 'preserve-3d' }}
               >
                 {char}
               </motion.span>
@@ -81,7 +83,7 @@ const Preloader = () => {
         </motion.div>
         
         <motion.div 
-          className="preloader-subtitle"
+          className="mt-6 text-gray-400 font-body text-sm tracking-wider"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.6 }}
@@ -89,9 +91,9 @@ const Preloader = () => {
           Creative Developer & Designer
         </motion.div>
 
-        <div className="preloader-progress">
+        <div className="mt-8 w-48 h-0.5 bg-white/10 rounded-full overflow-hidden">
           <motion.div 
-            className="preloader-progress-bar"
+            className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 origin-left"
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 2, ease: [0.76, 0, 0.24, 1] }}
@@ -99,7 +101,7 @@ const Preloader = () => {
         </div>
 
         <motion.div
-          className="preloader-counter"
+          className="mt-4 font-mono text-xs text-gray-500"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -110,7 +112,7 @@ const Preloader = () => {
 
       {/* Background Elements */}
       <motion.div 
-        className="preloader-circle"
+        className="absolute w-96 h-96 rounded-full border border-indigo-500/10"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.1 }}
         transition={{ duration: 1, delay: 0.3 }}
@@ -124,7 +126,6 @@ const Counter = () => {
     <motion.span
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="counter-text"
     >
       <motion.span
         animate={{ opacity: [0.3, 1, 0.3] }}

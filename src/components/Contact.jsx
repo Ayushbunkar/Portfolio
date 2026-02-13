@@ -131,35 +131,35 @@ const Contact = () => {
   }
 
   return (
-    <section id="contact" className="contact" ref={sectionRef}>
-      <div className="contact-container">
+    <section id="contact" className="py-36 px-[5%] relative overflow-hidden bg-[#0a0a0f]" ref={sectionRef}>
+      <div className="max-w-7xl mx-auto">
         <motion.div 
-          className="contact-header"
+          className="text-center mb-16"
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <span className="section-label">Get In Touch</span>
-          <h2 className="section-title">
-            Let's Work <span className="gradient">Together</span>
+          <span className="text-indigo-500 font-mono text-sm uppercase tracking-wider mb-6 block">Get In Touch</span>
+          <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6">
+            Let's Work <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Together</span>
           </h2>
-          <p className="section-subtitle">
+          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
             Have a project in mind? Let's create something amazing together. 
             I'm always open to discussing new opportunities.
           </p>
         </motion.div>
 
-        <div className="contact-content">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Contact Form */}
           <motion.div 
-            className="contact-form-wrapper"
+            className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-8 md:p-10"
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
           >
-            <form className="contact-form" onSubmit={handleSubmit}>
+            <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
               <motion.div 
-                className={`form-group ${focused === 'name' ? 'focused' : ''} ${formData.name ? 'filled' : ''}`}
+                className="relative"
                 variants={itemVariants}
               >
                 <input
@@ -170,14 +170,14 @@ const Contact = () => {
                   onChange={handleChange}
                   onFocus={() => setFocused('name')}
                   onBlur={() => setFocused(null)}
+                  placeholder="Your Name"
                   required
+                  className="w-full bg-transparent border-b border-white/10 py-4 text-white font-body text-base placeholder:text-gray-500 outline-none transition-all duration-300 focus:border-indigo-500"
                 />
-                <label htmlFor="name">Your Name</label>
-                <div className="form-line" />
               </motion.div>
 
               <motion.div 
-                className={`form-group ${focused === 'email' ? 'focused' : ''} ${formData.email ? 'filled' : ''}`}
+                className="relative"
                 variants={itemVariants}
               >
                 <input
@@ -188,14 +188,14 @@ const Contact = () => {
                   onChange={handleChange}
                   onFocus={() => setFocused('email')}
                   onBlur={() => setFocused(null)}
+                  placeholder="Your Email"
                   required
+                  className="w-full bg-transparent border-b border-white/10 py-4 text-white font-body text-base placeholder:text-gray-500 outline-none transition-all duration-300 focus:border-indigo-500"
                 />
-                <label htmlFor="email">Your Email</label>
-                <div className="form-line" />
               </motion.div>
 
               <motion.div 
-                className={`form-group ${focused === 'subject' ? 'focused' : ''} ${formData.subject ? 'filled' : ''}`}
+                className="relative"
                 variants={itemVariants}
               >
                 <input
@@ -206,14 +206,14 @@ const Contact = () => {
                   onChange={handleChange}
                   onFocus={() => setFocused('subject')}
                   onBlur={() => setFocused(null)}
+                  placeholder="Subject"
                   required
+                  className="w-full bg-transparent border-b border-white/10 py-4 text-white font-body text-base placeholder:text-gray-500 outline-none transition-all duration-300 focus:border-indigo-500"
                 />
-                <label htmlFor="subject">Subject</label>
-                <div className="form-line" />
               </motion.div>
 
               <motion.div 
-                className={`form-group ${focused === 'message' ? 'focused' : ''} ${formData.message ? 'filled' : ''}`}
+                className="relative"
                 variants={itemVariants}
               >
                 <textarea
@@ -224,14 +224,14 @@ const Contact = () => {
                   onChange={handleChange}
                   onFocus={() => setFocused('message')}
                   onBlur={() => setFocused(null)}
+                  placeholder="Your Message"
                   required
+                  className="w-full bg-transparent border-b border-white/10 py-4 text-white font-body text-base placeholder:text-gray-500 outline-none transition-all duration-300 focus:border-indigo-500 resize-none"
                 />
-                <label htmlFor="message">Your Message</label>
-                <div className="form-line" />
               </motion.div>
 
-              <motion.div variants={itemVariants}>
-                <MagneticButton type="submit" className="submit-btn">
+              <motion.div variants={itemVariants} className="mt-4">
+                <MagneticButton type="submit" className="filled">
                   <span>Send Message</span>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
                     <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
@@ -243,64 +243,65 @@ const Contact = () => {
 
           {/* Contact Info */}
           <motion.div 
-            className="contact-info"
+            className="flex flex-col gap-6"
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
           >
-            <motion.div className="info-card" variants={itemVariants}>
-              <h3>
-                <ScrambleText text="Contact Info" />
+            <motion.div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-8" variants={itemVariants}>
+              <h3 className="font-display text-xl font-semibold text-white mb-6">
+                <ScrambleText>Contact Info</ScrambleText>
               </h3>
-              <div className="info-items">
+              <div className="flex flex-col gap-4">
                 {contactInfo.map((info, index) => (
                   <motion.a
                     key={index}
                     href={info.link || '#'}
-                    className="info-item"
+                    className="flex items-center gap-4 p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
                     whileHover={{ x: 10 }}
                     transition={{ type: 'spring', stiffness: 300 }}
                   >
-                    <span className="info-icon">{info.icon}</span>
-                    <div className="info-text">
-                      <span className="info-label">{info.label}</span>
-                      <span className="info-value">{info.value}</span>
+                    <span className="w-10 h-10 flex items-center justify-center bg-indigo-500/10 rounded-lg text-indigo-500 [&>svg]:w-5 [&>svg]:h-5">{info.icon}</span>
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-500">{info.label}</span>
+                      <span className="text-white font-medium">{info.value}</span>
                     </div>
                   </motion.a>
                 ))}
               </div>
             </motion.div>
 
-            <motion.div className="social-card" variants={itemVariants}>
-              <h3>Follow Me</h3>
-              <div className="social-links">
+            <motion.div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-8" variants={itemVariants}>
+              <h3 className="font-display text-xl font-semibold text-white mb-6">Follow Me</h3>
+              <div className="grid grid-cols-2 gap-4">
                 {socialLinks.map((social, index) => (
                   <motion.a
                     key={index}
                     href={social.url}
-                    className="social-link"
+                    className="flex items-center gap-3 p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
                     target="_blank"
                     rel="noopener noreferrer"
-                    whileHover={{ y: -5, scale: 1.1 }}
+                    whileHover={{ y: -5, scale: 1.02 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <span className="social-icon">{social.icon}</span>
-                    <span className="social-name">{social.name}</span>
+                    <span className="w-8 h-8 flex items-center justify-center">{social.icon}</span>
+                    <span className="text-gray-400 text-sm font-medium">{social.name}</span>
                   </motion.a>
-                ))}              </div>
+                ))}
+              </div>
             </motion.div>
           </motion.div>
         </div>
       </div>
 
       {/* Footer */}
-      <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-brand">
-            <span className="brand-name">Ayush Bunkar</span>
-            <span className="brand-tagline">Creative Developer</span>
+      <footer className="mt-24 pt-12 border-t border-white/5">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="mb-6">
+            <span className="font-display text-xl font-bold text-white block">Ayush Bunkar</span>
+            <span className="text-gray-500 text-sm">Creative Developer</span>
           </div>
-          <p className="footer-copyright">
+          <p className="text-gray-500 text-sm">
             © {new Date().getFullYear()} All Rights Reserved. Built with ❤️ and React.
           </p>
         </div>

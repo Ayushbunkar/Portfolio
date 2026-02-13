@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { motion, useMotionTemplate, useMotionValue, useSpring } from 'framer-motion'
 
-const TiltCard = ({ children, className = '' }) => {
+const TiltCard = ({ children, className = '', intensity = 20 }) => {
   const ref = useRef(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -21,8 +21,8 @@ const TiltCard = ({ children, className = '' }) => {
     const mouseX = e.clientX - rect.left
     const mouseY = e.clientY - rect.top
 
-    const xPercent = (mouseX / width - 0.5) * 20
-    const yPercent = (mouseY / height - 0.5) * -20
+    const xPercent = (mouseX / width - 0.5) * intensity
+    const yPercent = (mouseY / height - 0.5) * -intensity
 
     x.set(xPercent)
     y.set(yPercent)
@@ -36,7 +36,7 @@ const TiltCard = ({ children, className = '' }) => {
   return (
     <motion.div
       ref={ref}
-      className={`tilt-card ${className}`}
+      className={`relative ${className}`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{
@@ -45,10 +45,9 @@ const TiltCard = ({ children, className = '' }) => {
         transformStyle: 'preserve-3d',
       }}
     >
-      <div className="tilt-card-content" style={{ transform: 'translateZ(50px)' }}>
+      <div style={{ transform: 'translateZ(50px)' }}>
         {children}
       </div>
-      <div className="tilt-card-glow" />
     </motion.div>
   )
 }
