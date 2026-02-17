@@ -100,7 +100,7 @@ const Navbar = () => {
           </motion.a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-4">
             {navLinks.map((link) => (
               <motion.a
                 key={link.name}
