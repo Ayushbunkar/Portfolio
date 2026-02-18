@@ -59,7 +59,7 @@ const About = () => {
     <section id="about" className="py-36 px-[5%] relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #0a0a0f 0%, #12121a 100%)' }} ref={sectionRef}>
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
         <motion.div
-          className="flex flex-col items-center lg:items-start text-center lg:text-left"
+          className="flex flex-col items-center text-center"
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
@@ -100,7 +100,7 @@ const About = () => {
             ))}
           </motion.div>
 
-          <motion.div className="flex flex-wrap justify-center lg:justify-start gap-4" variants={itemVariants}>
+          <motion.div className="flex flex-wrap justify-center gap-4" variants={itemVariants}>
             <MagneticButton href="#contact" className="filled">
               <span>Let's Talk</span>
             </MagneticButton>
@@ -113,7 +113,7 @@ const About = () => {
           </motion.div>
         </motion.div>
 
-        <div className="relative flex justify-center lg:justify-end">
+        <div className="relative flex justify-center">
           <motion.div
             className="relative"
             initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
