@@ -149,14 +149,14 @@ const Hero = () => {
 
         {/* CTA Buttons */}
         <motion.div
-          className="flex flex-wrap justify-center gap-6 mb-14"
+          className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mb-14"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.8, duration: 0.8 }}
         >
           <MagneticButton href="#projects" className="filled">
             <span>View My Work</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18" className="flex-shrink-0">
               <path d="M7 17L17 7M17 7H7M17 7V17" />
             </svg>
           </MagneticButton>
@@ -167,7 +167,7 @@ const Hero = () => {
 
         {/* Social Links */}
         <motion.div
-          className="flex justify-center gap-6"
+          className="flex items-center justify-center gap-4 md:gap-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2.2 }}

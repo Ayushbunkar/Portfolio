@@ -85,11 +85,11 @@ const About = () => {
             smooth animations</span> and intuitive interfaces.
           </motion.p>
 
-          <motion.div className="grid grid-cols-2 gap-4 w-full mb-8" variants={itemVariants}>
+          <motion.div className="grid grid-cols-2 gap-3 md:gap-4 w-full mb-8" variants={itemVariants}>
             {services.map((service, index) => (
               <motion.div
                 key={index}
-                className="p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
+                className="p-3 md:p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5 flex flex-col items-center text-center"
                 whileHover={{ y: -5, scale: 1.02 }}
                 transition={{ type: 'spring', stiffness: 300 }}
               >
@@ -100,13 +100,13 @@ const About = () => {
             ))}
           </motion.div>
 
-          <motion.div className="flex flex-wrap justify-center gap-4" variants={itemVariants}>
+          <motion.div className="flex flex-wrap items-center justify-center gap-3 md:gap-4" variants={itemVariants}>
             <MagneticButton href="#contact" className="filled">
               <span>Let's Talk</span>
             </MagneticButton>
             <MagneticButton href="/resume.pdf">
               <span>Download CV</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16" className="flex-shrink-0">
                 <path d="M12 5v14M19 12l-7 7-7-7" />
               </svg>
             </MagneticButton>

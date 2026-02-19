@@ -26,7 +26,7 @@ const MagneticButton = ({ children, className = '', onClick, href }) => {
     <Component
       ref={ref}
       href={href}
-      className={`relative inline-flex items-center justify-center gap-3 px-8 py-4 font-body text-sm font-semibold rounded-full cursor-pointer transition-all duration-300 ${
+      className={`relative inline-flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 font-body text-sm font-semibold rounded-full cursor-pointer transition-all duration-300 whitespace-nowrap ${
         isFilled 
           ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-none hover:shadow-[0_10px_40px_rgba(99,102,241,0.3)]' 
           : isOutline
@@ -41,7 +41,7 @@ const MagneticButton = ({ children, className = '', onClick, href }) => {
       whileTap={{ scale: 0.95 }}
     >
       <motion.span
-        className="flex items-center gap-2"
+        className="flex items-center justify-center gap-2"
         animate={{ x: position.x * 0.5, y: position.y * 0.5 }}
         transition={{ type: 'spring', stiffness: 150, damping: 15, mass: 0.1 }}
       >

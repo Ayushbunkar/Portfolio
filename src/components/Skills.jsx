@@ -216,10 +216,10 @@ const Skills = () => {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-[280px_1fr] gap-8 lg:gap-12">
+        <div className="grid lg:grid-cols-[280px_1fr] gap-6 lg:gap-12">
           {/* Category Tabs */}
           <motion.div 
-            className="flex flex-col gap-2"
+            className="flex flex-row lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide"
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -227,17 +227,17 @@ const Skills = () => {
             {skillCategories.map((category, index) => (
               <motion.button
                 key={index}
-                className={`relative flex items-center gap-3 px-5 py-4 bg-white/[0.02] border rounded-xl text-left transition-all duration-300 ${activeCategory === index ? 'border-indigo-500/50 bg-indigo-500/10 text-white' : 'border-white/[0.06] text-gray-400 hover:border-white/[0.12] hover:text-white'}`}
+                className={`relative flex items-center justify-center lg:justify-start gap-2 lg:gap-3 px-4 lg:px-5 py-3 lg:py-4 bg-white/[0.02] border rounded-xl text-left transition-all duration-300 flex-shrink-0 min-w-fit ${activeCategory === index ? 'border-indigo-500/50 bg-indigo-500/10 text-white' : 'border-white/[0.06] text-gray-400 hover:border-white/[0.12] hover:text-white'}`}
                 onClick={() => setActiveCategory(index)}
                 whileHover={{ x: 10 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <span className="text-indigo-500">{category.icon}</span>
-                <span className="flex-1 font-medium">{category.name}</span>
-                <span className="text-sm font-mono text-gray-500">{category.skills.length}</span>
+                <span className="font-medium text-sm lg:text-base">{category.name}</span>
+                <span className="hidden lg:inline text-sm font-mono text-gray-500">{category.skills.length}</span>
                 {activeCategory === index && (
                   <motion.div
-                    className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-indigo-500 rounded-r-full"
+                    className="absolute left-0 bottom-0 lg:top-1/2 lg:-translate-y-1/2 w-full lg:w-1 h-1 lg:h-8 bg-indigo-500 rounded-t-full lg:rounded-t-none lg:rounded-r-full"
                     layoutId="skillTabIndicator"
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   />
@@ -246,25 +246,25 @@ const Skills = () => {
             ))}
 
             {/* Experience Stats */}
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              <div className="text-center p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl">
-                <span className="font-display text-2xl font-bold text-white block">
+            <div className="mt-4 lg:mt-6 grid grid-cols-2 gap-2 lg:gap-3">
+              <div className="text-center p-3 lg:p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl">
+                <span className="font-display text-xl lg:text-2xl font-bold text-white block">
                   <AnimatedCounter target={15} suffix="+" duration={1.5} />
                 </span>
-                <span className="text-gray-500 text-sm">Technologies</span>
+                <span className="text-gray-500 text-xs lg:text-sm">Technologies</span>
               </div>
-              <div className="text-center p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl">
-                <span className="font-display text-2xl font-bold text-white block">
+              <div className="text-center p-3 lg:p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl">
+                <span className="font-display text-xl lg:text-2xl font-bold text-white block">
                   <AnimatedCounter target={3} suffix="+" duration={1.5} />
                 </span>
-                <span className="text-gray-500 text-sm">Years Exp.</span>
+                <span className="text-gray-500 text-xs lg:text-sm">Years Exp.</span>
               </div>
             </div>
           </motion.div>
 
           {/* Skills Grid */}
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4"
             key={activeCategory}
             variants={containerVariants}
             initial="hidden"
@@ -273,15 +273,15 @@ const Skills = () => {
             {skillCategories[activeCategory].skills.map((skill, index) => (
               <motion.div
                 key={skill.name}
-                className="group p-5 bg-white/[0.02] border border-white/[0.06] rounded-2xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
+                className="group p-4 md:p-5 bg-white/[0.02] border border-white/[0.06] rounded-2xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
                 variants={itemVariants}
                 whileHover={{ y: -8, scale: 1.02 }}
                 transition={{ type: 'spring', stiffness: 300 }}
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-lg">{skill.icon}</span>
-                  <div className="flex-1">
-                    <h4 className="font-display text-sm font-semibold text-white">{skill.name}</h4>
+                <div className="flex items-center gap-3 mb-3 md:mb-4">
+                  <span className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center bg-white/5 rounded-lg flex-shrink-0">{skill.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-display text-sm font-semibold text-white truncate">{skill.name}</h4>
                     <span className="text-xs font-mono text-indigo-500">{skill.level}%</span>
                   </div>
                 </div>
@@ -318,17 +318,17 @@ const Skills = () => {
 
         {/* Bottom Decoration */}
         <motion.div 
-          className="mt-16 text-center"
+          className="mt-12 lg:mt-16 text-center"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          <div className="inline-flex items-center gap-4 px-6 py-3 bg-white/[0.02] border border-white/[0.06] rounded-full">
-            <span className="text-gray-400 text-sm">Always Learning</span>
-            <span className="text-indigo-500">•</span>
-            <span className="text-gray-400 text-sm">Always Growing</span>
-            <span className="text-indigo-500">•</span>
-            <span className="text-gray-400 text-sm">Always Building</span>
+          <div className="inline-flex flex-wrap items-center justify-center gap-2 md:gap-4 px-4 md:px-6 py-3 bg-white/[0.02] border border-white/[0.06] rounded-full">
+            <span className="text-gray-400 text-xs md:text-sm">Always Learning</span>
+            <span className="text-indigo-500 hidden md:inline">•</span>
+            <span className="text-gray-400 text-xs md:text-sm">Always Growing</span>
+            <span className="text-indigo-500 hidden md:inline">•</span>
+            <span className="text-gray-400 text-xs md:text-sm">Always Building</span>
           </div>
         </motion.div>
       </div>

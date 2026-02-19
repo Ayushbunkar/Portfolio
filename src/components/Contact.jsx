@@ -149,10 +149,10 @@ const Contact = () => {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16">
           {/* Contact Form */}
           <motion.div 
-            className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-8 md:p-10"
+            className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6 md:p-8 lg:p-10"
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
@@ -243,28 +243,28 @@ const Contact = () => {
 
           {/* Contact Info */}
           <motion.div 
-            className="flex flex-col gap-6"
+            className="flex flex-col gap-4 md:gap-6"
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
           >
-            <motion.div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-8" variants={itemVariants}>
-              <h3 className="font-display text-xl font-semibold text-white mb-6">
+            <motion.div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6 md:p-8" variants={itemVariants}>
+              <h3 className="font-display text-lg md:text-xl font-semibold text-white mb-4 md:mb-6">
                 <ScrambleText>Contact Info</ScrambleText>
               </h3>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3 md:gap-4">
                 {contactInfo.map((info, index) => (
                   <motion.a
                     key={index}
                     href={info.link || '#'}
-                    className="flex items-center gap-4 p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
+                    className="flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
                     whileHover={{ x: 10 }}
                     transition={{ type: 'spring', stiffness: 300 }}
                   >
-                    <span className="w-10 h-10 flex items-center justify-center bg-indigo-500/10 rounded-lg text-indigo-500 [&>svg]:w-5 [&>svg]:h-5">{info.icon}</span>
-                    <div className="flex flex-col">
-                      <span className="text-sm text-gray-500">{info.label}</span>
-                      <span className="text-white font-medium">{info.value}</span>
+                    <span className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center bg-indigo-500/10 rounded-lg text-indigo-500 flex-shrink-0 [&>svg]:w-4 [&>svg]:h-4 md:[&>svg]:w-5 md:[&>svg]:h-5">{info.icon}</span>
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-xs md:text-sm text-gray-500">{info.label}</span>
+                      <span className="text-white font-medium text-sm md:text-base truncate">{info.value}</span>
                     </div>
                   </motion.a>
                 ))}
@@ -273,19 +273,19 @@ const Contact = () => {
 
             <motion.div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-8" variants={itemVariants}>
               <h3 className="font-display text-xl font-semibold text-white mb-6">Follow Me</h3>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3 md:gap-4">
                 {socialLinks.map((social, index) => (
                   <motion.a
                     key={index}
                     href={social.url}
-                    className="flex items-center gap-3 p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
+                    className="flex items-center justify-start gap-3 p-3 md:p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ y: -5, scale: 1.02 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <span className="w-8 h-8 flex items-center justify-center">{social.icon}</span>
-                    <span className="text-gray-400 text-sm font-medium">{social.name}</span>
+                    <span className="w-8 h-8 flex items-center justify-center flex-shrink-0">{social.icon}</span>
+                    <span className="text-gray-400 text-sm font-medium truncate">{social.name}</span>
                   </motion.a>
                 ))}
               </div>
@@ -296,10 +296,10 @@ const Contact = () => {
 
       {/* Footer */}
       <footer className="mt-24 pt-12 border-t border-white/5">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="mb-6">
-            <span className="font-display text-xl font-bold text-white block">Ayush Bunkar</span>
-            <span className="text-gray-500 text-sm">Creative Developer</span>
+        <div className="max-w-7xl mx-auto text-center px-4">
+          <div className="mb-6 flex flex-col items-center justify-center">
+            <span className="font-display text-xl font-bold text-white">Ayush Bunkar</span>
+            <span className="text-gray-500 text-sm mt-1">Creative Developer</span>
           </div>
           <p className="text-gray-500 text-sm">
             © {new Date().getFullYear()} All Rights Reserved. Built with ❤️ and React.

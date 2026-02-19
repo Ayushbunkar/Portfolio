@@ -124,7 +124,7 @@ const Projects = () => {
         </motion.p>
 
         <motion.div 
-          className="flex flex-wrap justify-center gap-3 mt-10"
+          className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mt-10"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -132,7 +132,7 @@ const Projects = () => {
           {categories.map((cat) => (
             <motion.button
               key={cat}
-              className={`relative px-6 py-3 font-body text-sm font-medium bg-transparent border rounded-full cursor-pointer transition-all duration-300 overflow-hidden ${
+              className={`relative px-4 md:px-6 py-2.5 md:py-3 font-body text-sm font-medium bg-transparent border rounded-full cursor-pointer transition-all duration-300 overflow-hidden whitespace-nowrap ${
                 filter === cat 
                   ? 'text-white border-transparent' 
                   : 'text-gray-400 border-white/10 hover:text-white hover:border-white/20'
