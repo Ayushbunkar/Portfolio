@@ -10,8 +10,9 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
-    { name: 'Projects', href: '#projects' },
     { name: 'Skills', href: '#skills' },
+    { name: 'Projects', href: '#projects' },
+    { name: 'Journey', href: '#journey' },
     { name: 'Contact', href: '#contact' },
   ]
 
@@ -20,8 +21,8 @@ const Navbar = () => {
       setIsScrolled(window.scrollY > 50)
 
       // Detect active section
-      const sections = navLinks.map(link => link.href.slice(1))
-      for (const section of sections.reverse()) {
+      const sections = navLinks.map((link) => link.href.slice(1))
+      for (const section of [...sections].reverse()) {
         const element = document.getElementById(section)
         if (element) {
           const rect = element.getBoundingClientRect()
@@ -81,35 +82,35 @@ const Navbar = () => {
   return (
     <>
       <motion.nav
-        className={`fixed top-0 left-0 right-0 z-[1000] px-[5%] py-6 transition-all duration-300 ${isScrolled ? 'py-4 bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/5' : ''}`}
+        className={`fixed top-0 left-0 right-0 z-[1000] px-4 sm:px-6 lg:px-10 py-4 transition-all duration-300 ${isScrolled ? 'py-2.5 bg-[#0a0a0f]/85 backdrop-blur-xl border-b border-white/10' : ''}`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
       >
-        <div className="flex items-center justify-between max-w-[1400px] mx-auto">
+        <div className="flex items-center justify-between max-w-[1200px] mx-auto rounded-2xl h-14 md:h-16 px-1 md:px-2">
           {/* Logo */}
           <motion.a
             href="#home"
-            className="flex items-center gap-1 font-display text-xl font-bold text-white"
+            className="flex items-center gap-1.5 font-display text-lg md:text-xl font-bold text-white"
             onClick={(e) => handleLinkClick(e, '#home')}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <span>AB</span>
-            <span className="w-2 h-2 bg-indigo-500 rounded-full" />
+            <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-indigo-500 rounded-full" />
           </motion.a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-4">
-            {navLinks.map((link) => (
+          <div className="hidden lg:flex items-center gap-1.5">
+            {navLinks.map((link, i) => (
               <motion.a
                 key={link.name}
                 href={link.href}
-                className={`relative flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 overflow-hidden ${activeSection === link.href.slice(1) ? 'text-white' : 'text-gray-400 hover:text-white'}`}
+                className={`relative flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium rounded-full transition-all duration-300 overflow-hidden ${activeSection === link.href.slice(1) ? 'text-white bg-white/10' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
                 onClick={(e) => handleLinkClick(e, link.href)}
                 whileHover={{ y: -2 }}
               >
-                <span className="text-xs text-indigo-500 opacity-60">0{navLinks.indexOf(link) + 1}</span>
+                <span className="hidden xl:inline text-[10px] text-indigo-500 opacity-60">0{i + 1}</span>
                 <span>{link.name}</span>
                 {activeSection === link.href.slice(1) && (
                   <motion.div
@@ -123,15 +124,15 @@ const Navbar = () => {
           </div>
 
           {/* CTA Button */}
-          <div className="hidden md:block">
-            <MagneticButton href="#contact" className="text-sm">
+          <div className="hidden lg:block">
+            <MagneticButton href="#contact" className="filled !px-5 !py-2.5 md:!px-6 md:!py-3 min-h-0 text-sm">
               <span>Let's Talk</span>
             </MagneticButton>
           </div>
 
           {/* Menu Toggle */}
           <motion.button
-            className="md:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-1.5 bg-transparent border-none cursor-pointer z-[1002]"
+            className="lg:hidden relative w-9 h-9 flex flex-col items-center justify-center gap-1.5 bg-transparent border-none cursor-pointer z-[1002]"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             whileTap={{ scale: 0.9 }}
           >
@@ -153,19 +154,19 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             />
             <motion.div
-              className="fixed top-0 right-0 w-full max-w-md h-screen bg-[#12121a] z-[1001] flex flex-col"
+              className="fixed top-0 right-0 w-[86%] max-w-sm h-screen bg-[#12121a] z-[1001] flex flex-col"
               variants={menuVariants}
               initial="closed"
               animate="open"
               exit="closed"
             >
-              <div className="flex flex-col justify-between h-full pt-24 pb-10 px-8">
+              <div className="flex flex-col justify-between h-full pt-20 pb-8 px-6 sm:px-7">
                 <div className="flex flex-col gap-2">
                   {navLinks.map((link, i) => (
                     <motion.a
                       key={link.name}
                       href={link.href}
-                      className="flex items-center gap-4 py-4 text-white font-display text-2xl font-semibold border-b border-white/5 transition-all duration-300 hover:text-indigo-500 hover:pl-2"
+                      className="flex items-center gap-3 py-3.5 text-white font-display text-xl sm:text-2xl font-semibold border-b border-white/5 transition-all duration-300 hover:text-indigo-500 hover:pl-2"
                       onClick={(e) => handleLinkClick(e, link.href)}
                       custom={i}
                       variants={linkVariants}

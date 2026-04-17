@@ -1,193 +1,309 @@
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 import AnimatedCounter from './AnimatedCounter'
-import TiltCard from './TiltCard'
 import MagneticButton from './MagneticButton'
+import { ensureScrollTrigger, gsap } from '../utils/scrollAnimations'
+
+const ORIGIN_STEPS = [
+  {
+    title: 'Curiosity Became Craft',
+    phase: 'Origin 01',
+    description:
+      'What started as simple UI experiments evolved into a clear mission: build interfaces that feel alive and communicate trust instantly.',
+    image:
+      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80',
+  },
+  {
+    title: 'Design Language Took Shape',
+    phase: 'Origin 02',
+    description:
+      'A systematic visual style emerged: balanced spacing, rounded geometry, expressive gradients, and motion that guides attention.',
+    image:
+      'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1600&q=80',
+  },
+  {
+    title: 'Engineering Discipline Added Depth',
+    phase: 'Origin 03',
+    description:
+      'The workflow became product-grade with reusable components, performance budgets, and accessibility checks embedded by default.',
+    image:
+      'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1600&q=80',
+  },
+  {
+    title: 'Storytelling Became the Core',
+    phase: 'Origin 04',
+    description:
+      'Now every section carries meaning: identity, origin, power, impact, and connection; scroll feels like a guided product journey.',
+    image:
+      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80',
+  },
+]
+
+const STATS = [
+  { value: 3, suffix: '+', label: 'Years Crafting Interfaces' },
+  { value: 50, suffix: '+', label: 'Projects Delivered' },
+  { value: 92, suffix: '%', label: 'Repeat Client Satisfaction' },
+  { value: 100, suffix: '%', label: 'Performance-Focused Builds' },
+]
+
+const ORIGIN_CONTEXT = [
+  {
+    title: 'Space Theme Context',
+    copy: 'This portfolio behaves like a mission route. Every section receives a specific role so users never feel lost.',
+  },
+  {
+    title: 'Narrative Density',
+    copy: 'Instead of minimal placeholders, each chapter includes clear text, outcomes, and reasoning behind design choices.',
+  },
+  {
+    title: 'Continuity Layer',
+    copy: 'The follower elements track story progression from hero to contact, keeping the flow connected all the way down.',
+  },
+]
 
 const About = () => {
   const sectionRef = useRef(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' })
+  const imageRef = useRef(null)
+  const [activeStep, setActiveStep] = useState(0)
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
-  }
+  useEffect(() => {
+    const ScrollTrigger = ensureScrollTrigger()
 
-  const itemVariants = {
-    hidden: { y: 40, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } },
-  }
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '.about-intro',
+        { opacity: 0, y: 40, filter: 'blur(8px)' },
+        {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 78%',
+          },
+        }
+      )
 
-  const stats = [
-    { number: 3, suffix: '+', label: 'Years of Experience' },
-    { number: 50, suffix: '+', label: 'Projects Delivered' },
-    { number: 30, suffix: '+', label: 'Happy Clients' },
-    { number: 100, suffix: '%', label: 'Client Satisfaction' },
-  ]
+      gsap.fromTo(
+        '.about-context-card',
+        { opacity: 0, y: 24, filter: 'blur(8px)' },
+        {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 0.6,
+          stagger: 0.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.about-context-grid',
+            start: 'top 84%',
+          },
+        }
+      )
 
-  const serviceIcons = {
-    design: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8 text-indigo-500">
-        <path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-      </svg>
-    ),
-    code: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8 text-indigo-500">
-        <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-      </svg>
-    ),
-    responsive: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8 text-indigo-500">
-        <path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-      </svg>
-    ),
-    performance: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8 text-indigo-500">
-        <path d="M13 10V3L4 14h7v7l9-11h-7z" />
-      </svg>
-    ),
-  }
+      gsap.to(imageRef.current, {
+        yPercent: -12,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      })
 
-  const services = [
-    { icon: serviceIcons.design, title: 'UI/UX Design', desc: 'Beautiful interfaces' },
-    { icon: serviceIcons.code, title: 'Web Development', desc: 'Modern websites' },
-    { icon: serviceIcons.responsive, title: 'Responsive', desc: 'All devices' },
-    { icon: serviceIcons.performance, title: 'Performance', desc: 'Lightning fast' },
-  ]
+      const items = gsap.utils.toArray('.about-story-item')
+      items.forEach((item, index) => {
+        gsap.fromTo(
+          item,
+          {
+            opacity: 0,
+            x: index % 2 === 0 ? -42 : 42,
+            y: 30,
+            filter: 'blur(10px)',
+          },
+          {
+            opacity: 1,
+            x: 0,
+            y: 0,
+            filter: 'blur(0px)',
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: item,
+              start: 'top 80%',
+            },
+          }
+        )
+
+        ScrollTrigger.create({
+          trigger: item,
+          start: 'top 55%',
+          end: 'bottom 45%',
+          onEnter: () => setActiveStep(index),
+          onEnterBack: () => setActiveStep(index),
+        })
+      })
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [])
 
   return (
-    <section id="about" className="py-36 px-[5%] relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #0a0a0f 0%, #12121a 100%)' }} ref={sectionRef}>
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-        <motion.div
-          className="flex flex-col items-center text-center"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-        >
-          <motion.span className="text-indigo-500 font-mono text-sm uppercase tracking-wider mb-6" variants={itemVariants}>
-            About Me
-          </motion.span>
-          <motion.h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-8" variants={itemVariants}>
-            Passionate About
-            <br />
-            <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Creating Digital Art</span>
-          </motion.h2>
-          <motion.p className="text-gray-400 text-lg leading-relaxed mb-6" variants={itemVariants}>
-            I'm <strong className="text-white">Ayush Bunkar</strong>, a creative developer based in India with 
-            a passion for crafting exceptional digital experiences. I combine technical 
-            expertise with artistic vision to build websites that are not just functional, 
-            but truly memorable.
-          </motion.p>
-          <motion.p className="text-gray-400 text-lg leading-relaxed mb-6" variants={itemVariants}>
-            My approach blends <span className="text-indigo-500 font-medium">cutting-edge technology</span> with 
-            thoughtful design, ensuring every project delivers both aesthetic appeal and 
-            outstanding performance. I believe in the power of <span className="text-indigo-500 font-medium">
-            smooth animations</span> and intuitive interfaces.
-          </motion.p>
+    <section id="about" ref={sectionRef} className="section-shell bg-[#060913]">
+      <div className="section-container">
+        <div className="about-intro text-center">
+          <span className="section-kicker">
+            <span className="section-kicker-dot" />
+            Origin Layer
+          </span>
+          <h2 className="section-title">
+            The Story Behind
+            <span className="section-title-gradient">The Interface Mindset</span>
+          </h2>
+          <p className="section-copy mx-auto">
+            About is no longer just biography. It reveals progression in stages so users understand how design intent,
+            code quality, and product thinking came together.
+          </p>
 
-          <motion.div className="grid grid-cols-2 gap-3 md:gap-4 w-full mb-8" variants={itemVariants}>
-            {services.map((service, index) => (
-              <motion.div
-                key={index}
-                className="p-3 md:p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5 flex flex-col items-center text-center"
-                whileHover={{ y: -5, scale: 1.02 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-              >
-                <span className="flex items-center justify-center mb-3">{service.icon}</span>
-                <h4 className="font-display text-sm font-semibold text-white mb-1">{service.title}</h4>
-                <p className="text-xs text-gray-400">{service.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <motion.div className="flex flex-wrap items-center justify-center gap-3 md:gap-4" variants={itemVariants}>
-            <MagneticButton href="#contact" className="filled">
-              <span>Let's Talk</span>
-            </MagneticButton>
-            <MagneticButton href="/resume.pdf">
-              <span>Download CV</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16" className="flex-shrink-0">
-                <path d="M12 5v14M19 12l-7 7-7-7" />
-              </svg>
-            </MagneticButton>
-          </motion.div>
-        </motion.div>
-
-        <div className="relative flex justify-center">
-          <motion.div
-            className="relative"
-            initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-            animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
-            transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
-          >
-            <TiltCard>
-              <div className="w-80 h-96 rounded-3xl overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-indigo-500/30 to-pink-500/30 flex items-center justify-center">
-                  <span className="font-display text-6xl font-extrabold text-white/30">AB</span>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f]/80 to-transparent" />
-              </div>
-            </TiltCard>
-            
-            <motion.div
-              className="absolute px-5 py-3 bg-[#0f0f0f]/90 backdrop-blur-xl border border-white/10 rounded-full font-mono text-sm font-semibold text-white z-10 top-10 -right-12"
-              style={{ boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)' }}
-              animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <span>React</span>
-            </motion.div>
-            <motion.div
-              className="absolute px-5 py-3 bg-[#0f0f0f]/90 backdrop-blur-xl border border-white/10 rounded-full font-mono text-sm font-semibold text-white z-10 bottom-24 -left-10"
-              style={{ boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)' }}
-              animate={{ y: [0, 15, 0], rotate: [0, -5, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <span>GSAP</span>
-            </motion.div>
-            <motion.div
-              className="absolute px-5 py-3 bg-[#0f0f0f]/90 backdrop-blur-xl border border-white/10 rounded-full font-mono text-sm font-semibold text-white z-10 top-1/2 -right-8"
-              style={{ boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)' }}
-              animate={{ y: [0, -10, 0], rotate: [0, 3, 0] }}
-              transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <span>Framer</span>
-            </motion.div>
-
-            <motion.div
-              className="absolute -top-8 -left-8 w-24 h-24 rounded-full flex flex-col items-center justify-center z-10"
-              style={{ background: 'linear-gradient(135deg, #a855f7, #ec4899)', boxShadow: '0 20px 40px rgba(168, 85, 247, 0.3)' }}
-              initial={{ scale: 0 }}
-              animate={isInView ? { scale: 1 } : {}}
-              transition={{ delay: 0.8, type: 'spring', stiffness: 200 }}
-            >
-              <span className="font-display text-2xl font-bold text-white">3+</span>
-              <span className="text-xs text-white/80 font-medium">Years Exp.</span>
-            </motion.div>
-          </motion.div>
+          <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-slate-300/95 sm:text-base">
+            You are not only reading background information. You are moving through a guided signal path that explains
+            why this style, this motion language, and this product mindset exist in one cohesive space-themed system.
+          </p>
         </div>
-      </div>
 
-      <div className="mt-16 lg:mt-24 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-4xl mx-auto">
-        {stats.map((stat, index) => (
-          <motion.div
-            key={index}
-            className="text-center p-6 bg-white/[0.02] border border-white/[0.06] rounded-2xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1, duration: 0.6 }}
-            viewport={{ once: true }}
-            whileHover={{ y: -5 }}
-          >
-            <span className="font-display text-3xl md:text-4xl font-bold text-white block mb-2">
-              <AnimatedCounter target={stat.number} suffix={stat.suffix} duration={2} />
-            </span>
-            <span className="text-gray-400 text-sm">{stat.label}</span>
-          </motion.div>
-        ))}
+        <div className="about-context-grid mt-8 grid gap-3 md:grid-cols-3">
+          {ORIGIN_CONTEXT.map((item) => (
+            <motion.article
+              key={item.title}
+              className="about-context-card narrative-card p-4 text-left"
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45 }}
+            >
+              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-indigo-200">{item.title}</p>
+              <p className="mt-2 text-sm leading-relaxed text-slate-200">{item.copy}</p>
+            </motion.article>
+          ))}
+        </div>
+
+        <div className="mt-12 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
+          <div className="relative pr-0 lg:pr-8">
+            <div className="absolute left-[18px] top-0 h-full w-[2px] rounded-full bg-white/12 md:left-1/2 md:-translate-x-1/2" />
+
+            <div className="space-y-5">
+              {ORIGIN_STEPS.map((step, index) => {
+                const isActive = index <= activeStep
+                const isLeft = index % 2 === 0
+
+                return (
+                  <div key={step.title} className="about-story-item relative grid md:grid-cols-2 md:gap-6">
+                    <motion.span
+                      className="absolute left-[11px] top-8 h-4 w-4 -translate-x-1/2 rounded-full border-2 md:left-1/2 md:top-1/2 md:-translate-y-1/2"
+                      animate={{
+                        backgroundColor: isActive ? '#7c86ff' : '#101827',
+                        borderColor: isActive ? '#c7d2fe' : 'rgba(255,255,255,0.3)',
+                        boxShadow: isActive ? '0 0 18px #7c86ff' : 'none',
+                      }}
+                      transition={{ duration: 0.35 }}
+                    />
+
+                    <motion.article
+                      className={`ml-10 rounded-2xl border p-5 sm:p-6 md:ml-0 ${
+                        isLeft ? 'md:mr-10 md:text-right' : 'md:col-start-2 md:ml-10'
+                      } ${
+                        isActive
+                          ? 'border-indigo-300/45 bg-indigo-500/10 shadow-[0_22px_50px_rgba(6,15,35,0.4)]'
+                          : 'border-white/12 bg-white/[0.03]'
+                      }`}
+                      animate={{ scale: isActive ? 1 : 0.985 }}
+                      transition={{ type: 'spring', stiffness: 180, damping: 24 }}
+                    >
+                      <div
+                        className={`mb-3 flex items-center justify-between gap-3 ${
+                          isLeft ? 'md:flex-row-reverse' : ''
+                        }`}
+                      >
+                        <span className="meaning-badge">{step.phase}</span>
+                        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-slate-400">
+                          Story Reveal
+                        </span>
+                      </div>
+
+                      <h3 className="font-display text-xl font-bold text-white sm:text-2xl">{step.title}</h3>
+                      <p className="mt-3 text-sm leading-relaxed text-slate-300 sm:text-[15px]">{step.description}</p>
+                    </motion.article>
+                  </div>
+                )
+              })}
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <MagneticButton href="#projects" className="filled beam-button rounded-full">
+                <span>See The Impact</span>
+              </MagneticButton>
+              <MagneticButton href="#contact" className="outline rounded-full">
+                <span>Start Collaboration</span>
+              </MagneticButton>
+            </div>
+          </div>
+
+          <div className="relative">
+            <div ref={imageRef} className="glass-panel relative overflow-hidden p-4 sm:p-5 lg:sticky lg:top-28">
+              <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_14%_22%,rgba(124,134,255,0.26),transparent_38%),radial-gradient(circle_at_82%_18%,rgba(45,212,191,0.18),transparent_34%),radial-gradient(circle_at_52%_90%,rgba(236,72,153,0.2),transparent_40%)]" />
+
+              <div className="relative overflow-hidden rounded-2xl border border-white/15">
+                <img
+                  src={ORIGIN_STEPS[activeStep].image}
+                  alt={ORIGIN_STEPS[activeStep].title}
+                  className="h-[300px] w-full object-cover sm:h-[360px]"
+                  loading="lazy"
+                />
+
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-indigo-200">
+                    Active Chapter
+                  </p>
+                  <p className="mt-1 font-display text-lg font-semibold text-white">
+                    {ORIGIN_STEPS[activeStep].title}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4 rounded-2xl border border-white/12 bg-black/25 p-4">
+                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-200">Meaning Layer</p>
+                <p className="mt-1 text-sm text-slate-200">
+                  Hero introduces identity. About establishes origin. The following sections build power, impact, and connection.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {STATS.map((item) => (
+            <motion.div
+              key={item.label}
+              className="soft-panel p-5 text-center"
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="font-display text-3xl font-bold text-white md:text-4xl">
+                <AnimatedCounter target={item.value} suffix={item.suffix} duration={1.9} />
+              </div>
+              <p className="mt-2 text-xs uppercase tracking-[0.12em] text-slate-300">{item.label}</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   )
 }
 
 export default About
+

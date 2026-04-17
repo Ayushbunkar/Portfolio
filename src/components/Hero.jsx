@@ -1,305 +1,541 @@
-import { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 import gsap from 'gsap'
-import MagneticButton from './MagneticButton'
-import { TypewriterText } from './GlitchText'
 
-// Floating gallery images - using placeholder gradients (5 cards with proper spacing)
-const galleryItems = [
-  { id: 1, gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', rotation: -12, x: -120, y: -140, z: 20, scale: 0.9 },
-  { id: 2, gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', rotation: -5, x: 60, y: -180, z: 60, scale: 0.95 },
-  { id: 3, gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', rotation: 0, x: 0, y: 0, z: 100, scale: 1.15, main: true },
-  { id: 4, gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', rotation: 6, x: -80, y: 160, z: 50, scale: 0.9 },
-  { id: 5, gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', rotation: 10, x: 100, y: 120, z: 30, scale: 0.85 },
+const ROLES = ['Frontend Engineer', 'Interaction Designer', 'Creative Developer', 'Product Storyteller']
+
+const HERO_STATS = [
+  { value: '50+', label: 'Premium Builds' },
+  { value: '98%', label: 'Client Delight' },
+  { value: '24/7', label: 'Performance Focus' },
 ]
 
-const Hero = () => {
-  const heroRef = useRef(null)
-  const galleryRef = useRef(null)
+const SOCIAL_LINKS = [
+  { name: 'GitHub', href: 'https://github.com' },
+  { name: 'LinkedIn', href: 'https://linkedin.com' },
+  { name: 'Dribbble', href: 'https://dribbble.com' },
+]
 
-  // Floating animation for gallery cards - entrance only
+function TypewriterText({ texts, speed = 90, deleteSpeed = 45, delay = 1400 }) {
+  const [display, setDisplay] = useState('')
+  const [index, setIndex] = useState(0)
+  const [phase, setPhase] = useState('typing')
+  const [charIndex, setCharIndex] = useState(0)
+
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo('.gallery-card', 
-        { opacity: 0, scale: 0.5, y: 100 },
-        { opacity: 1, scale: 1, y: 0, duration: 1, stagger: 0.1, delay: 1.5, ease: 'power3.out' }
-      )
-    }, galleryRef)
-    return () => ctx.revert()
-  }, [])
+    const currentText = texts[index]
+    let timeoutId
 
-  const roles = ['Frontend Developer', 'UI/UX Designer', 'Creative Coder', 'Problem Solver']
+    if (phase === 'typing') {
+      if (charIndex < currentText.length) {
+        timeoutId = setTimeout(() => {
+          setDisplay(currentText.slice(0, charIndex + 1))
+          setCharIndex((value) => value + 1)
+        }, speed)
+      } else {
+        timeoutId = setTimeout(() => setPhase('deleting'), delay)
+      }
+    } else if (charIndex > 0) {
+      timeoutId = setTimeout(() => {
+        setDisplay(currentText.slice(0, charIndex - 1))
+        setCharIndex((value) => value - 1)
+      }, deleteSpeed)
+    } else {
+      setIndex((value) => (value + 1) % texts.length)
+      setPhase('typing')
+    }
 
-  const letterVariants = {
-    hidden: { y: 100, opacity: 0, rotateX: -90 },
-    visible: (i) => ({
-      y: 0, opacity: 1, rotateX: 0,
-      transition: { delay: i * 0.05, duration: 0.8, ease: [0.215, 0.61, 0.355, 1] },
-    }),
-  }
-
-  const name = "AYUSH"
-  const lastName = "BUNKAR"
+    return () => clearTimeout(timeoutId)
+  }, [charIndex, delay, deleteSpeed, index, phase, speed, texts])
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative py-20 px-[5%] pt-[120px] overflow-hidden" ref={heroRef}>
-      {/* Animated Background */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full" style={{
-          backgroundImage: 'linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px)',
-          backgroundSize: '80px 80px',
-          maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)'
-        }} />
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, #0a0a0f 100%)' }} />
-        <motion.div 
-          className="absolute rounded-full blur-[80px] w-[600px] h-[600px] -top-[20%] -right-[10%]"
-          style={{ background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.3))' }}
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div 
-          className="absolute rounded-full blur-[80px] w-[500px] h-[500px] -bottom-[15%] -left-[10%]"
-          style={{ background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(99, 102, 241, 0.2))' }}
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.4, 0.2, 0.4] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div 
-          className="absolute rounded-full blur-[80px] w-[400px] h-[400px] top-[30%] left-[20%]"
-          style={{ background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.3), rgba(59, 130, 246, 0.2))' }}
-          animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </div>
-
-      <motion.div className="relative z-20 text-center max-w-5xl mx-auto flex flex-col items-center">
-        {/* Main Title */}
-        <div className="mb-8">
-          <motion.p
-            className="font-mono text-indigo-500 text-lg mb-4 tracking-wider uppercase"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-          >
-            Hello, I'm
-          </motion.p>
-          
-          <h1 className="flex flex-col items-center gap-2 leading-none mb-6">
-            <span className="flex items-center justify-center">
-              {name.split('').map((letter, index) => (
-                <motion.span
-                  key={index}
-                  className="font-display text-[clamp(2.5rem,10vw,8rem)] font-extrabold text-white inline-block tracking-tighter"
-                  custom={index}
-                  variants={letterVariants}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  {letter}
-                </motion.span>
-              ))}
-            </span>
-            <span className="flex items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-              {lastName.split('').map((letter, index) => (
-                <motion.span
-                  key={index}
-                  className="font-display text-[clamp(2.5rem,10vw,8rem)] font-extrabold inline-block tracking-tighter"
-                  custom={index + name.length}
-                  variants={letterVariants}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  {letter}
-                </motion.span>
-              ))}
-            </span>
-          </h1>
-
-          <motion.div
-            className="text-xl md:text-2xl text-gray-400"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
-          >
-            <span>I'm a </span>
-            <span className="text-indigo-500 font-semibold">
-              <TypewriterText texts={roles} speed={80} deleteSpeed={40} delay={1500} />
-            </span>
-          </motion.div>
-        </div>
-
-        {/* Decorative Line */}
-        <motion.div
-          className="w-24 h-0.5 mx-auto mb-8 origin-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ delay: 1.4, duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-        />
-
-        {/* Description */}
-        <motion.p
-          className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed text-center"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.6, duration: 0.8 }}
-        >
-          Crafting <span className="text-white font-medium">immersive digital experiences</span> through 
-          clean code, stunning animations, and pixel-perfect design. Turning complex 
-          ideas into <span className="text-white font-medium">elegant solutions</span>.
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mb-14"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.8, duration: 0.8 }}
-        >
-          <MagneticButton href="#projects" className="filled">
-            <span>View My Work</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18" className="flex-shrink-0">
-              <path d="M7 17L17 7M17 7H7M17 7V17" />
-            </svg>
-          </MagneticButton>
-          <MagneticButton href="#contact">
-            <span>Get In Touch</span>
-          </MagneticButton>
-        </motion.div>
-
-        {/* Social Links */}
-        <motion.div
-          className="flex items-center justify-center gap-4 md:gap-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.2 }}
-        >
-          <motion.a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white hover:text-black transition-all duration-300"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.2 }}
-            whileHover={{ y: -3, scale: 1.1 }}
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-          </motion.a>
-          <motion.a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-[#0A66C2] transition-all duration-300"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.3 }}
-            whileHover={{ y: -3, scale: 1.1 }}
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-            </svg>
-          </motion.a>
-          <motion.a
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white hover:text-black transition-all duration-300"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.4 }}
-            whileHover={{ y: -3, scale: 1.1 }}
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-          </motion.a>
-          <motion.a
-            href="https://dribbble.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-[#EA4C89] transition-all duration-300"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.5 }}
-            whileHover={{ y: -3, scale: 1.1 }}
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-              <path d="M12 24C5.385 24 0 18.615 0 12S5.385 0 12 0s12 5.385 12 12-5.385 12-12 12zm10.12-10.358c-.35-.11-3.17-.953-6.384-.438 1.34 3.684 1.887 6.684 1.992 7.308 2.3-1.555 3.936-4.02 4.395-6.87zm-6.115 7.808c-.153-.9-.75-4.032-2.19-7.77l-.066.02c-5.79 2.015-7.86 6.025-8.04 6.4 1.73 1.358 3.92 2.166 6.29 2.166 1.42 0 2.77-.29 4-.814zm-11.62-2.58c.232-.4 3.045-5.055 8.332-6.765.135-.045.27-.084.405-.12-.26-.585-.54-1.167-.832-1.74C7.17 11.775 2.206 11.71 1.756 11.7l-.004.312c0 2.633.998 5.037 2.634 6.855zm-2.42-8.955c.46.008 4.683.026 9.477-1.248-1.698-3.018-3.53-5.558-3.8-5.928-2.868 1.35-5.01 3.99-5.676 7.17zM9.6 2.052c.282.38 2.145 2.914 3.822 6 3.645-1.365 5.19-3.44 5.373-3.702-1.81-1.61-4.19-2.586-6.795-2.586-.825 0-1.63.1-2.4.285zm10.335 3.483c-.218.29-1.935 2.493-5.724 4.04.24.49.47.985.68 1.486.08.18.15.36.22.53 3.41-.43 6.8.26 7.14.33-.02-2.42-.88-4.64-2.31-6.38z"/>
-            </svg>
-          </motion.a>
-        </motion.div>
-      </motion.div>
-
-      {/* Side Text */}
-      <motion.div
-        className="hidden lg:block absolute top-1/2 -translate-y-1/2 text-gray-500 text-xs font-mono uppercase tracking-widest left-8"
-        style={{ writingMode: 'vertical-rl' }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-      >
-        <span>PORTFOLIO © 2026</span>
-      </motion.div>
-      <motion.div
-        className="hidden lg:block absolute top-1/2 -translate-y-1/2 text-gray-500 text-xs font-mono uppercase tracking-widest right-8 rotate-180"
-        style={{ writingMode: 'vertical-rl' }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-      >
-        <span>BASED IN INDIA</span>
-      </motion.div>
-
-      {/* Floating 3D Gallery */}
-      <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-[40%] h-[70vh] pointer-events-none z-[5]" style={{ perspective: '1200px' }} ref={galleryRef}>
-        <div className="relative w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
-          {galleryItems.map((item) => (
-            <motion.div
-              key={item.id}
-              className="gallery-card absolute cursor-pointer pointer-events-auto"
-              style={{
-                left: '50%',
-                top: '50%',
-                transform: `translateX(calc(-50% + ${item.x}px)) translateY(calc(-50% + ${item.y}px)) translateZ(${item.z}px) rotate(${item.rotation}deg) scale(${item.scale})`,
-                transformStyle: 'preserve-3d',
-                transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                zIndex: 5 + Math.floor(item.z / 10),
-              }}
-              whileHover={{ scale: item.scale * 1.15, zIndex: 100 }}
-            >
-              <div className="relative" style={{ transformStyle: 'preserve-3d', animation: 'card-float 4s ease-in-out infinite', animationDelay: `${item.id * 0.5}s` }}>
-                <div 
-                  className={`relative ${item.main ? 'w-40 h-52 md:w-48 md:h-60 lg:w-56 lg:h-72' : 'w-32 h-40 md:w-36 md:h-44 lg:w-40 lg:h-52'} rounded-2xl overflow-hidden border border-white/10`}
-                  style={{ 
-                    background: item.gradient,
-                    boxShadow: item.main 
-                      ? '0 30px 60px -15px rgba(0, 0, 0, 0.6), 0 0 80px rgba(99, 102, 241, 0.25)' 
-                      : '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(99, 102, 241, 0.15)'
-                  }}
-                >
-                  <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, transparent 100%)', pointerEvents: 'none' }} />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="font-mono text-white/40 text-sm font-bold absolute top-4 left-4">0{item.id}</span>
-                    <div className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-sm">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6 text-white/70">
-                        <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute inset-0 -z-10 rounded-2xl blur-3xl opacity-50" style={{ background: item.gradient, transform: 'translateZ(-20px) scale(1.3)' }} />
-              </div>
-            </motion.div>
-          ))}
-          
-          {/* Decorative orbits */}
-          <div className="absolute left-1/2 top-1/2 w-[300px] h-[300px] md:w-[400px] md:h-[400px] rounded-full border border-white/[0.03]" style={{ transform: 'translate(-50%, -50%) rotateX(75deg)', animation: 'orbit-spin 30s linear infinite' }} />
-          <div className="absolute left-1/2 top-1/2 w-[450px] h-[450px] md:w-[550px] md:h-[550px] rounded-full border border-white/[0.02]" style={{ transform: 'translate(-50%, -50%) rotateX(75deg)', animation: 'orbit-spin 40s linear infinite reverse' }} />
-        </div>
-      </div>
-    </section>
+    <span>
+      {display}
+      <span
+        className="ml-1 inline-block h-[1.05em] w-[2px] align-middle"
+        style={{
+          background: 'linear-gradient(180deg, #c7d2fe 0%, #2dd4bf 100%)',
+          animation: 'heroCursorBlink 1s step-end infinite',
+        }}
+      />
+    </span>
   )
 }
 
-export default Hero
+function MagneticButton({ children, href, variant = 'filled' }) {
+  const buttonRef = useRef(null)
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const sx = useSpring(x, { stiffness: 410, damping: 30 })
+  const sy = useSpring(y, { stiffness: 410, damping: 30 })
+
+  const onMove = (event) => {
+    if (!buttonRef.current) return
+    const box = buttonRef.current.getBoundingClientRect()
+    const centerX = box.left + box.width / 2
+    const centerY = box.top + box.height / 2
+    x.set((event.clientX - centerX) * 0.28)
+    y.set((event.clientY - centerY) * 0.28)
+  }
+
+  const onLeave = () => {
+    x.set(0)
+    y.set(0)
+  }
+
+  const baseClasses =
+    'relative inline-flex min-h-[52px] items-center justify-center gap-2 overflow-hidden rounded-full px-7 py-3.5 text-sm font-semibold tracking-wide transition-all duration-300'
+
+  const variantClasses =
+    variant === 'filled'
+      ? 'beam-button border border-indigo-300/30 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white shadow-[0_14px_38px_rgba(61,74,208,0.42)] hover:scale-[1.03] hover:shadow-[0_18px_46px_rgba(80,95,228,0.46)]'
+      : 'border border-white/20 bg-white/[0.02] text-white hover:scale-[1.03] hover:border-white/45 hover:bg-white/10'
+
+  return (
+    <motion.a
+      ref={buttonRef}
+      href={href}
+      className={`${baseClasses} ${variantClasses}`}
+      style={{ x: sx, y: sy }}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      whileTap={{ scale: 0.97 }}
+    >
+      <span className="relative z-10">{children}</span>
+    </motion.a>
+  )
+}
+
+const disposeSceneObject = (object) => {
+  object.traverse((item) => {
+    if (item.geometry) item.geometry.dispose()
+    if (item.material) {
+      if (Array.isArray(item.material)) {
+        item.material.forEach((material) => material.dispose())
+      } else {
+        item.material.dispose()
+      }
+    }
+  })
+}
+
+export default function Hero() {
+  const heroRef = useRef(null)
+  const canvasRef = useRef(null)
+  const [threeReady, setThreeReady] = useState(false)
+
+  useEffect(() => {
+    let mounted = true
+    let animationFrameId = 0
+    let renderer
+    let scene
+    let camera
+    let cleanupFns = []
+
+    const setupThree = async () => {
+      if (typeof window === 'undefined' || !heroRef.current || !canvasRef.current) return
+
+      const THREE = await import('three')
+      if (!mounted || !heroRef.current || !canvasRef.current) return
+
+      const section = heroRef.current
+      const canvas = canvasRef.current
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: true,
+        powerPreference: 'high-performance',
+      })
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8))
+      renderer.setClearColor(0x000000, 0)
+
+      scene = new THREE.Scene()
+      scene.fog = new THREE.FogExp2(0x060a16, 0.055)
+
+      camera = new THREE.PerspectiveCamera(52, 1, 0.1, 80)
+      camera.position.set(0, 0.15, 8.9)
+
+      const ambient = new THREE.AmbientLight(0x5d6de8, 0.42)
+      const key = new THREE.DirectionalLight(0xa8f5eb, 1.08)
+      key.position.set(4, 2, 6)
+      const rim = new THREE.PointLight(0xff6dc6, 1.1, 18)
+      rim.position.set(-3, -2.5, 5)
+
+      scene.add(ambient, key, rim)
+
+      const root = new THREE.Group()
+      scene.add(root)
+
+      const core = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(1.72, 2),
+        new THREE.MeshPhysicalMaterial({
+          color: 0x6f83ff,
+          emissive: 0x2b2f70,
+          emissiveIntensity: 1.15,
+          roughness: 0.14,
+          metalness: 0.28,
+          clearcoat: 1,
+          clearcoatRoughness: 0.12,
+          transmission: 0.25,
+          transparent: true,
+          opacity: 0.9,
+        })
+      )
+      root.add(core)
+
+      const wireShell = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(2.34, 1),
+        new THREE.MeshBasicMaterial({
+          color: 0x8bf4df,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.2,
+        })
+      )
+      root.add(wireShell)
+
+      const ringA = new THREE.Mesh(
+        new THREE.TorusGeometry(2.8, 0.048, 16, 220),
+        new THREE.MeshStandardMaterial({
+          color: 0x6f83ff,
+          emissive: 0x303c90,
+          emissiveIntensity: 0.85,
+          roughness: 0.2,
+          metalness: 0.72,
+          transparent: true,
+          opacity: 0.76,
+        })
+      )
+      ringA.rotation.set(Math.PI * 0.25, Math.PI * 0.04, Math.PI * 0.12)
+      root.add(ringA)
+
+      const ringB = new THREE.Mesh(
+        new THREE.TorusGeometry(2.22, 0.04, 14, 200),
+        new THREE.MeshStandardMaterial({
+          color: 0xff74ca,
+          emissive: 0x6c2a56,
+          emissiveIntensity: 0.7,
+          roughness: 0.18,
+          metalness: 0.75,
+          transparent: true,
+          opacity: 0.6,
+        })
+      )
+      ringB.rotation.set(Math.PI * 0.65, Math.PI * 0.15, Math.PI * 0.2)
+      root.add(ringB)
+
+      const starCount = 1600
+      const starGeometry = new THREE.BufferGeometry()
+      const starPositions = new Float32Array(starCount * 3)
+      const starColors = new Float32Array(starCount * 3)
+      const palette = [new THREE.Color(0x8ea2ff), new THREE.Color(0x9cf7e5), new THREE.Color(0xff8bd1)]
+
+      for (let index = 0; index < starCount; index += 1) {
+        const radius = 5.2 + Math.random() * 4.3
+        const theta = Math.random() * Math.PI * 2
+        const phi = Math.acos(2 * Math.random() - 1)
+
+        starPositions[index * 3] = radius * Math.sin(phi) * Math.cos(theta)
+        starPositions[index * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
+        starPositions[index * 3 + 2] = radius * Math.cos(phi) - 1.5
+
+        const color = palette[index % palette.length]
+        starColors[index * 3] = color.r
+        starColors[index * 3 + 1] = color.g
+        starColors[index * 3 + 2] = color.b
+      }
+
+      starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3))
+      starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3))
+
+      const stars = new THREE.Points(
+        starGeometry,
+        new THREE.PointsMaterial({
+          size: 0.028,
+          vertexColors: true,
+          transparent: true,
+          opacity: 0.72,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+        })
+      )
+      scene.add(stars)
+
+      const pointer = { x: 0, y: 0 }
+      const smoothPointer = { x: 0, y: 0 }
+      const clock = new THREE.Clock()
+
+      const onPointerMove = (event) => {
+        if (prefersReducedMotion) return
+        const box = section.getBoundingClientRect()
+        const nx = ((event.clientX - box.left) / box.width) * 2 - 1
+        const ny = ((event.clientY - box.top) / box.height) * 2 - 1
+        pointer.x = nx
+        pointer.y = -ny
+      }
+
+      const onResize = () => {
+        if (!section || !renderer || !camera) return
+        const width = section.clientWidth
+        const height = section.clientHeight
+        renderer.setSize(width, height, false)
+        camera.aspect = width / height
+        camera.updateProjectionMatrix()
+      }
+
+      section.addEventListener('pointermove', onPointerMove)
+      window.addEventListener('resize', onResize)
+      onResize()
+
+      cleanupFns = [
+        () => section.removeEventListener('pointermove', onPointerMove),
+        () => window.removeEventListener('resize', onResize),
+      ]
+
+      const animate = () => {
+        if (!mounted || !renderer || !scene || !camera) return
+        animationFrameId = requestAnimationFrame(animate)
+
+        const elapsed = clock.getElapsedTime()
+        smoothPointer.x += (pointer.x - smoothPointer.x) * 0.04
+        smoothPointer.y += (pointer.y - smoothPointer.y) * 0.04
+
+        const pointerInfluenceX = prefersReducedMotion ? 0 : smoothPointer.x
+        const pointerInfluenceY = prefersReducedMotion ? 0 : smoothPointer.y
+
+        root.rotation.y = elapsed * 0.2 + pointerInfluenceX * 0.4
+        root.rotation.x = Math.sin(elapsed * 0.28) * 0.14 + pointerInfluenceY * 0.28
+
+        core.rotation.x = elapsed * 0.18
+        core.rotation.y = elapsed * 0.22
+        wireShell.rotation.y = -elapsed * 0.15
+        ringA.rotation.z += 0.0055
+        ringB.rotation.x -= 0.0045
+
+        stars.rotation.y = -elapsed * 0.06
+        stars.rotation.x = elapsed * 0.03
+
+        camera.position.x = pointerInfluenceX * 0.42
+        camera.position.y = 0.14 + pointerInfluenceY * 0.27
+        camera.lookAt(0, 0, 0)
+
+        renderer.render(scene, camera)
+      }
+
+      animate()
+      setThreeReady(true)
+
+      cleanupFns.push(() => {
+        disposeSceneObject(root)
+        disposeSceneObject(stars)
+      })
+    }
+
+    setupThree()
+
+    return () => {
+      mounted = false
+      if (animationFrameId) cancelAnimationFrame(animationFrameId)
+      cleanupFns.forEach((fn) => fn())
+      if (renderer) renderer.dispose()
+    }
+  }, [])
+
+  useEffect(() => {
+    const context = gsap.context(() => {
+      gsap.fromTo(
+        '.hero-reveal',
+        { y: 38, opacity: 0, filter: 'blur(8px)' },
+        {
+          y: 0,
+          opacity: 1,
+          filter: 'blur(0px)',
+          duration: 0.9,
+          stagger: 0.12,
+          delay: 0.25,
+          ease: 'power3.out',
+        }
+      )
+
+      gsap.fromTo(
+        '.hero-stat-card',
+        { y: 22, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          delay: 0.85,
+          ease: 'power2.out',
+          stagger: 0.08,
+        }
+      )
+
+      gsap.fromTo(
+        '.hero-scroll',
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 0.8,
+          delay: 1.2,
+          ease: 'power2.out',
+        }
+      )
+    }, heroRef)
+
+    return () => context.revert()
+  }, [])
+
+  return (
+    <>
+      <style>{`
+        @keyframes heroCursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes heroScan { 0% { transform: translateX(-140%); } 100% { transform: translateX(140%); } }
+        @keyframes heroScrollDot { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+      `}</style>
+
+      <section
+        id="home"
+        ref={heroRef}
+        className="relative isolate min-h-screen overflow-hidden bg-[#050812] pb-24 pt-28 sm:pt-32"
+      >
+        <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 z-0 h-full w-full" />
+
+        <div className="pointer-events-none absolute inset-0 z-[1]">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_72%_65%_at_24%_28%,rgba(115,130,255,0.22),transparent_62%),radial-gradient(ellipse_66%_56%_at_84%_22%,rgba(44,212,189,0.14),transparent_62%),radial-gradient(ellipse_72%_62%_at_50%_102%,rgba(236,72,153,0.16),transparent_68%)]" />
+          <div className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,1)_1px,transparent_1px)] [background-size:68px_68px]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,18,0.68)_0%,rgba(5,8,18,0.78)_42%,rgba(5,8,18,0.94)_100%)]" />
+        </div>
+
+        <div className="section-container relative z-10 grid items-center gap-12 lg:grid-cols-[minmax(0,1.04fr)_minmax(0,0.96fr)] lg:gap-8">
+          <div className="space-y-7 text-center lg:text-left">
+            <div className="hero-reveal inline-flex items-center gap-2 rounded-full border border-indigo-300/25 bg-indigo-300/10 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-indigo-100">
+              Premium Portfolio Experience
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
+            </div>
+
+            <div className="hero-reveal space-y-4">
+              <h1 className="font-display text-[clamp(2.7rem,7.6vw,6rem)] font-black leading-[0.94] tracking-[-0.03em] text-white">
+                AYUSH
+                <span className="block bg-[linear-gradient(102deg,#d7deff_0%,#98f2e4_42%,#f7a6d2_100%)] bg-clip-text text-transparent">
+                  BUNKAR
+                </span>
+              </h1>
+
+              <p className="mx-auto max-w-2xl text-base leading-relaxed text-slate-200/88 sm:text-lg lg:mx-0">
+                I build digital products that feel expensive from the first second. Clean systems, cinematic motion,
+                and high-performance engineering come together into one premium experience.
+              </p>
+            </div>
+
+            <div className="hero-reveal text-base text-slate-200/80 sm:text-lg">
+              <span className="mr-2 text-white/65">I craft as a</span>
+              <span className="font-semibold text-cyan-200">
+                <TypewriterText texts={ROLES} />
+              </span>
+            </div>
+
+            <div className="hero-reveal flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+              <MagneticButton href="#projects" variant="filled">
+                Explore Projects
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M7 17L17 7" />
+                  <path d="M17 7H8" />
+                  <path d="M17 7V16" />
+                </svg>
+              </MagneticButton>
+              <MagneticButton href="#contact" variant="outline">
+                Book a Discovery Call
+              </MagneticButton>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {HERO_STATS.map((item) => (
+                <div key={item.label} className="hero-stat-card soft-panel px-4 py-3 text-center sm:text-left">
+                  <p className="font-display text-2xl font-bold text-white">{item.value}</p>
+                  <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-slate-300">{item.label}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="hero-reveal flex flex-wrap items-center justify-center gap-2 pt-1 lg:justify-start">
+              {SOCIAL_LINKS.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full border border-white/16 bg-white/[0.04] px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white/85 transition-colors duration-300 hover:border-cyan-200/55 hover:text-cyan-100"
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <motion.aside
+            className="hero-reveal relative mx-auto w-full max-w-[520px] lg:max-w-none"
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.5 }}
+          >
+            <div className="glass-panel relative overflow-hidden p-5 sm:p-6">
+              <div
+                className="pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-[linear-gradient(110deg,transparent_0%,rgba(255,255,255,0.42)_45%,transparent_85%)] opacity-55"
+                style={{ animation: 'heroScan 3.8s linear infinite' }}
+              />
+
+              <div className="relative z-10">
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-indigo-200">Realtime 3D Identity Layer</p>
+                <h3 className="mt-3 font-display text-2xl font-black leading-tight text-white sm:text-3xl">
+                  A Hero Built Like a Product Launch
+                </h3>
+
+                <p className="mt-3 text-sm leading-relaxed text-slate-200/90 sm:text-[15px]">
+                  The scene is rendered with Three.js: a physical-material core, orbiting rings, volumetric color fields,
+                  and additive star particles tuned for smooth motion.
+                </p>
+
+                <div className="mt-5 grid grid-cols-2 gap-2 text-xs">
+                  <div className="rounded-xl border border-white/12 bg-white/[0.04] p-3 text-slate-100">
+                    <p className="font-mono uppercase tracking-[0.14em] text-indigo-200">Render</p>
+                    <p className="mt-1 text-sm font-semibold">Adaptive Pixel Ratio</p>
+                  </div>
+                  <div className="rounded-xl border border-white/12 bg-white/[0.04] p-3 text-slate-100">
+                    <p className="font-mono uppercase tracking-[0.14em] text-cyan-200">Motion</p>
+                    <p className="mt-1 text-sm font-semibold">Pointer Reactive</p>
+                  </div>
+                  <div className="rounded-xl border border-white/12 bg-white/[0.04] p-3 text-slate-100">
+                    <p className="font-mono uppercase tracking-[0.14em] text-pink-200">Depth</p>
+                    <p className="mt-1 text-sm font-semibold">Physical Materials</p>
+                  </div>
+                  <div className="rounded-xl border border-white/12 bg-white/[0.04] p-3 text-slate-100">
+                    <p className="font-mono uppercase tracking-[0.14em] text-violet-200">Speed</p>
+                    <p className="mt-1 text-sm font-semibold">Lightweight Scene Graph</p>
+                  </div>
+                </div>
+
+                <div className="mt-5 rounded-2xl border border-white/15 bg-black/28 p-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.17em] text-cyan-200">Premium Direction</p>
+                  <p className="mt-1 text-sm text-slate-200/95">
+                    Identity is now unmistakable: bold, technical, and premium before the user scrolls.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.aside>
+        </div>
+
+        <div className="hero-scroll absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 opacity-0">
+          <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/40">Scroll to continue</span>
+          <div className="h-11 w-px bg-gradient-to-b from-cyan-200/70 via-indigo-300/55 to-transparent" />
+          <span
+            className="h-1.5 w-1.5 rounded-full bg-cyan-200/90"
+            style={{ animation: 'heroScrollDot 1.9s ease-in-out infinite' }}
+          />
+        </div>
+      </section>
+    </>
+  )
+}

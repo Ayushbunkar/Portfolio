@@ -1,293 +1,434 @@
-import { useRef, useState, useEffect } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import TiltCard from './TiltCard'
+import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import MagneticButton from './MagneticButton'
+import { ensureScrollTrigger, gsap } from '../utils/scrollAnimations'
 
-gsap.registerPlugin(ScrollTrigger)
+const PROJECTS = [
+  {
+    id: 'nova-commerce',
+    title: 'Nova Commerce',
+    phase: 'Impact 01',
+    year: '2025',
+    type: 'SaaS Commerce Platform',
+    summary:
+      'Built a conversion-focused storefront with immersive storytelling, responsive checkout flow, and optimized navigation depth.',
+    impact: '42% conversion uplift',
+    narrative: 'Commerce flow redesigned as a cinematic conversion path from discovery to checkout.',
+    accent: '#7c86ff',
+    image:
+      'https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1600&q=80',
+    stack: ['React', 'Node.js', 'MongoDB', 'Stripe'],
+    details: [
+      'Dynamic product narrative with interactive sections',
+      'Checkout drop-off reduced via frictionless flow mapping',
+      'Page performance tuned for Core Web Vitals',
+    ],
+  },
+  {
+    id: 'pulse-analytics',
+    title: 'Pulse Analytics',
+    phase: 'Impact 02',
+    year: '2025',
+    type: 'Realtime Product Dashboard',
+    summary:
+      'Designed and engineered a realtime operations dashboard where motion communicates hierarchy and critical metric states.',
+    impact: '35% faster insight cycles',
+    narrative: 'Realtime signals were translated into visual hierarchy so teams make decisions faster.',
+    accent: '#2dd4bf',
+    image:
+      'https://images.unsplash.com/photo-1518186233392-c232efbf2373?auto=format&fit=crop&w=1600&q=80',
+    stack: ['React', 'Framer Motion', 'D3', 'WebSockets'],
+    details: [
+      'Real-time charts with contextual transitions',
+      'Alert layers with priority-driven visual grammar',
+      'Systemized component architecture for scale',
+    ],
+  },
+  {
+    id: 'orbit-social',
+    title: 'Orbit Social',
+    phase: 'Impact 03',
+    year: '2024',
+    type: 'Community Product Experience',
+    summary:
+      'Created a high-retention social experience with fluid feed interactions, creator tools, and immersive posting journeys.',
+    impact: '120K active users',
+    narrative: 'Interaction loops were tuned to keep creators and audiences engaged for longer sessions.',
+    accent: '#ec4899',
+    image:
+      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80',
+    stack: ['Next.js', 'PostgreSQL', 'Redis', 'Socket.io'],
+    details: [
+      'Live interactions with resilient event handling',
+      'Publishing workflow designed for creator speed',
+      'Visual feedback loops increased session duration',
+    ],
+  },
+  {
+    id: 'astra-ai',
+    title: 'Astra AI Studio',
+    phase: 'Impact 04',
+    year: '2025',
+    type: 'AI Workflow Platform',
+    summary:
+      'Delivered a structured AI studio where teams can generate campaign assets while staying within brand and product context.',
+    impact: '58% production boost',
+    narrative: 'AI workflows were structured to reduce chaos and preserve brand quality at scale.',
+    accent: '#f59e0b',
+    image:
+      'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1600&q=80',
+    stack: ['Python', 'FastAPI', 'React', 'OpenAI'],
+    details: [
+      'Prompt systems aligned to brand and product taxonomies',
+      'Review and feedback loop integrated in one workflow',
+      'Multi-team collaboration with permission layers',
+    ],
+  },
+]
+
+const IMPACT_CONTEXT = [
+  {
+    title: 'Space Theme Continuity',
+    copy: 'Projects are mapped as constellations: each panel is a star that contributes to the larger mission narrative.',
+  },
+  {
+    title: 'Density Over Emptiness',
+    copy: 'Every case includes story, stack, outcomes, and deliverables so the section feels complete and informative.',
+  },
+  {
+    title: 'Motion With Purpose',
+    copy: 'Horizontal scroll and reveal animations are used to guide attention, not distract from decision-critical details.',
+  },
+]
 
 const Projects = () => {
   const sectionRef = useRef(null)
-  const headerRef = useRef(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' })
-  const [hoveredProject, setHoveredProject] = useState(null)
-  const [filter, setFilter] = useState('All')
-
-  const projects = [
-    {
-      id: 1,
-      title: 'E-Commerce Platform',
-      category: 'Full Stack',
-      description: 'A modern e-commerce platform with seamless UX, real-time inventory, and AI-powered recommendations.',
-      tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-      color: '#6366f1',
-      gradient: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-      year: '2024',
-    },
-    {
-      id: 2,
-      title: 'Portfolio Dashboard',
-      category: 'Frontend',
-      description: 'Interactive analytics dashboard with beautiful 3D charts and real-time data visualization.',
-      tech: ['React', 'D3.js', 'Three.js', 'GSAP'],
-      color: '#ec4899',
-      gradient: 'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)',
-      year: '2024',
-    },
-    {
-      id: 3,
-      title: 'Social Media App',
-      category: 'Full Stack',
-      description: 'Full-featured social platform with real-time messaging, stories, and infinite scroll feed.',
-      tech: ['Next.js', 'Socket.io', 'PostgreSQL', 'Redis'],
-      color: '#10b981',
-      gradient: 'linear-gradient(135deg, #10b981 0%, #14b8a6 100%)',
-      year: '2023',
-    },
-    {
-      id: 4,
-      title: 'AI Content Generator',
-      category: 'AI/ML',
-      description: 'AI-powered content tool that creates blog posts, marketing copy, and social media content.',
-      tech: ['Python', 'OpenAI', 'FastAPI', 'React'],
-      color: '#f59e0b',
-      gradient: 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)',
-      year: '2024',
-    },
-  ]
-
-  const categories = ['All', 'Full Stack', 'Frontend', 'AI/ML']
-  const filteredProjects = filter === 'All' 
-    ? projects 
-    : projects.filter(p => p.category === filter)
+  const pinRef = useRef(null)
+  const trackRef = useRef(null)
+  const [selectedProject, setSelectedProject] = useState(null)
 
   useEffect(() => {
+    const ScrollTrigger = ensureScrollTrigger()
+
     const ctx = gsap.context(() => {
+      const track = trackRef.current
+      const pin = pinRef.current
+      if (!track || !pin) return
+
+      const distance = () => Math.max(track.scrollWidth - window.innerWidth, 0)
+
+      const horizontalTween = gsap.to(track, {
+        x: () => -distance(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: pin,
+          start: 'top top',
+          end: () => `+=${distance()}`,
+          pin: true,
+          scrub: 1.05,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      })
+
       gsap.fromTo(
-        headerRef.current,
-        { y: 80, opacity: 0 },
+        '.projects-intro',
+        { opacity: 0, y: 38, filter: 'blur(10px)' },
         {
-          y: 0,
           opacity: 1,
-          duration: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 0.9,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%',
+            start: 'top 75%',
           },
         }
       )
+
+      gsap.fromTo(
+        '.projects-context-card',
+        { opacity: 0, y: 20, filter: 'blur(8px)' },
+        {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 0.6,
+          stagger: 0.08,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.projects-context-grid',
+            start: 'top 85%',
+          },
+        }
+      )
+
+      const panels = gsap.utils.toArray('.project-panel')
+      panels.forEach((panel) => {
+        const media = panel.querySelector('.project-media')
+        const copy = panel.querySelector('.project-copy')
+        const labels = panel.querySelectorAll('.floating-label')
+
+        if (media) {
+          gsap.fromTo(
+            media,
+            { scale: 1.2, opacity: 0.45, filter: 'blur(12px)' },
+            {
+              scale: 1,
+              opacity: 1,
+              filter: 'blur(0px)',
+              ease: 'none',
+              scrollTrigger: {
+                trigger: panel,
+                containerAnimation: horizontalTween,
+                start: 'left 80%',
+                end: 'center center',
+                scrub: true,
+              },
+            }
+          )
+        }
+
+        if (copy) {
+          gsap.fromTo(
+            copy,
+            { opacity: 0, y: 48, filter: 'blur(10px)' },
+            {
+              opacity: 1,
+              y: 0,
+              filter: 'blur(0px)',
+              ease: 'none',
+              scrollTrigger: {
+                trigger: panel,
+                containerAnimation: horizontalTween,
+                start: 'left 72%',
+                end: 'left 38%',
+                scrub: true,
+              },
+            }
+          )
+        }
+
+        if (labels.length > 0) {
+          gsap.fromTo(
+            labels,
+            { opacity: 0, y: 12 },
+            {
+              opacity: 1,
+              y: 0,
+              stagger: 0.08,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: panel,
+                containerAnimation: horizontalTween,
+                start: 'left 62%',
+                end: 'left 45%',
+                scrub: true,
+              },
+            }
+          )
+        }
+      })
+
+      ScrollTrigger.refresh()
     }, sectionRef)
 
     return () => ctx.revert()
   }, [])
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
-  }
+  useEffect(() => {
+    if (!selectedProject) return undefined
 
-  const cardVariants = {
-    hidden: { y: 60, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } },
-    exit: { y: -30, opacity: 0, transition: { duration: 0.3 } },
-  }
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setSelectedProject(null)
+    }
+
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [selectedProject])
 
   return (
-    <section id="projects" className="py-36 px-[5%] relative overflow-hidden bg-[#0a0a0f]" ref={sectionRef}>
-      <div className="text-center mb-16" ref={headerRef}>
-        <motion.span 
-          className="text-indigo-500 font-mono text-sm uppercase tracking-wider mb-6 block"
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          Selected Work
-        </motion.span>
-        <motion.h2 
-          className="font-display text-4xl md:text-5xl font-bold text-white mb-6"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.1 }}
-        >
-          Featured <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Projects</span>
-        </motion.h2>
-        <motion.p 
-          className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          A curated collection of my best work, showcasing expertise in 
-          modern web development and creative design.
-        </motion.p>
+    <section id="projects" ref={sectionRef} className="relative scroll-mt-28 overflow-hidden bg-[#050913] pb-12 pt-24 md:scroll-mt-32">
+      <div className="projects-intro section-container mb-10 text-center">
+        <span className="section-kicker">
+          <span className="section-kicker-dot" />
+          Impact Layer
+        </span>
+        <h2 className="section-title">
+          Project Stories in
+          <span className="section-title-gradient">A Horizontal Journey</span>
+        </h2>
+        <p className="section-copy mx-auto">
+          Scroll to move across full-screen case studies. Each panel reveals media, impact, and system decisions that shaped real outcomes.
+        </p>
 
-        <motion.div 
-          className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mt-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          {categories.map((cat) => (
-            <motion.button
-              key={cat}
-              className={`relative px-4 md:px-6 py-2.5 md:py-3 font-body text-sm font-medium bg-transparent border rounded-full cursor-pointer transition-all duration-300 overflow-hidden whitespace-nowrap ${
-                filter === cat 
-                  ? 'text-white border-transparent' 
-                  : 'text-gray-400 border-white/10 hover:text-white hover:border-white/20'
-              }`}
-              onClick={() => setFilter(cat)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {cat}
-              {filter === cat && (
-                <motion.div
-                  className="absolute inset-0 rounded-full -z-10"
-                  style={{ background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)' }}
-                  layoutId="tabIndicator"
-                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                />
-              )}
-            </motion.button>
-          ))}
-        </motion.div>
+        <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-slate-300/95 sm:text-base">
+          This is the impact orbit of the site. As you move horizontally, each project expands from headline to execution
+          detail so the storyline stays clear without feeling sparse.
+        </p>
       </div>
 
-      <motion.div 
-        className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-6xl mx-auto"
-        variants={containerVariants}
-        initial="hidden"
-        animate={isInView ? 'visible' : 'hidden'}
-      >
-        <AnimatePresence mode="wait">
-          {filteredProjects.map((project, index) => (
-            <motion.div
+      <div className="projects-context-grid section-container mb-10 grid gap-3 md:grid-cols-3">
+        {IMPACT_CONTEXT.map((item) => (
+          <motion.article
+            key={item.title}
+            className="projects-context-card narrative-card p-4 text-left"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.45 }}
+          >
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-pink-200">{item.title}</p>
+            <p className="mt-2 text-sm leading-relaxed text-slate-200">{item.copy}</p>
+          </motion.article>
+        ))}
+      </div>
+
+      <div ref={pinRef} className="relative">
+        <div ref={trackRef} className="flex w-max">
+          {PROJECTS.map((project) => (
+            <article
               key={project.id}
-              className="w-full"
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              layout
-              onMouseEnter={() => setHoveredProject(project.id)}
-              onMouseLeave={() => setHoveredProject(null)}
+              className="project-panel relative min-h-screen w-screen overflow-hidden px-4 pb-10 pt-28 sm:px-8 sm:pt-32 lg:px-16"
+              style={{
+                background: `radial-gradient(circle at 18% 18%, ${project.accent}2f, transparent 42%), radial-gradient(circle at 78% 82%, rgba(124,134,255,0.12), transparent 45%), #050913`,
+              }}
             >
-              <TiltCard intensity={8}>
-                <div 
-                  className="relative bg-white/[0.02] border border-white/[0.06] rounded-3xl overflow-hidden transition-all duration-300 hover:border-white/[0.12]"
-                  style={{ '--project-color': project.color, boxShadow: hoveredProject === project.id ? '0 30px 60px -15px rgba(0, 0, 0, 0.5)' : 'none' }}
-                >
-                  <span className="absolute top-6 left-6 font-mono text-sm text-indigo-500/60 z-10">
-                    0{index + 1}
-                  </span>
-
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    <div 
-                      className="w-full h-full flex items-center justify-center relative"
-                      style={{ background: project.gradient }}
-                    >
-                      <span className="font-display text-[clamp(4rem,10vw,8rem)] font-extrabold text-white/20">
-                        {project.title.split(' ').map(w => w[0]).join('')}
-                      </span>
-                      
-                      <motion.div
-                        className="absolute rounded-full opacity-30 w-40 h-40 -top-10 -right-10 bg-white/10"
-                        animate={{ rotate: 360, scale: hoveredProject === project.id ? 1.2 : 1 }}
-                        transition={{ rotate: { duration: 20, repeat: Infinity, ease: 'linear' }, scale: { duration: 0.3 } }}
-                      />
-                      <motion.div
-                        className="absolute rounded-full opacity-30 w-32 h-32 -bottom-8 -left-8 bg-white/5"
-                        animate={{ rotate: -360, scale: hoveredProject === project.id ? 1.3 : 1 }}
-                        transition={{ rotate: { duration: 25, repeat: Infinity, ease: 'linear' }, scale: { duration: 0.3 } }}
-                      />
-                    </div>
-
-                    <motion.div
-                      className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: hoveredProject === project.id ? 1 : 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <div className="flex gap-4">
-                        <motion.a
-                          href="#"
-                          className="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex flex-col items-center justify-center gap-1 text-white transition-all duration-300 hover:bg-white/20"
-                          whileHover={{ scale: 1.1, rotate: 10 }}
-                          whileTap={{ scale: 0.9 }}
-                        >
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
-                            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
-                          </svg>
-                          <span className="text-xs font-medium">Live</span>
-                        </motion.a>
-                        <motion.a
-                          href="#"
-                          className="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex flex-col items-center justify-center gap-1 text-white transition-all duration-300 hover:bg-white/20"
-                          whileHover={{ scale: 1.1, rotate: -10 }}
-                          whileTap={{ scale: 0.9 }}
-                        >
-                          <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                          </svg>
-                          <span className="text-xs font-medium">Code</span>
-                        </motion.a>
-                      </div>
-                    </motion.div>
+              <div className="mx-auto grid max-w-[1320px] items-start gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-8">
+                <div className="project-copy flex min-w-0 flex-col lg:min-h-[44vh]">
+                  <div className="mb-3 flex flex-wrap items-center gap-2">
+                    <span className="meaning-badge">{project.phase}</span>
+                    <span className="rounded-full border border-white/20 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-300">
+                      {project.year}
+                    </span>
                   </div>
 
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="font-mono text-xs text-indigo-500 uppercase tracking-wider">{project.category}</span>
-                      <span className="font-mono text-xs text-gray-500">{project.year}</span>
-                    </div>
-                    <h3 className="font-display text-xl font-bold text-white mb-3">{project.title}</h3>
-                    <p className="text-gray-400 text-sm leading-relaxed mb-4">{project.description}</p>
-                    
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.tech.map((tech, i) => (
-                        <motion.span 
-                          key={i} 
-                          className="px-3.5 py-1.5 font-mono text-xs font-medium text-gray-400 bg-white/5 border border-white/[0.08] rounded-full transition-all duration-300 hover:text-white hover:border-white/20 hover:bg-white/[0.08]"
-                          whileHover={{ scale: 1.1, y: -2 }}
-                        >
-                          {tech}
-                        </motion.span>
-                      ))}
-                    </div>
+                  <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-cyan-200">{project.type}</p>
+                  <h3 className="mt-2 min-h-[5.2rem] max-w-[12ch] font-display text-[clamp(1.9rem,4.2vw,3.6rem)] font-black leading-[0.92] tracking-[-0.015em] text-white sm:min-h-[6.2rem]">
+                    {project.title}
+                  </h3>
 
-                    <motion.div 
-                      className="flex items-center gap-2 text-gray-400 text-sm font-medium cursor-pointer transition-all duration-300 hover:text-indigo-500"
-                      animate={{ x: hoveredProject === project.id ? 5 : 0, opacity: hoveredProject === project.id ? 1 : 0.5 }}
+                  <p className="mt-2 min-h-[3.1rem] max-w-xl text-[13px] leading-relaxed text-slate-200 sm:min-h-[3.6rem] sm:text-sm">
+                    {project.summary}
+                  </p>
+
+                  <p className="mt-2 min-h-[4.7rem] max-w-xl rounded-2xl border border-white/15 bg-black/25 p-2.5 text-[13px] leading-relaxed text-slate-100/95 sm:min-h-[5.2rem] sm:text-sm">
+                    {project.narrative}
+                  </p>
+
+                  <div className="mt-4 min-h-[2.1rem] flex flex-wrap gap-1.5 sm:min-h-[2.4rem] sm:gap-2">
+                    {project.stack.map((item) => (
+                      <span
+                        key={`${project.id}-${item}`}
+                        className="floating-label rounded-full border border-white/20 bg-white/10 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.1em] text-slate-100 sm:px-2.5 sm:py-1 sm:text-[9px]"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mt-4 min-h-[4.9rem] rounded-2xl border border-white/15 bg-black/25 p-2.5 sm:p-3">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-indigo-200">Outcome</p>
+                    <p className="mt-1 font-display text-base font-bold text-white sm:text-lg">{project.impact}</p>
+                  </div>
+
+                  <div className="mt-auto flex flex-wrap items-center gap-2.5 pt-4">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedProject(project)}
+                      className="beam-button rounded-full border border-white/20 bg-white/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-white transition-colors hover:bg-white/18"
                     >
-                      <span>View Project</span>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                    </motion.div>
+                      Open Details
+                    </button>
+                    <MagneticButton href="#contact" className="outline rounded-full">
+                      <span>Build Similar</span>
+                    </MagneticButton>
                   </div>
                 </div>
-              </TiltCard>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </motion.div>
 
-      <motion.div 
-        className="flex justify-center mt-16"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-      >
-        <MagneticButton href="#" className="outline">
-          <span>View All Projects</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        </MagneticButton>
-      </motion.div>
+                <motion.div className="project-media min-w-0 w-full overflow-hidden rounded-2xl border border-white/20 bg-black/20 shadow-[0_28px_90px_rgba(5,10,24,0.55)]">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="h-[34vh] w-full object-cover sm:h-[40vh] lg:h-[44vh]"
+                    loading="lazy"
+                  />
+
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_24%_22%,rgba(255,255,255,0.26),transparent_36%)] opacity-45" />
+                </motion.div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            className="fixed inset-0 z-[1300] flex items-center justify-center bg-black/75 p-4 backdrop-blur-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedProject(null)}
+          >
+            <motion.div
+              className="glass-panel relative w-full max-w-3xl overflow-hidden p-4 sm:p-6"
+              initial={{ opacity: 0, y: 28, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.96 }}
+              transition={{ duration: 0.3 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setSelectedProject(null)}
+                className="absolute right-4 top-4 rounded-full border border-white/25 bg-black/35 px-3 py-1 text-xs text-white"
+              >
+                Close
+              </button>
+
+              <img
+                src={selectedProject.image}
+                alt={selectedProject.title}
+                className="h-52 w-full rounded-2xl border border-white/20 object-cover sm:h-64"
+                loading="lazy"
+              />
+
+              <div className="mt-4 flex flex-wrap items-center gap-3">
+                <span className="meaning-badge">{selectedProject.phase}</span>
+                <span className="rounded-full border border-white/20 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-300">
+                  {selectedProject.type}
+                </span>
+              </div>
+
+              <h3 className="mt-3 font-display text-3xl font-black text-white">{selectedProject.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-slate-200">{selectedProject.summary}</p>
+
+              <div className="mt-4 rounded-2xl border border-white/15 bg-black/25 p-4">
+                <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-indigo-200">What Was Delivered</p>
+                <ul className="mt-2 space-y-2">
+                  {selectedProject.details.map((item) => (
+                    <li key={item} className="text-sm text-slate-100">• {item}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {selectedProject.stack.map((item) => (
+                  <span
+                    key={`${selectedProject.id}-modal-${item}`}
+                    className="rounded-full border border-white/20 bg-white/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-slate-100"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

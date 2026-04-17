@@ -1,7 +1,15 @@
 import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 
-const MagneticButton = ({ children, className = '', onClick, href }) => {
+const MagneticButton = ({
+  children,
+  className = '',
+  onClick,
+  href,
+  type = 'button',
+  target,
+  rel,
+}) => {
   const ref = useRef(null)
   const [position, setPosition] = useState({ x: 0, y: 0 })
 
@@ -26,11 +34,14 @@ const MagneticButton = ({ children, className = '', onClick, href }) => {
     <Component
       ref={ref}
       href={href}
-      className={`relative inline-flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 font-body text-sm font-semibold rounded-full cursor-pointer transition-all duration-300 whitespace-nowrap ${
+      type={href ? undefined : type}
+      target={href ? target : undefined}
+      rel={href ? rel : undefined}
+      className={`group relative inline-flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 font-body text-sm font-semibold rounded-full cursor-pointer transition-all duration-300 whitespace-nowrap ${
         isFilled 
           ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-none hover:shadow-[0_10px_40px_rgba(99,102,241,0.3)]' 
           : isOutline
-          ? 'bg-transparent text-white border border-white/20 hover:border-indigo-500/50 hover:bg-indigo-500/10'
+          ? 'bg-transparent text-white border border-white/30 hover:border-indigo-400/70 hover:bg-indigo-500/10'
           : 'bg-white/5 text-white border border-white/10 hover:border-indigo-500/30 hover:bg-white/10'
       } ${className}`}
       onClick={onClick}

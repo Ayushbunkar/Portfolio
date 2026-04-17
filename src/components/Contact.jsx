@@ -1,311 +1,278 @@
-import { useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
-import MagneticButton from './MagneticButton'
-import { ScrambleText } from './GlitchText'
+import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
+import { ensureScrollTrigger, gsap } from '../utils/scrollAnimations'
+
+const COLLAB_STEPS = [
+  {
+    phase: 'Step 01',
+    title: 'Context Sync',
+    detail: 'We align on product goals, audience, timeline, and what premium success should look like.',
+  },
+  {
+    phase: 'Step 02',
+    title: 'Design + Build Route',
+    detail: 'You receive a practical execution roadmap with visual direction, feature priorities, and delivery plan.',
+  },
+  {
+    phase: 'Step 03',
+    title: 'Launch Continuum',
+    detail: 'The final output is refined, performant, and ready for real users with ongoing optimization support.',
+  },
+]
 
 const Contact = () => {
-  const sectionRef = useRef(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' })
-  const [focused, setFocused] = useState(null)
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     name: '',
     email: '',
-    subject: '',
-    message: ''
+    projectType: '',
+    budget: '',
+    message: '',
   })
+  const [submitted, setSubmitted] = useState(false)
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
+  useEffect(() => {
+    ensureScrollTrigger()
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '.contact-intro',
+        { opacity: 0, y: 40, filter: 'blur(8px)' },
+        {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '#contact',
+            start: 'top 78%',
+          },
+        }
+      )
+
+      gsap.fromTo(
+        '.contact-card',
+        { opacity: 0, y: 24 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          stagger: 0.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '#contact .contact-grid',
+            start: 'top 82%',
+          },
+        }
+      )
+
+      gsap.fromTo(
+        '.contact-process-card',
+        { opacity: 0, y: 16, filter: 'blur(6px)' },
+        {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 0.55,
+          stagger: 0.09,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '#contact .contact-process-grid',
+            start: 'top 86%',
+          },
+        }
+      )
+    })
+
+    return () => ctx.revert()
+  }, [])
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setForm((prev) => ({ ...prev, [name]: value }))
+    if (submitted) setSubmitted(false)
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log('Form submitted:', formData)
-    // Add your form submission logic here
-  }
-
-  const contactInfo = [
-    {
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-      ),
-      label: 'Email',
-      value: 'hello@ayushbunkar.com',
-      link: 'mailto:hello@ayushbunkar.com'
-    },
-    {
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-          <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-      ),
-      label: 'Location',
-      value: 'India',
-      link: null
-    },
-    {
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
-        </svg>
-      ),
-      label: 'Website',
-      value: 'ayushbunkar.com',
-      link: 'https://ayushbunkar.com'
-    }
-  ]
-
-  const socialLinks = [
-    { 
-      name: 'GitHub', 
-      icon: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-        </svg>
-      ),
-      url: 'https://github.com' 
-    },
-    { 
-      name: 'LinkedIn', 
-      icon: (
-        <svg viewBox="0 0 24 24" fill="#0A66C2" className="w-5 h-5">
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-        </svg>
-      ),
-      url: 'https://linkedin.com' 
-    },
-    { 
-      name: 'Twitter', 
-      icon: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-        </svg>
-      ),
-      url: 'https://twitter.com' 
-    },
-    { 
-      name: 'Instagram', 
-      icon: (
-        <svg viewBox="0 0 24 24" fill="url(#instagram-gradient)" className="w-5 h-5">
-          <defs>
-            <linearGradient id="instagram-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#FFDC80"/>
-              <stop offset="25%" stopColor="#FCAF45"/>
-              <stop offset="50%" stopColor="#F77737"/>
-              <stop offset="75%" stopColor="#F56040"/>
-              <stop offset="100%" stopColor="#C13584"/>
-            </linearGradient>
-          </defs>
-          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-        </svg>
-      ),
-      url: 'https://instagram.com' 
-    },
-  ]
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: [0.76, 0, 0.24, 1],
-      },
-    },
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    setSubmitted(true)
   }
 
   return (
-    <section id="contact" className="py-36 px-[5%] relative overflow-hidden bg-[#0a0a0f]" ref={sectionRef}>
-      <div className="max-w-7xl mx-auto">
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-        >
-          <span className="text-indigo-500 font-mono text-sm uppercase tracking-wider mb-6 block">Get In Touch</span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6">
-            Let's Work <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Together</span>
+    <section id="contact" className="section-shell bg-[#050913] pb-24">
+      <div className="section-container">
+        <div className="contact-intro text-center">
+          <span className="section-kicker">
+            <span className="section-kicker-dot" />
+            Connection Layer
+          </span>
+          <h2 className="section-title">
+            Let&apos;s Design Something
+            <span className="section-title-gradient">That Feels Premium & Alive</span>
           </h2>
-          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-            Have a project in mind? Let's create something amazing together. 
-            I'm always open to discussing new opportunities.
+          <p className="section-copy mx-auto">
+            Share your vision and goals. I&apos;ll respond with a sharp project direction, delivery path, and a practical build plan.
           </p>
-        </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16">
-          {/* Contact Form */}
-          <motion.div 
-            className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6 md:p-8 lg:p-10"
-            variants={containerVariants}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-          >
-            <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-              <motion.div 
-                className="relative"
-                variants={itemVariants}
-              >
+          <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-slate-300/95 sm:text-base">
+            This final section keeps the same space-mission continuity as the rest of the page and converts it into a
+            clear collaboration protocol, so nothing feels disconnected.
+          </p>
+        </div>
+
+        <div className="contact-grid mt-12 grid gap-8 lg:grid-cols-[0.88fr_1.12fr]">
+          <aside className="contact-card glass-panel p-6 sm:p-7">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-indigo-200">Direct Channels</p>
+
+            <div className="mt-4 space-y-3">
+              {[
+                ['Email', 'hello@ayushbunkar.com'],
+                ['Location', 'India'],
+                ['Timezone', 'IST (UTC +05:30)'],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-2xl border border-white/12 bg-black/25 p-4">
+                  <p className="text-xs text-slate-400">{label}</p>
+                  <p className="mt-1 text-sm font-medium text-white">{value}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-5 rounded-2xl border border-cyan-300/30 bg-cyan-500/10 p-4">
+              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-100">Availability</p>
+              <p className="mt-2 text-sm text-cyan-50">Open for selected freelance and product collaborations.</p>
+            </div>
+
+            <div className="mt-5 rounded-2xl border border-white/12 bg-black/25 p-4">
+              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-slate-300">Meaning Layer</p>
+              <p className="mt-2 text-sm text-slate-200">
+                Contact is connection: this is where identity, origin, power, and impact turn into real collaboration.
+              </p>
+            </div>
+
+            <div className="contact-process-grid mt-5 space-y-3">
+              {COLLAB_STEPS.map((item) => (
+                <motion.article
+                  key={item.phase}
+                  className="contact-process-card narrative-card p-4"
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45 }}
+                >
+                  <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-200">{item.phase}</p>
+                  <p className="mt-1 text-sm font-semibold text-white">{item.title}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-200">{item.detail}</p>
+                </motion.article>
+              ))}
+            </div>
+          </aside>
+
+          <form onSubmit={handleSubmit} className="contact-card glass-panel space-y-4 p-6 sm:p-7">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-indigo-200">Project Brief</p>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="focus-ring-shell block">
+                <span className="mb-1.5 block text-xs text-slate-300">Name</span>
                 <input
-                  type="text"
+                  className="focus-input"
                   name="name"
-                  id="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  onFocus={() => setFocused('name')}
-                  onBlur={() => setFocused(null)}
-                  placeholder="Your Name"
-                  required
-                  className="w-full bg-transparent border-b border-white/10 py-4 text-white font-body text-base placeholder:text-gray-500 outline-none transition-all duration-300 focus:border-indigo-500"
-                />
-              </motion.div>
-
-              <motion.div 
-                className="relative"
-                variants={itemVariants}
-              >
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  onFocus={() => setFocused('email')}
-                  onBlur={() => setFocused(null)}
-                  placeholder="Your Email"
-                  required
-                  className="w-full bg-transparent border-b border-white/10 py-4 text-white font-body text-base placeholder:text-gray-500 outline-none transition-all duration-300 focus:border-indigo-500"
-                />
-              </motion.div>
-
-              <motion.div 
-                className="relative"
-                variants={itemVariants}
-              >
-                <input
                   type="text"
-                  name="subject"
-                  id="subject"
-                  value={formData.subject}
+                  value={form.name}
                   onChange={handleChange}
-                  onFocus={() => setFocused('subject')}
-                  onBlur={() => setFocused(null)}
-                  placeholder="Subject"
+                  placeholder="Your name"
                   required
-                  className="w-full bg-transparent border-b border-white/10 py-4 text-white font-body text-base placeholder:text-gray-500 outline-none transition-all duration-300 focus:border-indigo-500"
                 />
-              </motion.div>
+              </label>
 
-              <motion.div 
-                className="relative"
-                variants={itemVariants}
-              >
-                <textarea
-                  name="message"
-                  id="message"
-                  rows="5"
-                  value={formData.message}
+              <label className="focus-ring-shell block">
+                <span className="mb-1.5 block text-xs text-slate-300">Email</span>
+                <input
+                  className="focus-input"
+                  name="email"
+                  type="email"
+                  value={form.email}
                   onChange={handleChange}
-                  onFocus={() => setFocused('message')}
-                  onBlur={() => setFocused(null)}
-                  placeholder="Your Message"
+                  placeholder="you@company.com"
                   required
-                  className="w-full bg-transparent border-b border-white/10 py-4 text-white font-body text-base placeholder:text-gray-500 outline-none transition-all duration-300 focus:border-indigo-500 resize-none"
                 />
-              </motion.div>
+              </label>
+            </div>
 
-              <motion.div variants={itemVariants} className="mt-4">
-                <MagneticButton type="submit" className="filled">
-                  <span>Send Message</span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
-                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
-                  </svg>
-                </MagneticButton>
-              </motion.div>
-            </form>
-          </motion.div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="focus-ring-shell block">
+                <span className="mb-1.5 block text-xs text-slate-300">Project Type</span>
+                <select
+                  className="focus-input"
+                  name="projectType"
+                  value={form.projectType}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="Portfolio">Portfolio Website</option>
+                  <option value="SaaS">SaaS Landing Page</option>
+                  <option value="Dashboard">Dashboard</option>
+                  <option value="E-commerce">E-commerce</option>
+                </select>
+              </label>
 
-          {/* Contact Info */}
-          <motion.div 
-            className="flex flex-col gap-4 md:gap-6"
-            variants={containerVariants}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-          >
-            <motion.div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6 md:p-8" variants={itemVariants}>
-              <h3 className="font-display text-lg md:text-xl font-semibold text-white mb-4 md:mb-6">
-                <ScrambleText>Contact Info</ScrambleText>
-              </h3>
-              <div className="flex flex-col gap-3 md:gap-4">
-                {contactInfo.map((info, index) => (
-                  <motion.a
-                    key={index}
-                    href={info.link || '#'}
-                    className="flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
-                    whileHover={{ x: 10 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
-                  >
-                    <span className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center bg-indigo-500/10 rounded-lg text-indigo-500 flex-shrink-0 [&>svg]:w-4 [&>svg]:h-4 md:[&>svg]:w-5 md:[&>svg]:h-5">{info.icon}</span>
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-xs md:text-sm text-gray-500">{info.label}</span>
-                      <span className="text-white font-medium text-sm md:text-base truncate">{info.value}</span>
-                    </div>
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
+              <label className="focus-ring-shell block">
+                <span className="mb-1.5 block text-xs text-slate-300">Budget Range</span>
+                <select
+                  className="focus-input"
+                  name="budget"
+                  value={form.budget}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="2L-5L">₹2L - ₹5L</option>
+                  <option value="5L-10L">₹5L - ₹10L</option>
+                  <option value="10L+">₹10L+</option>
+                </select>
+              </label>
+            </div>
 
-            <motion.div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-8" variants={itemVariants}>
-              <h3 className="font-display text-xl font-semibold text-white mb-6">Follow Me</h3>
-              <div className="grid grid-cols-2 gap-3 md:gap-4">
-                {socialLinks.map((social, index) => (
-                  <motion.a
-                    key={index}
-                    href={social.url}
-                    className="flex items-center justify-start gap-3 p-3 md:p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl transition-all duration-300 hover:border-indigo-500/30 hover:bg-indigo-500/5"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ y: -5, scale: 1.02 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <span className="w-8 h-8 flex items-center justify-center flex-shrink-0">{social.icon}</span>
-                    <span className="text-gray-400 text-sm font-medium truncate">{social.name}</span>
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
+            <label className="focus-ring-shell block">
+              <span className="mb-1.5 block text-xs text-slate-300">What are you building?</span>
+              <textarea
+                className="focus-input min-h-[138px] resize-y"
+                name="message"
+                value={form.message}
+                onChange={handleChange}
+                placeholder="Tell me your goals, timeline, and what success should look like..."
+                required
+              />
+            </label>
+
+            <motion.button
+              type="submit"
+              className="beam-button relative w-full overflow-hidden rounded-2xl border border-indigo-300/40 bg-gradient-to-r from-indigo-500 to-pink-500 px-6 py-3 font-semibold text-white shadow-[0_18px_44px_rgba(80,70,230,0.42)]"
+              whileHover={{ y: -2, scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Send Project Brief
+            </motion.button>
+
+            <motion.p
+              initial={false}
+              animate={{ opacity: submitted ? 1 : 0, y: submitted ? 0 : 6 }}
+              className="text-sm text-cyan-200"
+            >
+              Thanks. Your brief is ready to send. Connect via email and I&apos;ll reply with a roadmap.
+            </motion.p>
+          </form>
         </div>
-      </div>
 
-      {/* Footer */}
-      <footer className="mt-24 pt-12 border-t border-white/5">
-        <div className="max-w-7xl mx-auto text-center px-4">
-          <div className="mb-6 flex flex-col items-center justify-center">
-            <span className="font-display text-xl font-bold text-white">Ayush Bunkar</span>
-            <span className="text-gray-500 text-sm mt-1">Creative Developer</span>
-          </div>
-          <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} All Rights Reserved. Built with ❤️ and React.
+        <footer className="mt-14 border-t border-white/10 pt-8 text-center">
+          <p className="font-display text-xl font-bold text-white">Ayush Bunkar</p>
+          <p className="mt-1 text-sm text-slate-400">Creative Developer • Motion-Driven Frontend Engineer</p>
+          <p className="mx-auto mt-3 max-w-xl text-xs leading-relaxed text-slate-500">
+            End of route: from launch signal to collaboration channel, every section above was designed to carry one
+            consistent space-themed product story.
           </p>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </section>
   )
 }
