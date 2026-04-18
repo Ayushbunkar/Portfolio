@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import AnimatedCounter from './AnimatedCounter'
 import MagneticButton from './MagneticButton'
 import { ensureScrollTrigger, gsap } from '../utils/scrollAnimations'
@@ -256,12 +256,19 @@ const About = () => {
               <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_14%_22%,rgba(124,134,255,0.26),transparent_38%),radial-gradient(circle_at_82%_18%,rgba(45,212,191,0.18),transparent_34%),radial-gradient(circle_at_52%_90%,rgba(236,72,153,0.2),transparent_40%)]" />
 
               <div className="relative overflow-hidden rounded-2xl border border-white/15">
-                <img
-                  src={ORIGIN_STEPS[activeStep].image}
-                  alt={ORIGIN_STEPS[activeStep].title}
-                  className="h-[300px] w-full object-cover sm:h-[360px]"
-                  loading="lazy"
-                />
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={ORIGIN_STEPS[activeStep].image}
+                    src={ORIGIN_STEPS[activeStep].image}
+                    alt={ORIGIN_STEPS[activeStep].title}
+                    className="h-[300px] w-full object-cover sm:h-[360px]"
+                    loading="lazy"
+                    initial={{ opacity: 0, scale: 1.08, filter: 'blur(8px)' }}
+                    animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                    exit={{ opacity: 0, scale: 0.98, filter: 'blur(8px)' }}
+                    transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                  />
+                </AnimatePresence>
 
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5">
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-indigo-200">

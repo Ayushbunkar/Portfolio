@@ -290,68 +290,68 @@ const Projects = () => {
           {PROJECTS.map((project) => (
             <article
               key={project.id}
-              className="project-panel relative min-h-screen w-screen overflow-hidden px-4 pb-10 pt-28 sm:px-8 sm:pt-32 lg:px-16"
+              className="project-panel relative min-h-screen w-screen overflow-hidden px-4 pb-2 pt-26 sm:px-7 sm:pb-4 sm:pt-30 lg:px-14 lg:pt-36"
               style={{
                 background: `radial-gradient(circle at 18% 18%, ${project.accent}2f, transparent 42%), radial-gradient(circle at 78% 82%, rgba(124,134,255,0.12), transparent 45%), #050913`,
               }}
             >
-              <div className="mx-auto grid max-w-[1320px] items-start gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-8">
-                <div className="project-copy flex min-w-0 flex-col lg:min-h-[44vh]">
-                  <div className="mb-3 flex flex-wrap items-center gap-2">
+              <div className="mx-auto grid max-w-[1240px] items-stretch gap-4 lg:grid-cols-2 lg:gap-6">
+                <div className="project-copy flex h-full min-w-0 w-full max-w-[480px] flex-col justify-self-center">
+                  <div className="mb-2 flex flex-wrap items-center gap-1.5">
                     <span className="meaning-badge">{project.phase}</span>
-                    <span className="rounded-full border border-white/20 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-300">
+                    <span className="rounded-full border border-white/20 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-slate-300">
                       {project.year}
                     </span>
                   </div>
 
-                  <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-cyan-200">{project.type}</p>
-                  <h3 className="mt-2 min-h-[5.2rem] max-w-[12ch] font-display text-[clamp(1.9rem,4.2vw,3.6rem)] font-black leading-[0.92] tracking-[-0.015em] text-white sm:min-h-[6.2rem]">
+                  <p className="font-mono text-[8px] uppercase tracking-[0.1em] text-cyan-200">{project.type}</p>
+                  <h3 className="mt-1.5 min-h-[4.1rem] max-w-[12ch] font-display text-[clamp(1.55rem,3.2vw,2.9rem)] font-black leading-[0.9] tracking-[-0.01em] text-white sm:min-h-[4.9rem]">
                     {project.title}
                   </h3>
 
-                  <p className="mt-2 min-h-[3.1rem] max-w-xl text-[13px] leading-relaxed text-slate-200 sm:min-h-[3.6rem] sm:text-sm">
+                  <p className="mt-1.5 min-h-[2.6rem] max-w-xl text-[12px] leading-relaxed text-slate-200 sm:min-h-[3rem] sm:text-[13px]">
                     {project.summary}
                   </p>
 
-                  <p className="mt-2 min-h-[4.7rem] max-w-xl rounded-2xl border border-white/15 bg-black/25 p-2.5 text-[13px] leading-relaxed text-slate-100/95 sm:min-h-[5.2rem] sm:text-sm">
+                  <p className="mt-1.5 min-h-[3.9rem] max-w-xl rounded-2xl border border-white/15 bg-black/25 p-2 text-[12px] leading-relaxed text-slate-100/95 sm:min-h-[4.4rem] sm:text-[13px]">
                     {project.narrative}
                   </p>
 
-                  <div className="mt-4 min-h-[2.1rem] flex flex-wrap gap-1.5 sm:min-h-[2.4rem] sm:gap-2">
+                  <div className="mt-2.5 min-h-[1.8rem] flex flex-wrap gap-1 sm:min-h-[2rem] sm:gap-1.5">
                     {project.stack.map((item) => (
                       <span
                         key={`${project.id}-${item}`}
-                        className="floating-label rounded-full border border-white/20 bg-white/10 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.1em] text-slate-100 sm:px-2.5 sm:py-1 sm:text-[9px]"
+                        className="floating-label rounded-full border border-white/20 bg-white/10 px-1.5 py-0.5 font-mono text-[7px] uppercase tracking-[0.08em] text-slate-100 sm:px-2 sm:text-[8px]"
                       >
                         {item}
                       </span>
                     ))}
                   </div>
 
-                  <div className="mt-4 min-h-[4.9rem] rounded-2xl border border-white/15 bg-black/25 p-2.5 sm:p-3">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-indigo-200">Outcome</p>
-                    <p className="mt-1 font-display text-base font-bold text-white sm:text-lg">{project.impact}</p>
+                  <div className="mt-2.5 min-h-[4rem] rounded-2xl border border-white/15 bg-black/25 p-2 sm:min-h-[4.4rem] sm:p-2.5">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-indigo-200">Outcome</p>
+                    <p className="mt-1 font-display text-[1.45rem] font-bold leading-none text-white sm:text-[1.7rem]">{project.impact}</p>
                   </div>
 
-                  <div className="mt-auto flex flex-wrap items-center gap-2.5 pt-4">
+                  <div className="mt-3 flex flex-wrap items-center gap-2 pt-1">
                     <button
                       type="button"
                       onClick={() => setSelectedProject(project)}
-                      className="beam-button rounded-full border border-white/20 bg-white/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-white transition-colors hover:bg-white/18"
+                      className="beam-button rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-white/18"
                     >
                       Open Details
                     </button>
-                    <MagneticButton href="#contact" className="outline rounded-full">
+                    <MagneticButton href="#contact" className="outline rounded-full !px-4 !py-2 !text-xs">
                       <span>Build Similar</span>
                     </MagneticButton>
                   </div>
                 </div>
 
-                <motion.div className="project-media min-w-0 w-full overflow-hidden rounded-2xl border border-white/20 bg-black/20 shadow-[0_28px_90px_rgba(5,10,24,0.55)]">
+                <motion.div className="project-media aspect-[4/3] sm:aspect-[6/5] min-w-0 w-full max-w-[480px] justify-self-center self-center overflow-hidden rounded-2xl border border-white/20 bg-black/20 shadow-[0_28px_90px_rgba(5,10,24,0.55)]">
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="h-[34vh] w-full object-cover sm:h-[40vh] lg:h-[44vh]"
+                    className="h-full w-full object-cover object-center"
                     loading="lazy"
                   />
 

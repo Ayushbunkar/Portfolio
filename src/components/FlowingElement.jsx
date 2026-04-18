@@ -47,10 +47,10 @@ const FLOW_STEPS = [
 ]
 
 const SHAPE_STYLE = {
-  circle: { width: 12, height: 12, borderRadius: '999px', rotate: 0 },
-  diamond: { width: 11, height: 11, borderRadius: '34%', rotate: 45 },
-  hex: { width: 14, height: 14, borderRadius: '30%', rotate: 30 },
-  pill: { width: 21, height: 9, borderRadius: '999px', rotate: 8 },
+  circle: { width: 18, height: 18, borderRadius: '999px', rotate: 0 },
+  diamond: { width: 16, height: 16, borderRadius: '34%', rotate: 45 },
+  hex: { width: 21, height: 21, borderRadius: '30%', rotate: 30 },
+  pill: { width: 30, height: 12, borderRadius: '999px', rotate: 8 },
 }
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
@@ -175,9 +175,9 @@ const FlowingElement = () => {
         <motion.div
           className="connector-tail absolute left-1/2 -translate-x-1/2"
           style={{
-            top: -116,
-            width: 2,
-            height: 112,
+            top: -142,
+            width: 3,
+            height: 138,
             borderRadius: 999,
           }}
           animate={{ opacity: [0.45, 0.82, 0.45] }}
@@ -187,13 +187,13 @@ const FlowingElement = () => {
         <motion.div
           className="absolute left-1/2 -translate-x-1/2"
           style={{
-            top: -134,
-            width: 30,
-            height: 30,
+            top: -174,
+            width: 46,
+            height: 46,
             borderRadius: '999px',
-            filter: 'blur(11px)',
+            filter: 'blur(15px)',
             background: model.color,
-            opacity: 0.28,
+            opacity: 0.35,
           }}
           animate={{ scale: [0.9, 1.15, 0.9] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
@@ -217,6 +217,43 @@ const FlowingElement = () => {
             animation: 'orb-pulse 1.7s ease-in-out infinite',
           }}
         />
+
+        {[0, 1].map((index) => (
+          <motion.div
+            key={`satellite-${index}`}
+            className="absolute left-1/2 -translate-x-1/2 rounded-full"
+            style={{
+              width: index === 0 ? 8 : 6,
+              height: index === 0 ? 8 : 6,
+              background: model.color,
+              top: index === 0 ? -58 : -88,
+              opacity: 0.7,
+              boxShadow: `0 0 14px ${model.color}`,
+            }}
+            animate={{
+              x: index === 0 ? [0, 10, 0] : [0, -10, 0],
+              opacity: [0.35, 0.9, 0.35],
+            }}
+            transition={{
+              duration: index === 0 ? 2.2 : 2.6,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+        ))}
+
+        <motion.div
+          className="absolute left-1/2 -translate-x-1/2 rounded-full border px-2 py-1 font-mono text-[9px] uppercase tracking-[0.16em]"
+          animate={{
+            top: 28,
+            borderColor: `${model.color}6b`,
+            color: model.color,
+            backgroundColor: 'rgba(8, 12, 24, 0.56)',
+          }}
+          transition={{ duration: 0.35 }}
+        >
+          {model.label}
+        </motion.div>
 
       </motion.div>
     </div>
