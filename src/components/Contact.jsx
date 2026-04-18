@@ -148,23 +148,6 @@ const Contact = () => {
                 Contact is connection: this is where identity, origin, power, and impact turn into real collaboration.
               </p>
             </div>
-
-            <div className="contact-process-grid mt-5 space-y-3">
-              {COLLAB_STEPS.map((item) => (
-                <motion.article
-                  key={item.phase}
-                  className="contact-process-card narrative-card p-4"
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.45 }}
-                >
-                  <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-200">{item.phase}</p>
-                  <p className="mt-1 text-sm font-semibold text-white">{item.title}</p>
-                  <p className="mt-1 text-sm leading-relaxed text-slate-200">{item.detail}</p>
-                </motion.article>
-              ))}
-            </div>
           </aside>
 
           <form onSubmit={handleSubmit} className="contact-card glass-panel space-y-4 p-6 sm:p-7">
@@ -262,6 +245,23 @@ const Contact = () => {
               Thanks. Your brief is ready to send. Connect via email and I&apos;ll reply with a roadmap.
             </motion.p>
           </form>
+        </div>
+
+        <div className="contact-process-grid mt-8 grid gap-3 md:grid-cols-3">
+          {COLLAB_STEPS.map((item) => (
+            <motion.article
+              key={item.phase}
+              className="contact-process-card narrative-card flex h-full flex-col rounded-2xl p-4 sm:p-5"
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45 }}
+            >
+              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-200">{item.phase}</p>
+              <p className="mt-1 text-base font-semibold text-white">{item.title}</p>
+              <p className="mt-2 text-sm leading-relaxed text-slate-200">{item.detail}</p>
+            </motion.article>
+          ))}
         </div>
 
         <footer className="mt-14 border-t border-white/10 pt-8 text-center">
