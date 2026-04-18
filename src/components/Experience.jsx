@@ -181,7 +181,7 @@ const Experience = () => {
   }, [])
 
   return (
-    <section id="journey" ref={sectionRef} className="section-shell bg-[#060913]">
+    <section id="journey" ref={sectionRef} className="section-shell bg-[#060913]/64">
       <div className="section-container">
         <div className="journey-heading mb-12 text-center md:mb-16">
           <span className="section-kicker">

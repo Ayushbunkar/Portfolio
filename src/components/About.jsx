@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import AnimatedCounter from './AnimatedCounter'
 import MagneticButton from './MagneticButton'
 import { ensureScrollTrigger, gsap } from '../utils/scrollAnimations'
@@ -39,6 +39,16 @@ const ORIGIN_STEPS = [
   },
 ]
 
+const IMAGE_PANEL_STEPS = [
+  ...ORIGIN_STEPS,
+  {
+    title: 'Iteration Unlocks Scale',
+    phase: 'Origin 05',
+    image:
+      'https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&w=1600&q=80',
+  },
+]
+
 const STATS = [
   { value: 3, suffix: '+', label: 'Years Crafting Interfaces' },
   { value: 50, suffix: '+', label: 'Projects Delivered' },
@@ -61,9 +71,16 @@ const ORIGIN_CONTEXT = [
   },
 ]
 
+const IMAGE_FLOW_TEXT = [
+  'Identity and intent establish the direction of the product story.',
+  'Visual language and spacing bring structure to complex ideas.',
+  'Engineering discipline makes every interaction stable and fast.',
+  'Storytelling turns interface quality into memorable experience.',
+  'Continuous iteration keeps the experience adaptable and future-ready.',
+]
+
 const About = () => {
   const sectionRef = useRef(null)
-  const imageRef = useRef(null)
   const [activeStep, setActiveStep] = useState(0)
 
   useEffect(() => {
@@ -103,17 +120,6 @@ const About = () => {
         }
       )
 
-      gsap.to(imageRef.current, {
-        yPercent: -12,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      })
-
       const items = gsap.utils.toArray('.about-story-item')
       items.forEach((item, index) => {
         gsap.fromTo(
@@ -152,7 +158,7 @@ const About = () => {
   }, [])
 
   return (
-    <section id="about" ref={sectionRef} className="section-shell bg-[#060913]">
+    <section id="about" ref={sectionRef} className="section-shell bg-[#060913]/64">
       <div className="section-container">
         <div className="about-intro text-center">
           <span className="section-kicker">
@@ -252,39 +258,42 @@ const About = () => {
           </div>
 
           <div className="relative">
-            <div ref={imageRef} className="glass-panel relative overflow-hidden p-4 sm:p-5 lg:sticky lg:top-28">
+            <div className="glass-panel relative overflow-hidden p-4 sm:p-5 lg:min-h-[940px]">
               <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_14%_22%,rgba(124,134,255,0.26),transparent_38%),radial-gradient(circle_at_82%_18%,rgba(45,212,191,0.18),transparent_34%),radial-gradient(circle_at_52%_90%,rgba(236,72,153,0.2),transparent_40%)]" />
 
-              <div className="relative overflow-hidden rounded-2xl border border-white/15">
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={ORIGIN_STEPS[activeStep].image}
-                    src={ORIGIN_STEPS[activeStep].image}
-                    alt={ORIGIN_STEPS[activeStep].title}
-                    className="h-[300px] w-full object-cover sm:h-[360px]"
-                    loading="lazy"
-                    initial={{ opacity: 0, scale: 1.08, filter: 'blur(8px)' }}
-                    animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                    exit={{ opacity: 0, scale: 0.98, filter: 'blur(8px)' }}
-                    transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                  />
-                </AnimatePresence>
-
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-indigo-200">
-                    Active Chapter
-                  </p>
-                  <p className="mt-1 font-display text-lg font-semibold text-white">
-                    {ORIGIN_STEPS[activeStep].title}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-4 rounded-2xl border border-white/12 bg-black/25 p-4">
-                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-200">Meaning Layer</p>
-                <p className="mt-1 text-sm text-slate-200">
+              <div className="mb-3 rounded-2xl border border-white/12 bg-black/25 p-3">
+                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-cyan-200">Meaning Layer</p>
+                <p className="mt-1 text-xs leading-relaxed text-slate-200 sm:text-sm">
                   Hero introduces identity. About establishes origin. The following sections build power, impact, and connection.
                 </p>
+              </div>
+
+              <div className="space-y-3">
+                {IMAGE_PANEL_STEPS.map((step, index) => (
+                  <div key={step.title}>
+                    <div className="relative overflow-hidden rounded-2xl border border-white/15">
+                      <motion.img
+                        src={step.image}
+                        alt={step.title}
+                        className="h-[175px] w-full object-cover sm:h-[195px] lg:h-[210px]"
+                        loading="lazy"
+                        initial={{ opacity: 0, y: 10, scale: 1.04, filter: 'blur(6px)' }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+                        viewport={{ once: true, amount: 0.25 }}
+                        transition={{ duration: 0.45, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
+                      />
+
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-3">
+                        <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-cyan-200">{step.phase}</p>
+                        <p className="mt-1 font-display text-sm font-semibold leading-tight text-white sm:text-base">
+                          {step.title}
+                        </p>
+                      </div>
+                    </div>
+
+                    <p className="px-1 pt-1 text-[11px] leading-relaxed text-slate-300/90">{IMAGE_FLOW_TEXT[index]}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

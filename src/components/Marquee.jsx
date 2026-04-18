@@ -4,9 +4,9 @@ const Marquee = ({ items, direction = 'left', speed = 30 }) => {
   const duplicatedItems = [...items, ...items, ...items]
 
   return (
-    <div className="relative w-full overflow-hidden py-5 md:py-6 border-y border-white/10 bg-[#0d0d14]">
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 md:w-40 bg-gradient-to-r from-[#0d0d14] to-transparent z-10" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 md:w-40 bg-gradient-to-l from-[#0d0d14] to-transparent z-10" />
+    <div className="relative w-full overflow-hidden border-y border-white/10 bg-[#0d0d14]/68 py-5 md:py-6">
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-[#0d0d14]/95 to-transparent md:w-40" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-[#0d0d14]/95 to-transparent md:w-40" />
       <motion.div
         className="flex items-center gap-10 md:gap-12 whitespace-nowrap"
         animate={{

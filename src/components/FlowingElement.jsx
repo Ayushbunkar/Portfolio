@@ -63,7 +63,6 @@ const FlowingElement = () => {
     x: 140,
     y: 160,
     color: FLOW_STEPS[0].color,
-    label: FLOW_STEPS[0].label,
     form: FLOW_STEPS[0].form,
     docHeight: typeof document !== 'undefined' ? document.documentElement.scrollHeight : 2000,
   })
@@ -135,7 +134,6 @@ const FlowingElement = () => {
         y,
         color: current.color,
         form: current.form,
-        label: current.label,
         docHeight: document.documentElement.scrollHeight,
       })
     }
@@ -217,43 +215,6 @@ const FlowingElement = () => {
             animation: 'orb-pulse 1.7s ease-in-out infinite',
           }}
         />
-
-        {[0, 1].map((index) => (
-          <motion.div
-            key={`satellite-${index}`}
-            className="absolute left-1/2 -translate-x-1/2 rounded-full"
-            style={{
-              width: index === 0 ? 8 : 6,
-              height: index === 0 ? 8 : 6,
-              background: model.color,
-              top: index === 0 ? -58 : -88,
-              opacity: 0.7,
-              boxShadow: `0 0 14px ${model.color}`,
-            }}
-            animate={{
-              x: index === 0 ? [0, 10, 0] : [0, -10, 0],
-              opacity: [0.35, 0.9, 0.35],
-            }}
-            transition={{
-              duration: index === 0 ? 2.2 : 2.6,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          />
-        ))}
-
-        <motion.div
-          className="absolute left-1/2 -translate-x-1/2 rounded-full border px-2 py-1 font-mono text-[9px] uppercase tracking-[0.16em]"
-          animate={{
-            top: 28,
-            borderColor: `${model.color}6b`,
-            color: model.color,
-            backgroundColor: 'rgba(8, 12, 24, 0.56)',
-          }}
-          transition={{ duration: 0.35 }}
-        >
-          {model.label}
-        </motion.div>
 
       </motion.div>
     </div>

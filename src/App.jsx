@@ -5,7 +5,7 @@ import Hero from './components/Hero'
 import Marquee from './components/Marquee'
 import Cursor from './components/Cursor'
 import Preloader from './components/Preloader'
-import FlowingElement from './components/FlowingElement'
+import GlobalPlanetScene from './components/GlobalPlanetScene'
 import { ensureScrollTrigger, gsap } from './utils/scrollAnimations'
 
 const About = lazy(() => import('./components/About'))
@@ -104,6 +104,8 @@ function App() {
         <div className="space-bg-grid" />
       </div>
 
+      <GlobalPlanetScene />
+
       <Cursor />
       <AnimatePresence mode="wait">
         {loading ? (
@@ -117,7 +119,6 @@ function App() {
             className="main-content"
           >
             <Navbar />
-            <FlowingElement />
             <Hero />
             <Marquee items={marqueeItems} direction="left" speed={26} />
 

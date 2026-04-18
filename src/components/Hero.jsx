@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 import gsap from 'gsap'
+import { ensureScrollTrigger } from '../utils/scrollAnimations'
 
 const ROLES = ['Frontend Engineer', 'Interaction Designer', 'Creative Developer', 'Product Storyteller']
 
@@ -84,7 +85,7 @@ function MagneticButton({ children, href, variant = 'filled' }) {
   }
 
   const baseClasses =
-    'relative inline-flex min-h-[52px] items-center justify-center gap-2 overflow-hidden rounded-full px-7 py-3.5 text-sm font-semibold tracking-wide transition-all duration-300'
+    'relative inline-flex shrink-0 min-h-[52px] items-center justify-center gap-2 overflow-hidden rounded-full px-7 py-3.5 text-sm font-semibold tracking-wide transition-all duration-300'
 
   const variantClasses =
     variant === 'filled'
@@ -101,7 +102,7 @@ function MagneticButton({ children, href, variant = 'filled' }) {
       onMouseLeave={onLeave}
       whileTap={{ scale: 0.97 }}
     >
-      <span className="relative z-10">{children}</span>
+      <span className="relative z-10 inline-flex items-center gap-2 whitespace-nowrap">{children}</span>
     </motion.a>
   )
 }
@@ -141,6 +142,8 @@ export default function Hero() {
       const section = heroRef.current
       const canvas = canvasRef.current
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      const ScrollTrigger = ensureScrollTrigger()
+      let scrollProgress = 0
 
       renderer = new THREE.WebGLRenderer({
         canvas,
@@ -148,98 +151,187 @@ export default function Hero() {
         antialias: true,
         powerPreference: 'high-performance',
       })
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8))
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.9))
       renderer.setClearColor(0x000000, 0)
 
       scene = new THREE.Scene()
-      scene.fog = new THREE.FogExp2(0x060a16, 0.055)
+      scene.fog = new THREE.FogExp2(0x050b1c, 0.038)
 
       camera = new THREE.PerspectiveCamera(52, 1, 0.1, 80)
-      camera.position.set(0, 0.15, 8.9)
+      camera.position.set(0, 0.12, 8.8)
 
-      const ambient = new THREE.AmbientLight(0x5d6de8, 0.42)
-      const key = new THREE.DirectionalLight(0xa8f5eb, 1.08)
-      key.position.set(4, 2, 6)
-      const rim = new THREE.PointLight(0xff6dc6, 1.1, 18)
-      rim.position.set(-3, -2.5, 5)
+      const ambient = new THREE.AmbientLight(0x6f9bff, 0.5)
+      const key = new THREE.DirectionalLight(0x9ffff0, 1.25)
+      key.position.set(5, 2.5, 6)
+      const rim = new THREE.PointLight(0xff947f, 1.12, 20)
+      rim.position.set(-3.2, -2.4, 5.2)
+      const glow = new THREE.PointLight(0x5aa5ff, 0.92, 16)
+      glow.position.set(2.8, 1.4, 3.2)
 
-      scene.add(ambient, key, rim)
+      scene.add(ambient, key, rim, glow)
 
-      const root = new THREE.Group()
-      scene.add(root)
+      const world = new THREE.Group()
+      world.position.set(1.2, -0.06, 0)
+      scene.add(world)
 
-      const core = new THREE.Mesh(
-        new THREE.IcosahedronGeometry(1.72, 2),
-        new THREE.MeshPhysicalMaterial({
-          color: 0x6f83ff,
-          emissive: 0x2b2f70,
-          emissiveIntensity: 1.15,
-          roughness: 0.14,
-          metalness: 0.28,
-          clearcoat: 1,
-          clearcoatRoughness: 0.12,
-          transmission: 0.25,
-          transparent: true,
-          opacity: 0.9,
-        })
-      )
-      root.add(core)
+      const planetGroup = new THREE.Group()
+      world.add(planetGroup)
 
-      const wireShell = new THREE.Mesh(
-        new THREE.IcosahedronGeometry(2.34, 1),
+      const planetMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0x3f68c9,
+        emissive: 0x1a3677,
+        emissiveIntensity: 1.28,
+        roughness: 0.2,
+        metalness: 0.18,
+        clearcoat: 1,
+        clearcoatRoughness: 0.16,
+        transmission: 0.18,
+        transparent: true,
+        opacity: 0.96,
+      })
+
+      const core = new THREE.Mesh(new THREE.SphereGeometry(1.86, 64, 64), planetMaterial)
+      planetGroup.add(core)
+
+      const crust = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(1.98, 2),
         new THREE.MeshBasicMaterial({
-          color: 0x8bf4df,
+          color: 0x8ab8ff,
           wireframe: true,
           transparent: true,
-          opacity: 0.2,
+          opacity: 0.14,
         })
       )
-      root.add(wireShell)
+      planetGroup.add(crust)
+
+      const atmosphereMaterial = new THREE.MeshBasicMaterial({
+        color: 0x74c9ff,
+        transparent: true,
+        opacity: 0.28,
+        side: THREE.BackSide,
+        blending: THREE.AdditiveBlending,
+      })
+      const atmosphere = new THREE.Mesh(new THREE.SphereGeometry(2.2, 48, 48), atmosphereMaterial)
+      planetGroup.add(atmosphere)
 
       const ringA = new THREE.Mesh(
-        new THREE.TorusGeometry(2.8, 0.048, 16, 220),
+        new THREE.TorusGeometry(3.16, 0.062, 16, 240),
         new THREE.MeshStandardMaterial({
-          color: 0x6f83ff,
-          emissive: 0x303c90,
-          emissiveIntensity: 0.85,
+          color: 0x7da3ff,
+          emissive: 0x274f9f,
+          emissiveIntensity: 1,
           roughness: 0.2,
           metalness: 0.72,
           transparent: true,
-          opacity: 0.76,
+          opacity: 0.82,
         })
       )
-      ringA.rotation.set(Math.PI * 0.25, Math.PI * 0.04, Math.PI * 0.12)
-      root.add(ringA)
+      ringA.rotation.set(Math.PI * 0.26, Math.PI * 0.06, Math.PI * 0.14)
+      planetGroup.add(ringA)
 
       const ringB = new THREE.Mesh(
-        new THREE.TorusGeometry(2.22, 0.04, 14, 200),
+        new THREE.TorusGeometry(2.48, 0.052, 16, 220),
         new THREE.MeshStandardMaterial({
-          color: 0xff74ca,
-          emissive: 0x6c2a56,
-          emissiveIntensity: 0.7,
-          roughness: 0.18,
-          metalness: 0.75,
+          color: 0x4ce3c8,
+          emissive: 0x1e7f71,
+          emissiveIntensity: 0.9,
+          roughness: 0.22,
+          metalness: 0.64,
           transparent: true,
-          opacity: 0.6,
+          opacity: 0.68,
         })
       )
-      ringB.rotation.set(Math.PI * 0.65, Math.PI * 0.15, Math.PI * 0.2)
-      root.add(ringB)
+      ringB.rotation.set(Math.PI * 0.62, Math.PI * 0.12, Math.PI * 0.2)
+      planetGroup.add(ringB)
 
-      const starCount = 1600
+      const ringC = new THREE.Mesh(
+        new THREE.TorusGeometry(2.06, 0.04, 12, 200),
+        new THREE.MeshStandardMaterial({
+          color: 0xff9b78,
+          emissive: 0x7b3f2e,
+          emissiveIntensity: 0.72,
+          roughness: 0.2,
+          metalness: 0.62,
+          transparent: true,
+          opacity: 0.5,
+        })
+      )
+      ringC.rotation.set(Math.PI * 0.38, Math.PI * 0.3, Math.PI * 0.04)
+      planetGroup.add(ringC)
+
+      // Connection routes: identity -> origin -> power -> impact -> connection
+      const connectionGroup = new THREE.Group()
+      connectionGroup.position.set(0.12, 0.08, 0.16)
+      world.add(connectionGroup)
+
+      const nodeBlueprint = [
+        new THREE.Vector3(-2.5, 1.25, 0.72),
+        new THREE.Vector3(-0.92, 2.1, 1.04),
+        new THREE.Vector3(1.56, 1.54, 0.82),
+        new THREE.Vector3(2.22, -0.24, 0.92),
+        new THREE.Vector3(0.42, -1.92, 0.7),
+      ]
+      const linkPalette = [0x6fa8ff, 0x2fd7c3, 0xff8f73, 0x8fb8ff, 0x7cf2dd]
+      const pulseSignals = []
+
+      nodeBlueprint.forEach((position, index) => {
+        const node = new THREE.Mesh(
+          new THREE.SphereGeometry(0.07, 16, 16),
+          new THREE.MeshBasicMaterial({
+            color: linkPalette[index % linkPalette.length],
+            transparent: true,
+            opacity: 0.95,
+          })
+        )
+        node.position.copy(position)
+        connectionGroup.add(node)
+      })
+
+      for (let index = 0; index < nodeBlueprint.length; index += 1) {
+        const start = nodeBlueprint[index]
+        const end = nodeBlueprint[(index + 1) % nodeBlueprint.length]
+        const control = start.clone().add(end).multiplyScalar(0.5)
+        control.z += 1 + (index % 2 === 0 ? 0.45 : 0.28)
+
+        const curve = new THREE.QuadraticBezierCurve3(start, control, end)
+        const points = curve.getPoints(48)
+
+        const line = new THREE.Line(
+          new THREE.BufferGeometry().setFromPoints(points),
+          new THREE.LineBasicMaterial({
+            color: linkPalette[index % linkPalette.length],
+            transparent: true,
+            opacity: 0.26,
+          })
+        )
+        connectionGroup.add(line)
+
+        const pulse = new THREE.Mesh(
+          new THREE.SphereGeometry(0.055, 12, 12),
+          new THREE.MeshBasicMaterial({
+            color: 0xb7f7ff,
+            transparent: true,
+            opacity: 0.95,
+          })
+        )
+        connectionGroup.add(pulse)
+        pulseSignals.push({ curve, pulse, offset: index / nodeBlueprint.length })
+      }
+
+      const starCount = 2000
       const starGeometry = new THREE.BufferGeometry()
       const starPositions = new Float32Array(starCount * 3)
       const starColors = new Float32Array(starCount * 3)
-      const palette = [new THREE.Color(0x8ea2ff), new THREE.Color(0x9cf7e5), new THREE.Color(0xff8bd1)]
+      const palette = [new THREE.Color(0x8ea2ff), new THREE.Color(0x9cf7e5), new THREE.Color(0xffb49b)]
 
       for (let index = 0; index < starCount; index += 1) {
-        const radius = 5.2 + Math.random() * 4.3
+        const radius = 5.8 + Math.random() * 4.6
         const theta = Math.random() * Math.PI * 2
         const phi = Math.acos(2 * Math.random() - 1)
 
         starPositions[index * 3] = radius * Math.sin(phi) * Math.cos(theta)
         starPositions[index * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
-        starPositions[index * 3 + 2] = radius * Math.cos(phi) - 1.5
+        starPositions[index * 3 + 2] = radius * Math.cos(phi) - 1.4
 
         const color = palette[index % palette.length]
         starColors[index * 3] = color.r
@@ -253,10 +345,10 @@ export default function Hero() {
       const stars = new THREE.Points(
         starGeometry,
         new THREE.PointsMaterial({
-          size: 0.028,
+          size: 0.031,
           vertexColors: true,
           transparent: true,
-          opacity: 0.72,
+          opacity: 0.76,
           depthWrite: false,
           blending: THREE.AdditiveBlending,
         })
@@ -285,6 +377,40 @@ export default function Hero() {
         camera.updateProjectionMatrix()
       }
 
+      const materialPulse = gsap.to(planetMaterial, {
+        emissiveIntensity: 1.52,
+        duration: 2.8,
+        yoyo: true,
+        repeat: -1,
+        ease: 'sine.inOut',
+      })
+
+      const atmospherePulse = gsap.to(atmosphereMaterial, {
+        opacity: 0.36,
+        duration: 3,
+        yoyo: true,
+        repeat: -1,
+        ease: 'sine.inOut',
+      })
+
+      const ringPulse = gsap.to(ringB.material, {
+        emissiveIntensity: 1.22,
+        duration: 2.3,
+        yoyo: true,
+        repeat: -1,
+        ease: 'sine.inOut',
+      })
+
+      const heroScroll = ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+        onUpdate: (self) => {
+          scrollProgress = self.progress
+        },
+      })
+
       section.addEventListener('pointermove', onPointerMove)
       window.addEventListener('resize', onResize)
       onResize()
@@ -292,6 +418,10 @@ export default function Hero() {
       cleanupFns = [
         () => section.removeEventListener('pointermove', onPointerMove),
         () => window.removeEventListener('resize', onResize),
+        () => materialPulse.kill(),
+        () => atmospherePulse.kill(),
+        () => ringPulse.kill(),
+        () => heroScroll.kill(),
       ]
 
       const animate = () => {
@@ -299,27 +429,50 @@ export default function Hero() {
         animationFrameId = requestAnimationFrame(animate)
 
         const elapsed = clock.getElapsedTime()
-        smoothPointer.x += (pointer.x - smoothPointer.x) * 0.04
-        smoothPointer.y += (pointer.y - smoothPointer.y) * 0.04
+        smoothPointer.x += (pointer.x - smoothPointer.x) * 0.045
+        smoothPointer.y += (pointer.y - smoothPointer.y) * 0.045
 
         const pointerInfluenceX = prefersReducedMotion ? 0 : smoothPointer.x
         const pointerInfluenceY = prefersReducedMotion ? 0 : smoothPointer.y
 
-        root.rotation.y = elapsed * 0.2 + pointerInfluenceX * 0.4
-        root.rotation.x = Math.sin(elapsed * 0.28) * 0.14 + pointerInfluenceY * 0.28
+        const targetX = 1.2 + pointerInfluenceX * 0.48
+        const targetY = -0.06 - scrollProgress * 1.6 + pointerInfluenceY * 0.36
+        world.position.x += (targetX - world.position.x) * 0.06
+        world.position.y += (targetY - world.position.y) * 0.06
 
-        core.rotation.x = elapsed * 0.18
-        core.rotation.y = elapsed * 0.22
-        wireShell.rotation.y = -elapsed * 0.15
-        ringA.rotation.z += 0.0055
-        ringB.rotation.x -= 0.0045
+        world.rotation.z = Math.sin(elapsed * 0.2) * 0.03 + pointerInfluenceX * 0.04
 
-        stars.rotation.y = -elapsed * 0.06
-        stars.rotation.x = elapsed * 0.03
+        planetGroup.rotation.y = elapsed * 0.17 + pointerInfluenceX * 0.46
+        planetGroup.rotation.x = Math.sin(elapsed * 0.32) * 0.11 + pointerInfluenceY * 0.24
 
-        camera.position.x = pointerInfluenceX * 0.42
-        camera.position.y = 0.14 + pointerInfluenceY * 0.27
-        camera.lookAt(0, 0, 0)
+        core.rotation.y += 0.0018
+        crust.rotation.y = -elapsed * 0.12
+        crust.rotation.x = elapsed * 0.06
+        atmosphere.rotation.y = -elapsed * 0.07
+
+        ringA.rotation.z += 0.0044
+        ringA.rotation.x = Math.PI * 0.26 + Math.sin(elapsed * 0.45) * 0.055
+        ringB.rotation.x -= 0.0036
+        ringB.rotation.y = Math.cos(elapsed * 0.38) * 0.25
+        ringC.rotation.z += 0.005
+
+        pulseSignals.forEach((signal, index) => {
+          const t = (elapsed * 0.1 + signal.offset) % 1
+          const position = signal.curve.getPointAt(t)
+          signal.pulse.position.copy(position)
+          const pulseScale = 0.82 + Math.sin((elapsed + index) * 3.4) * 0.22
+          signal.pulse.scale.setScalar(pulseScale)
+        })
+
+        connectionGroup.rotation.y = -elapsed * 0.04 + pointerInfluenceX * 0.1
+        connectionGroup.rotation.x = pointerInfluenceY * 0.06
+
+        stars.rotation.y = -elapsed * 0.055
+        stars.rotation.x = elapsed * 0.024
+
+        camera.position.x = pointerInfluenceX * 0.45
+        camera.position.y = 0.12 + pointerInfluenceY * 0.29 + scrollProgress * 0.16
+        camera.lookAt(world.position.x * 0.14, world.position.y * 0.12, 0)
 
         renderer.render(scene, camera)
       }
@@ -328,7 +481,7 @@ export default function Hero() {
       setThreeReady(true)
 
       cleanupFns.push(() => {
-        disposeSceneObject(root)
+        disposeSceneObject(world)
         disposeSceneObject(stars)
       })
     }
@@ -398,25 +551,18 @@ export default function Hero() {
       <section
         id="home"
         ref={heroRef}
-        className="relative isolate min-h-screen overflow-hidden bg-[#050812] pb-24 pt-28 sm:pt-32"
+        className="relative isolate min-h-[calc(100svh-4rem)] overflow-hidden bg-[#050812]/38 pb-14 pt-16 sm:min-h-[calc(100svh-4.5rem)] sm:pb-16 sm:pt-20"
       >
-        <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 z-0 h-full w-full" />
-
         <div className="pointer-events-none absolute inset-0 z-[1]">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_72%_65%_at_24%_28%,rgba(115,130,255,0.22),transparent_62%),radial-gradient(ellipse_66%_56%_at_84%_22%,rgba(44,212,189,0.14),transparent_62%),radial-gradient(ellipse_72%_62%_at_50%_102%,rgba(236,72,153,0.16),transparent_68%)]" />
-          <div className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,1)_1px,transparent_1px)] [background-size:68px_68px]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,18,0.68)_0%,rgba(5,8,18,0.78)_42%,rgba(5,8,18,0.94)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_72%_66%_at_26%_28%,rgba(111,168,255,0.26),transparent_60%),radial-gradient(ellipse_64%_58%_at_74%_42%,rgba(47,215,195,0.2),transparent_58%),radial-gradient(ellipse_62%_54%_at_72%_78%,rgba(255,143,115,0.18),transparent_66%)]" />
+          <div className="absolute inset-0 opacity-[0.1] [background-image:linear-gradient(rgba(255,255,255,1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,1)_1px,transparent_1px)] [background-size:68px_68px]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,18,0.44)_0%,rgba(5,8,18,0.56)_44%,rgba(5,8,18,0.74)_100%)]" />
         </div>
 
-        <div className="section-container relative z-10 grid items-center gap-12 lg:grid-cols-[minmax(0,1.04fr)_minmax(0,0.96fr)] lg:gap-8">
-          <div className="space-y-7 text-center lg:text-left">
-            <div className="hero-reveal inline-flex items-center gap-2 rounded-full border border-indigo-300/25 bg-indigo-300/10 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-indigo-100">
-              Premium Portfolio Experience
-              <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
-            </div>
-
+        <div className="section-container relative z-10 grid items-start gap-8 lg:grid-cols-[minmax(0,1.04fr)_minmax(0,0.96fr)] lg:gap-7">
+          <div className="space-y-6 text-center lg:text-left">
             <div className="hero-reveal space-y-4">
-              <h1 className="font-display text-[clamp(2.7rem,7.6vw,6rem)] font-black leading-[0.94] tracking-[-0.03em] text-white">
+              <h1 className="max-w-[13ch] pr-2 font-display text-[clamp(2.5rem,6.8vw,5.4rem)] font-black leading-[0.95] tracking-[-0.025em] text-white lg:pr-4">
                 AYUSH
                 <span className="block bg-[linear-gradient(102deg,#d7deff_0%,#98f2e4_42%,#f7a6d2_100%)] bg-clip-text text-transparent">
                   BUNKAR
@@ -475,7 +621,7 @@ export default function Hero() {
           </div>
 
           <motion.aside
-            className="hero-reveal relative mx-auto w-full max-w-[520px] lg:max-w-none"
+            className="hero-reveal relative mx-auto mt-1 w-full max-w-[520px] lg:mt-2 lg:max-w-none lg:self-center"
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.5 }}

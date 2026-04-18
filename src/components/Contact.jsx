@@ -99,7 +99,7 @@ const Contact = () => {
   }
 
   return (
-    <section id="contact" className="section-shell bg-[#050913] pb-24">
+    <section id="contact" className="section-shell bg-[#050913]/66 pb-24">
       <div className="section-container">
         <div className="contact-intro text-center">
           <span className="section-kicker">

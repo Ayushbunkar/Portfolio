@@ -41,6 +41,7 @@ const POWER_CONTEXT = [
 const Skills = () => {
   const sectionRef = useRef(null)
   const orbitRef = useRef(null)
+  const orbitCanvasRef = useRef(null)
   const isInView = useInView(sectionRef, { once: true, margin: '-90px' })
 
   const maxLevel = useMemo(
@@ -116,8 +117,137 @@ const Skills = () => {
     return () => ctx.revert()
   }, [])
 
+  useEffect(() => {
+    let mounted = true
+    let animationFrameId = 0
+    let renderer
+    let scene
+    let camera
+    let particles
+
+    const setupOrbitScene = async () => {
+      if (!orbitRef.current || !orbitCanvasRef.current) return
+
+      const THREE = await import('three')
+      if (!mounted || !orbitRef.current || !orbitCanvasRef.current) return
+
+      const host = orbitRef.current
+      const canvas = orbitCanvasRef.current
+      const pointer = { x: 0, y: 0 }
+      const smoothPointer = { x: 0, y: 0 }
+
+      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.6))
+      renderer.setClearColor(0x000000, 0)
+
+      scene = new THREE.Scene()
+      camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100)
+      camera.position.z = 7.2
+
+      const pointsCount = 700
+      const positions = new Float32Array(pointsCount * 3)
+      const colors = new Float32Array(pointsCount * 3)
+      const palette = [new THREE.Color('#6fa8ff'), new THREE.Color('#2fd7c3'), new THREE.Color('#ff8f73')]
+
+      for (let i = 0; i < pointsCount; i += 1) {
+        const radius = 2.1 + Math.random() * 2.1
+        const theta = Math.random() * Math.PI * 2
+        const phi = Math.acos(2 * Math.random() - 1)
+
+        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
+        positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
+        positions[i * 3 + 2] = (radius * Math.cos(phi)) * 0.4
+
+        const selected = palette[Math.floor(Math.random() * palette.length)]
+        colors[i * 3] = selected.r
+        colors[i * 3 + 1] = selected.g
+        colors[i * 3 + 2] = selected.b
+      }
+
+      const geometry = new THREE.BufferGeometry()
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+
+      const material = new THREE.PointsMaterial({
+        size: 0.03,
+        transparent: true,
+        opacity: 0.72,
+        depthWrite: false,
+        vertexColors: true,
+        blending: THREE.AdditiveBlending,
+      })
+
+      particles = new THREE.Points(geometry, material)
+      scene.add(particles)
+
+      const onPointerMove = (event) => {
+        const box = host.getBoundingClientRect()
+        pointer.x = ((event.clientX - box.left) / box.width - 0.5) * 2
+        pointer.y = ((event.clientY - box.top) / box.height - 0.5) * 2
+      }
+
+      const onPointerLeave = () => {
+        pointer.x = 0
+        pointer.y = 0
+      }
+
+      const resize = () => {
+        if (!host || !renderer || !camera) return
+        const width = host.clientWidth
+        const height = host.clientHeight
+        renderer.setSize(width, height, false)
+        camera.aspect = width / height
+        camera.updateProjectionMatrix()
+      }
+
+      const animate = () => {
+        if (!mounted || !renderer || !scene || !camera || !particles) return
+        animationFrameId = requestAnimationFrame(animate)
+
+        smoothPointer.x += (pointer.x - smoothPointer.x) * 0.06
+        smoothPointer.y += (pointer.y - smoothPointer.y) * 0.06
+
+        particles.rotation.y += 0.0018 + smoothPointer.x * 0.0026
+        particles.rotation.x += 0.0009 + smoothPointer.y * 0.0022
+        particles.position.x = smoothPointer.x * 0.24
+        particles.position.y = smoothPointer.y * 0.2
+
+        renderer.render(scene, camera)
+      }
+
+      resize()
+      animate()
+
+      host.addEventListener('pointermove', onPointerMove)
+      host.addEventListener('pointerleave', onPointerLeave)
+      window.addEventListener('resize', resize)
+
+      const cleanup = () => {
+        host.removeEventListener('pointermove', onPointerMove)
+        host.removeEventListener('pointerleave', onPointerLeave)
+        window.removeEventListener('resize', resize)
+        if (animationFrameId) cancelAnimationFrame(animationFrameId)
+        geometry.dispose()
+        material.dispose()
+        renderer.dispose()
+      }
+
+      orbitCanvasRef.current._cleanupOrbitThree = cleanup
+    }
+
+    setupOrbitScene()
+
+    return () => {
+      mounted = false
+      if (orbitCanvasRef.current?._cleanupOrbitThree) {
+        orbitCanvasRef.current._cleanupOrbitThree()
+        delete orbitCanvasRef.current._cleanupOrbitThree
+      }
+    }
+  }, [])
+
   return (
-    <section id="skills" ref={sectionRef} className="section-shell bg-[#070a14]">
+    <section id="skills" ref={sectionRef} className="section-shell bg-[#070a14]/62">
       <div className="section-container">
         <div className="skills-intro text-center">
           <span className="section-kicker">
@@ -167,23 +297,24 @@ const Skills = () => {
 
         <div className="mt-12 grid items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
           <div ref={orbitRef} className="relative mx-auto h-[360px] w-[360px] max-w-full sm:h-[420px] sm:w-[420px]">
+            <canvas ref={orbitCanvasRef} className="pointer-events-none absolute inset-0 z-0 h-full w-full" />
             <motion.div
-              className="absolute inset-0 rounded-full border border-indigo-300/25"
+              className="absolute inset-0 z-[1] rounded-full border border-indigo-300/25"
               animate={{ rotate: 360 }}
               transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
             />
             <motion.div
-              className="absolute inset-[14%] rounded-full border border-cyan-300/20"
+              className="absolute inset-[14%] z-[1] rounded-full border border-cyan-300/20"
               animate={{ rotate: -360 }}
               transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
             />
             <motion.div
-              className="absolute inset-[32%] rounded-full border border-pink-300/25"
+              className="absolute inset-[32%] z-[1] rounded-full border border-pink-300/25"
               animate={{ rotate: 360 }}
               transition={{ duration: 11, repeat: Infinity, ease: 'linear' }}
             />
 
-            <div className="absolute left-1/2 top-1/2 grid h-28 w-28 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-white/[0.08] backdrop-blur-lg">
+            <div className="absolute left-1/2 top-1/2 z-[3] grid h-28 w-28 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-white/[0.08] backdrop-blur-lg">
               <div className="text-center">
                 <p className="font-display text-3xl font-black text-white">{maxLevel}%</p>
                 <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-cyan-200">Peak Strength</p>
@@ -193,14 +324,15 @@ const Skills = () => {
             {ORBIT.map((item, index) => {
               const angle = (360 / ORBIT.length) * index
               const radius = index % 2 === 0 ? 170 : 130
+              const radian = ((angle - 90) * Math.PI) / 180
+              const x = Math.cos(radian) * radius
+              const y = Math.sin(radian) * radius
 
               return (
                 <motion.div
                   key={item}
-                  className="absolute left-1/2 top-1/2"
-                  style={{
-                    transform: `rotate(${angle}deg) translateX(${radius}px) rotate(${-angle}deg)`,
-                  }}
+                  className="absolute left-1/2 top-1/2 z-[2] -translate-x-1/2 -translate-y-1/2"
+                  style={{ x, y }}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : {}}
                   transition={{ delay: 0.08 * index, duration: 0.45 }}

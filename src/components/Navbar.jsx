@@ -91,13 +91,12 @@ const Navbar = () => {
           {/* Logo */}
           <motion.a
             href="#home"
-            className="flex items-center gap-1.5 font-display text-lg md:text-xl font-bold text-white"
+            className="flex items-center font-display text-base sm:text-lg md:text-xl font-bold tracking-[0.01em] text-white whitespace-nowrap"
             onClick={(e) => handleLinkClick(e, '#home')}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <span>AB</span>
-            <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-indigo-500 rounded-full" />
+            <span>Ayush Bunkar</span>
           </motion.a>
 
           {/* Desktop Navigation */}

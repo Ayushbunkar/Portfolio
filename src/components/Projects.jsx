@@ -249,7 +249,7 @@ const Projects = () => {
   }, [selectedProject])
 
   return (
-    <section id="projects" ref={sectionRef} className="relative scroll-mt-28 overflow-hidden bg-[#050913] pb-12 pt-24 md:scroll-mt-32">
+    <section id="projects" ref={sectionRef} className="relative scroll-mt-28 overflow-hidden bg-[#050913]/58 pb-12 pt-24 md:scroll-mt-32">
       <div className="projects-intro section-container mb-10 text-center">
         <span className="section-kicker">
           <span className="section-kicker-dot" />
