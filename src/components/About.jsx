@@ -58,16 +58,16 @@ const STATS = [
 
 const ORIGIN_CONTEXT = [
   {
-    title: 'Space Theme Context',
-    copy: 'This portfolio behaves like a mission route. Every section receives a specific role so users never feel lost.',
+    title: 'AI System Context',
+    copy: 'This portfolio behaves like a product journey. Every section represents a stage from idea to MVP to deployment, so nothing feels random.',
   },
   {
-    title: 'Narrative Density',
-    copy: 'Instead of minimal placeholders, each chapter includes clear text, outcomes, and reasoning behind design choices.',
+    title: 'Execution Density',
+    copy: 'Instead of placeholders, each section highlights real builds, clear outcomes, and the thinking behind how systems were designed and shipped.',
   },
   {
     title: 'Continuity Layer',
-    copy: 'The follower elements track story progression from hero to contact, keeping the flow connected all the way down.',
+    copy: 'Each part connects the journey from learning to building to launching, so the flow stays consistent across AI, development, and product execution.',
   },
 ]
 
@@ -163,20 +163,20 @@ const About = () => {
         <div className="about-intro text-center">
           <span className="section-kicker">
             <span className="section-kicker-dot" />
-            Origin Layer
+            Builder Layer
           </span>
           <h2 className="section-title">
             The Story Behind
-            <span className="section-title-gradient">The Interface Mindset</span>
+            <span className="section-title-gradient">The Builder Mindset</span>
           </h2>
           <p className="section-copy mx-auto">
-            About is no longer just biography. It reveals progression in stages so users understand how design intent,
-            code quality, and product thinking came together.
+            About is no longer just biography. It shows how skills evolved across AI, development, and product
+            building, so you understand how systems, automation, and real-world execution come together.
           </p>
 
           <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-slate-300/95 sm:text-base">
-            You are not only reading background information. You are moving through a guided signal path that explains
-            why this style, this motion language, and this product mindset exist in one cohesive space-themed system.
+            You are not only reading background information. You are moving through a structured path that explains why
+            these AI systems, scalable architectures, and product decisions exist together in one cohesive workflow.
           </p>
         </div>
 

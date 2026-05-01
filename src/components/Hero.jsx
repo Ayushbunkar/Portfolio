@@ -3,7 +3,23 @@ import { motion, useMotionValue, useSpring } from 'framer-motion'
 import gsap from 'gsap'
 import { ensureScrollTrigger } from '../utils/scrollAnimations'
 
-const ROLES = ['Frontend Engineer', 'Interaction Designer', 'Creative Developer', 'Product Storyteller']
+const ROLES = [
+  'I craft AI-powered products',
+  'I build LLM-driven systems',
+  'I design scalable MVPs',
+  'I create automation workflows',
+  'I ship real-world AI tools',
+  'I engineer full-stack solutions',
+]
+
+const TAGS = [
+  'AI / ML Systems',
+  'LLM Apps (LangChain, LangGraph)',
+  'Full Stack Development',
+  'Automation & APIs',
+  'Startup MVP Building',
+  'Performance-First UI',
+]
 
 const HERO_STATS = [
   { value: '50+', label: 'Premium Builds' },
@@ -570,13 +586,13 @@ export default function Hero() {
               </h1>
 
               <p className="mx-auto max-w-2xl text-base leading-relaxed text-slate-200/88 sm:text-lg lg:mx-0">
-                I build digital products that feel expensive from the first second. Clean systems, cinematic motion,
-                and high-performance engineering come together into one premium experience.
+                I build AI systems and digital products that scale. Using LLMs, automation, and full-stack
+                development, I turn ideas into real, working solutions.
               </p>
             </div>
 
             <div className="hero-reveal text-base text-slate-200/80 sm:text-lg">
-              <span className="mr-2 text-white/65">I craft as a</span>
+              <span className="mr-2 text-white/65"></span>
               <span className="font-semibold text-cyan-200">
                 <TypewriterText texts={ROLES} />
               </span>
@@ -635,31 +651,20 @@ export default function Hero() {
               <div className="relative z-10">
                 <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-indigo-200">Realtime 3D Identity Layer</p>
                 <h3 className="mt-3 font-display text-2xl font-black leading-tight text-white sm:text-3xl">
-                  A Hero Built Like a Product Launch
+                  Building AI-powered products that solve real-world problems
                 </h3>
 
                 <p className="mt-3 text-sm leading-relaxed text-slate-200/90 sm:text-[15px]">
-                  The scene is rendered with Three.js: a physical-material core, orbiting rings, volumetric color fields,
-                  and additive star particles tuned for smooth motion.
+                  I work with AI/ML, LLMs, and modern web tech to create scalable apps, automation systems, and
+                  high-impact digital products.
                 </p>
 
                 <div className="mt-5 grid grid-cols-2 gap-2 text-xs">
-                  <div className="rounded-xl border border-white/12 bg-white/[0.04] p-3 text-slate-100">
-                    <p className="font-mono uppercase tracking-[0.14em] text-indigo-200">Render</p>
-                    <p className="mt-1 text-sm font-semibold">Adaptive Pixel Ratio</p>
-                  </div>
-                  <div className="rounded-xl border border-white/12 bg-white/[0.04] p-3 text-slate-100">
-                    <p className="font-mono uppercase tracking-[0.14em] text-cyan-200">Motion</p>
-                    <p className="mt-1 text-sm font-semibold">Pointer Reactive</p>
-                  </div>
-                  <div className="rounded-xl border border-white/12 bg-white/[0.04] p-3 text-slate-100">
-                    <p className="font-mono uppercase tracking-[0.14em] text-pink-200">Depth</p>
-                    <p className="mt-1 text-sm font-semibold">Physical Materials</p>
-                  </div>
-                  <div className="rounded-xl border border-white/12 bg-white/[0.04] p-3 text-slate-100">
-                    <p className="font-mono uppercase tracking-[0.14em] text-violet-200">Speed</p>
-                    <p className="mt-1 text-sm font-semibold">Lightweight Scene Graph</p>
-                  </div>
+                  {TAGS.map((tag) => (
+                    <div key={tag} className="rounded-xl border border-white/12 bg-white/[0.03] p-3 text-slate-100">
+                      <p className="font-mono uppercase tracking-[0.12em] text-indigo-200">{tag}</p>
+                    </div>
+                  ))}
                 </div>
 
                 <div className="mt-5 rounded-2xl border border-white/15 bg-black/28 p-4">
@@ -671,15 +676,6 @@ export default function Hero() {
               </div>
             </div>
           </motion.aside>
-        </div>
-
-        <div className="hero-scroll absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 opacity-0">
-          <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/40">Scroll to continue</span>
-          <div className="h-11 w-px bg-gradient-to-b from-cyan-200/70 via-indigo-300/55 to-transparent" />
-          <span
-            className="h-1.5 w-1.5 rounded-full bg-cyan-200/90"
-            style={{ animation: 'heroScrollDot 1.9s ease-in-out infinite' }}
-          />
         </div>
       </section>
     </>
