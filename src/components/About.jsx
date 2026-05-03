@@ -6,34 +6,34 @@ import { ensureScrollTrigger, gsap } from '../utils/scrollAnimations'
 
 const ORIGIN_STEPS = [
   {
-    title: 'Curiosity Became Craft',
+    title: 'Curiosity Became Creation',
     phase: 'Origin 01',
     description:
-      'What started as simple UI experiments evolved into a clear mission: build interfaces that feel alive and communicate trust instantly.',
+      'What started as curiosity in building small apps evolved into a focus on AI-powered products, scalable systems, and real-world problem solving.',
     image:
       'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80',
   },
   {
-    title: 'Design Language Took Shape',
+    title: 'Systems Thinking Took Shape',
     phase: 'Origin 02',
     description:
-      'A systematic visual style emerged: balanced spacing, rounded geometry, expressive gradients, and motion that guides attention.',
+      'A structured approach emerged: clean architecture, modular components, and LLM-driven workflows designed for performance and scalability.',
     image:
       'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1600&q=80',
   },
   {
-    title: 'Engineering Discipline Added Depth',
+    title: 'Engineering Added Depth',
     phase: 'Origin 03',
     description:
-      'The workflow became product-grade with reusable components, performance budgets, and accessibility checks embedded by default.',
+      'Development evolved into production-ready systems with APIs, automation pipelines, performance optimization, and reliable backend architecture.',
     image:
       'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1600&q=80',
   },
   {
-    title: 'Storytelling Became the Core',
+    title: 'Execution Became the Core',
     phase: 'Origin 04',
     description:
-      'Now every section carries meaning: identity, origin, power, impact, and connection; scroll feels like a guided product journey.',
+      'Every project now focuses on shipping—building MVPs, launching fast, and turning ideas into working AI products used in real scenarios.',
     image:
       'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80',
   },
@@ -42,7 +42,7 @@ const ORIGIN_STEPS = [
 const IMAGE_PANEL_STEPS = [
   ...ORIGIN_STEPS,
   {
-    title: 'Iteration Unlocks Scale',
+    title: 'Iteration Drives Scale',
     phase: 'Origin 05',
     image:
       'https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&w=1600&q=80',
@@ -72,12 +72,30 @@ const ORIGIN_CONTEXT = [
 ]
 
 const IMAGE_FLOW_TEXT = [
-  'Identity and intent establish the direction of the product story.',
-  'Visual language and spacing bring structure to complex ideas.',
-  'Engineering discipline makes every interaction stable and fast.',
-  'Storytelling turns interface quality into memorable experience.',
-  'Continuous iteration keeps the experience adaptable and future-ready.',
+  'Early exploration into development and UI led to building small projects and understanding how digital products are created.',
+  'Focus shifted to structured development—clean code, reusable components, and integrating AI models into practical workflows.',
+  'Projects evolved with backend systems, APIs, automation tools, and performance-focused engineering practices.',
+  'The priority became clear: build fast, ship real products, and solve actual problems using AI and full-stack development.',
+  'Continuous improvement, iteration, and feedback loops ensure every product becomes more scalable, efficient, and impactful over time.',
 ]
+
+const HIGHLIGHT_TERMS = ['AI', 'LLM', 'scalable', 'systems', 'APIs', 'automation', 'MVP', 'full-stack', 'backend']
+
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+const highlightText = (text) => {
+  const pattern = new RegExp(`(${HIGHLIGHT_TERMS.map(escapeRegExp).join('|')})`, 'gi')
+  return text.split(pattern).map((chunk, index) => {
+    const isHighlight = HIGHLIGHT_TERMS.some((term) => term.toLowerCase() === chunk.toLowerCase())
+    return isHighlight ? (
+      <span key={`${chunk}-${index}`} className="text-gradient-highlight">
+        {chunk}
+      </span>
+    ) : (
+      chunk
+    )
+  })
+}
 
 const About = () => {
   const sectionRef = useRef(null)
@@ -218,7 +236,7 @@ const About = () => {
                     />
 
                     <motion.article
-                      className={`ml-10 rounded-2xl border p-5 sm:p-6 md:ml-0 ${
+                      className={`story-card ml-10 rounded-2xl border p-5 sm:p-6 md:ml-0 ${
                         isLeft ? 'md:mr-10 md:text-right' : 'md:col-start-2 md:ml-10'
                       } ${
                         isActive
@@ -240,7 +258,9 @@ const About = () => {
                       </div>
 
                       <h3 className="font-display text-xl font-bold text-white sm:text-2xl">{step.title}</h3>
-                      <p className="mt-3 text-sm leading-relaxed text-slate-300 sm:text-[15px]">{step.description}</p>
+                      <p className="story-clamp mt-3 text-sm leading-relaxed text-slate-300 sm:text-[15px]">
+                        {highlightText(step.description)}
+                      </p>
                     </motion.article>
                   </div>
                 )
@@ -249,10 +269,10 @@ const About = () => {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <MagneticButton href="#projects" className="filled beam-button rounded-full">
-                <span>See The Impact</span>
+                <span>See My Work</span>
               </MagneticButton>
               <MagneticButton href="#contact" className="outline rounded-full">
-                <span>Start Collaboration</span>
+                <span>Start a Project</span>
               </MagneticButton>
             </div>
           </div>
@@ -262,15 +282,17 @@ const About = () => {
               <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_14%_22%,rgba(124,134,255,0.26),transparent_38%),radial-gradient(circle_at_82%_18%,rgba(45,212,191,0.18),transparent_34%),radial-gradient(circle_at_52%_90%,rgba(236,72,153,0.2),transparent_40%)]" />
 
               <div className="mb-3 rounded-2xl border border-white/12 bg-black/25 p-3">
-                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-cyan-200">Meaning Layer</p>
+                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-cyan-200">Product Journey</p>
                 <p className="mt-1 text-xs leading-relaxed text-slate-200 sm:text-sm">
-                  Hero introduces identity. About establishes origin. The following sections build power, impact, and connection.
+                  {highlightText(
+                    'The hero defines identity. The about section shows origin. Each stage builds capability, execution, and real-world impact through AI and scalable systems.'
+                  )}
                 </p>
               </div>
 
               <div className="space-y-3">
                 {IMAGE_PANEL_STEPS.map((step, index) => (
-                  <div key={step.title}>
+                  <div key={step.title} className="timeline-card">
                     <div className="relative overflow-hidden rounded-2xl border border-white/15">
                       <motion.img
                         src={step.image}
@@ -291,7 +313,9 @@ const About = () => {
                       </div>
                     </div>
 
-                    <p className="px-1 pt-1 text-[11px] leading-relaxed text-slate-300/90">{IMAGE_FLOW_TEXT[index]}</p>
+                    <p className="story-clamp px-1 pt-1 text-[11px] leading-relaxed text-slate-300/90">
+                      {highlightText(IMAGE_FLOW_TEXT[index])}
+                    </p>
                   </div>
                 ))}
               </div>

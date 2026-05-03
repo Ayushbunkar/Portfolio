@@ -7,66 +7,68 @@ const JOURNEY_STEPS = [
     phase: 'Identity',
     title: 'The Spark',
     description:
-      'Started with curiosity for interactive interfaces and quickly moved from simple pages to immersive product experiences.',
-    meta: '2019 - 2021',
-    lensTitle: 'Signal Capture',
-    lensCopy: 'Focused on mastering interface fundamentals: hierarchy, readability, rhythm, and confident first impressions.',
-    lensTags: ['UI Basics', 'Visual Rhythm', 'Curiosity'],
+      'Started with a focused interest in building digital products, quickly moving from basic development to creating functional applications.',
+    meta: '2024',
+    lensTitle: 'System Foundation',
+    lensCopy:
+      'Built strong fundamentals in frontend development, logic building, and problem-solving, forming the base for product thinking.',
+    lensTags: ['HTML', 'CSS', 'JavaScript', 'UI Basics'],
   },
   {
     phase: 'Origin',
-    title: 'Design + Code Merge',
+    title: 'Development + Systems Merge',
     description:
-      'Learned to blend visual systems with engineering discipline, turning UI ideas into motion-rich, production-ready frontends.',
-    meta: '2021 - 2023',
-    lensTitle: 'System Link',
-    lensCopy: 'Connected design intent with implementation patterns so visuals and behavior stayed aligned in real products.',
-    lensTags: ['Design Systems', 'Component Reuse', 'Execution'],
+      'Progressed into full-stack development, combining frontend interfaces with backend logic to build complete applications.',
+    meta: '2024 - 2025',
+    lensTitle: 'Core Stability',
+    lensCopy:
+      'Adopted modular code, reusable components, and performance-focused practices for scalable and maintainable systems.',
+    lensTags: ['Full-Stack Development', 'APIs', 'Performance', 'Scalability'],
   },
   {
     phase: 'Power',
-    title: 'Systems Thinking',
+    title: 'AI & Systems Thinking',
     description:
-      'Built reusable patterns, accessible components, and performance-first architecture for scale and maintainability.',
-    meta: '2023 - 2024',
-    lensTitle: 'Core Stability',
-    lensCopy: 'Scaled quality with reusable UI modules and performance checks baked into delivery workflows.',
-    lensTags: ['A11y', 'Performance', 'Scalability'],
+      'Shifted towards building AI-powered applications, LLM-based tools, and automation systems to solve real-world problems.',
+    meta: '2025',
+    lensTitle: 'Outcome Focus',
+    lensCopy: 'Focused on efficiency, usability, and building systems that deliver measurable results.',
+    lensTags: ['AI / ML', 'LLM Integration', 'Automation', 'Backend Systems'],
   },
   {
     phase: 'Impact',
-    title: 'Product Outcomes',
+    title: 'Product Execution',
     description:
-      'Focused on conversion impact, engagement depth, and UX clarity across SaaS, portfolio, and business platforms.',
-    meta: '2024 - 2025',
-    lensTitle: 'Outcome Tracking',
-    lensCopy: 'Shifted from visual output to measurable product movement: conversion lift, retention gain, and clarity score.',
-    lensTags: ['Conversion', 'Retention', 'Clarity'],
+      'Focused on building and launching MVPs, AI tools, and scalable products with real-world applications.',
+    meta: '2025 - Ongoing',
+    lensTitle: 'Mission Alignment',
+    lensCopy: 'Turned ideas into production-ready systems, ensuring performance, usability, and reliability.',
+    lensTags: ['MVP Development', 'System Design', 'Deployment', 'Optimization'],
   },
   {
     phase: 'Connection',
     title: 'Collaborative Growth',
     description:
-      'Partnering with founders, teams, and creators to craft premium digital stories that communicate value instantly.',
+      'Working with founders, teams, and creators to build AI-driven products and scalable digital solutions.',
     meta: '2025 - Present',
-    lensTitle: 'Mission Sync',
-    lensCopy: 'Cross-functional collaboration became the final layer, turning product stories into shared launch momentum.',
-    lensTags: ['Collaboration', 'Delivery', 'Momentum'],
+    lensTitle: 'Continuous Evolution',
+    lensCopy: 'Focused on iteration, feedback, and scaling systems for long-term impact.',
+    lensTags: ['Collaboration', 'Product Strategy', 'Scaling', 'Execution'],
   },
 ]
 
 const JOURNEY_CONTEXT = [
   {
-    title: 'Route Logic',
-    copy: 'Each step is a checkpoint in the same space mission narrative carried from hero through contact.',
+    title: 'Growth Path',
+    copy: 'Each stage marks a milestone, from early learning to building LLM applications, automation systems, and full-stack products used in real scenarios.',
   },
   {
-    title: 'Non-Empty Story',
-    copy: 'Instead of one-liner milestones, every stage explains intent, capability growth, and execution outcomes.',
+    title: 'Structured Progress',
+    copy: 'This is not a random journey. Every step shows clear intent, skill development, and execution outcomes leading to production-ready systems.',
   },
   {
-    title: 'Continuous Motion',
-    copy: 'The progress line and section followers keep users oriented while scrolling deeper into the page.',
+    title: 'Execution Over Theory',
+    copy: 'Instead of simple milestones, each phase shows what was built, how it was built, and the impact it created.',
   },
 ]
 
@@ -193,13 +195,13 @@ const Experience = () => {
             <span className="section-title-gradient">Momentum & Meaning</span>
           </h2>
           <p className="section-copy mx-auto">
-            This timeline connects the same narrative arc across the site: identity, origin, power, impact, and connection.
-            Each point lights up as you scroll to show growth in real time.
+            This timeline reflects the journey from learning to building AI-powered products, scalable systems, and real-world
+            applications. Each stage highlights how skills evolved into execution.
           </p>
 
           <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-slate-300/95 sm:text-base">
-            Think of this as a mission log. It adds context to every previous section and proves that the premium style
-            comes from an intentional process, not random decoration.
+            As you scroll, each step reveals growth, showing how ideas progressed into working products, deployed systems,
+            and practical solutions while keeping the full progression connected.
           </p>
         </div>
 

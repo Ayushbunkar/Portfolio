@@ -88,16 +88,16 @@ const PROJECTS = [
 
 const IMPACT_CONTEXT = [
   {
-    title: 'Space Theme Continuity',
-    copy: 'Projects are mapped as constellations: each panel is a star that contributes to the larger mission narrative.',
+    title: 'System Continuity',
+    copy: 'Projects are connected as part of a larger system, showing how architecture, scalability, and performance stay consistent across builds.',
   },
   {
-    title: 'Density Over Emptiness',
-    copy: 'Every case includes story, stack, outcomes, and deliverables so the section feels complete and informative.',
+    title: 'Depth Over Noise',
+    copy: 'Every case study includes clear context, technologies used (LLMs, APIs, frameworks), and outcomes so value is visible fast.',
   },
   {
-    title: 'Motion With Purpose',
-    copy: 'Horizontal scroll and reveal animations are used to guide attention, not distract from decision-critical details.',
+    title: 'Execution-Focused Motion',
+    copy: 'Horizontal scrolling and animations guide attention through each project, helping users understand decisions, workflows, and results without distraction.',
   },
 ]
 
@@ -260,12 +260,13 @@ const Projects = () => {
           <span className="section-title-gradient">A Horizontal Journey</span>
         </h2>
         <p className="section-copy mx-auto">
-          Scroll to move across full-screen case studies. Each panel reveals media, impact, and system decisions that shaped real outcomes.
+          Scroll to explore full-screen AI projects and case studies. Each panel highlights the problem, solution, tech stack,
+          and real outcomes behind every build.
         </p>
 
         <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-slate-300/95 sm:text-base">
-          This is the impact orbit of the site. As you move horizontally, each project expands from headline to execution
-          detail so the storyline stays clear without feeling sparse.
+          This section showcases how ideas are transformed into working products, from concept to deployment, while keeping
+          the journey clear and structured.
         </p>
       </div>
 

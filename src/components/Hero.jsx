@@ -597,7 +597,7 @@ export default function Hero() {
                 <TypewriterText texts={ROLES} />
               </span>
             </div>
-//tftffdsfd
+
             <div className="hero-reveal flex flex-wrap items-center justify-center gap-3 lg:justify-start">
               <MagneticButton href="#projects" variant="filled">
                 Explore Projects

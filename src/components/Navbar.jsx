@@ -202,7 +202,7 @@ const Navbar = () => {
                       </svg>
                     </a>
                   </div>
-                  <p className="text-gray-500 text-sm">hello@ayushbunkar.com</p>
+                  <p className="text-gray-500 text-sm">ayushbunkar100@gmail.com</p>
                 </motion.div>
               </div>
             </motion.div>

@@ -153,17 +153,26 @@ const TechIcon = ({ iconKey, className }) => {
 
 const POWER_CONTEXT = [
   {
-    title: 'System Power',
-    copy: 'Every tool here is selected to keep motion smooth, maintainability high, and delivery speed practical.',
+    title: 'Core Stack',
+    copy:
+      'Every tool and technology is chosen to ensure performance, scalable systems, and maintainability-from AI model integration to frontend optimization and backend architecture.',
   },
   {
-    title: 'Space Coordination',
-    copy: 'Orbit visuals represent how design, frontend, backend, and performance layers stay synchronized.',
+    title: 'System Architecture',
+    copy:
+      'This system brings together AI, frontend, backend, and DevOps-ensuring all layers work seamlessly to deliver smooth user experiences and reliable systems.',
   },
   {
-    title: 'Execution Clarity',
-    copy: 'These skills are applied as product systems, not isolated tricks, so results stay consistent across pages.',
+    title: 'Product Execution',
+    copy:
+      'These are not isolated skills. They are applied as complete product systems-so every build is consistent, scalable, and ready for real users.',
   },
+]
+
+const SKILLS_STATS = [
+  { value: 18, suffix: '+', label: 'Technologies & Tools' },
+  { value: 85, suffix: '%+', label: 'Average Proficiency' },
+  { value: 95, suffix: '%', label: 'Peak Strength in Core Areas' },
 ]
 
 const Skills = () => {
@@ -179,21 +188,7 @@ const Skills = () => {
   const activeGroup = SKILL_GROUPS[activeGroupKey] ?? SKILL_GROUPS.frontend
   const skills = activeGroup.skills
 
-  const groupMaxLevel = useMemo(() => skills.reduce((max, item) => Math.max(max, item.level), 0), [skills])
-
-  const averageLevel = useMemo(
-    () => Math.round(skills.reduce((total, item) => total + item.level, 0) / skills.length),
-    [skills]
-  )
-
-  const stats = useMemo(
-    () => [
-      { value: skills.length, suffix: '', label: `${activeGroup.label} Tools` },
-      { value: averageLevel, suffix: '%', label: 'Average Strength' },
-      { value: groupMaxLevel, suffix: '%', label: 'Peak Strength' },
-    ],
-    [activeGroup.label, averageLevel, groupMaxLevel, skills.length]
-  )
+  const stats = useMemo(() => SKILLS_STATS, [])
 
   const totalPages = useMemo(() => Math.max(1, Math.ceil(skills.length / CARDS_PER_PAGE)), [skills.length])
 
@@ -524,12 +519,13 @@ const Skills = () => {
             <span className="section-title-gradient">Concept Into Product</span>
           </h2>
           <p className="section-copy mx-auto">
-            This section represents power: technical precision, interaction quality, and the system thinking needed to scale premium experiences.
+            This section reflects my core strength: building AI-powered products, scalable systems, and full-stack
+            applications with real-world impact.
           </p>
 
           <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-slate-300/95 sm:text-base">
-            Power here means controlled complexity. Every animation, component, and architecture decision is tuned to
-            feel premium while keeping the build reliable in real production timelines.
+            I focus on turning ideas into working solutions-combining LLM integration, backend architecture, and modern
+            frontend development to deliver fast, reliable, production-ready applications.
           </p>
         </div>
 
@@ -551,10 +547,10 @@ const Skills = () => {
 
         <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
           {stats.map((stat) => (
-            <div key={`${activeGroupKey}-${stat.label}`} className="soft-panel min-w-[170px] px-5 py-4 text-center">
+            <div key={stat.label} className="soft-panel min-w-[170px] px-5 py-4 text-center">
               <div className="font-display text-3xl font-bold text-white">
                 <AnimatedCounter
-                  key={`${activeGroupKey}-${stat.label}-counter`}
+                  key={stat.label}
                   target={stat.value}
                   suffix={stat.suffix}
                   duration={1.8}
