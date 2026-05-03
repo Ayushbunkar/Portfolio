@@ -1,7 +1,7 @@
 import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
-import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 
 dotenv.config()
 
@@ -9,12 +9,13 @@ const app = express()
 
 const port = process.env.PORT || 3001
 const origin = process.env.FRONTEND_ORIGIN || 'http://localhost:5173'
-const resendApiKey = process.env.RESEND_API_KEY
+const smtpUser = process.env.SMTP_USER
+const smtpPass = process.env.SMTP_PASS
 const mailFrom = process.env.MAIL_FROM
 const mailTo = process.env.MAIL_TO
 
-if (!resendApiKey) {
-  console.warn('RESEND_API_KEY is missing. Emails will not send.')
+if (!smtpUser || !smtpPass) {
+  console.warn('SMTP credentials are missing. Emails will not send.')
 }
 
 app.use(cors({ origin }))
@@ -31,11 +32,9 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ ok: false, error: 'Missing required fields.' })
   }
 
-  if (!resendApiKey || !mailFrom || !mailTo) {
+  if (!smtpUser || !smtpPass || !mailFrom || !mailTo) {
     return res.status(500).json({ ok: false, error: 'Email service not configured.' })
   }
-
-  const resend = new Resend(resendApiKey)
 
   const subject = 'New Project Plan Request'
   const body = [
@@ -52,7 +51,17 @@ app.post('/api/contact', async (req, res) => {
   ].join('\n')
 
   try {
-    const { error } = await resend.emails.send({
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: smtpUser,
+        pass: smtpPass,
+      },
+    })
+
+    await transporter.sendMail({
       from: mailFrom,
       to: mailTo,
       replyTo: email,
@@ -60,13 +69,9 @@ app.post('/api/contact', async (req, res) => {
       text: body,
     })
 
-    if (error) {
-      return res.status(500).json({ ok: false, error: 'Email send failed.' })
-    }
-
     return res.json({ ok: true })
   } catch (err) {
-    return res.status(500).json({ ok: false, error: 'Unexpected error.' })
+    return res.status(500).json({ ok: false, error: 'Email send failed.' })
   }
 })
 

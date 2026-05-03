@@ -29,6 +29,7 @@ const Contact = () => {
     email: '',
     projectType: '',
     budget: '',
+    budgetCustom: '',
     timeline: '',
     message: '',
   })
@@ -106,12 +107,19 @@ const Contact = () => {
 
     setSubmitState('submitting')
 
+    const budgetValue = form.budget === 'Custom' && form.budgetCustom.trim()
+      ? form.budgetCustom.trim()
+      : form.budget
+
     try {
       const apiBase = import.meta.env.VITE_API_BASE ?? ''
       const response = await fetch(`${apiBase}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          budget: budgetValue,
+        }),
       })
 
       if (!response.ok) throw new Error('Request failed')
@@ -263,11 +271,28 @@ const Contact = () => {
                       required
                     >
                       <option value="">Select</option>
-                      <option value="2L-5L">₹2L - ₹5L</option>
-                      <option value="5L-10L">₹5L - ₹10L</option>
-                      <option value="10L+">₹10L+</option>
+                      <option value="$200-$500">$200 - $500</option>
+                      <option value="$500-$1k">$500 - $1k</option>
+                      <option value="$1k-$3k">$1k - $3k</option>
+                      <option value="$3k+">$3k+</option>
+                      <option value="Custom">Custom</option>
                     </select>
                   </label>
+
+                  {form.budget === 'Custom' && (
+                    <label className="focus-ring-shell block">
+                      <span className="mb-1.5 block text-xs text-slate-300">Custom Budget</span>
+                      <input
+                        className="focus-input"
+                        name="budgetCustom"
+                        type="text"
+                        value={form.budgetCustom}
+                        onChange={handleChange}
+                        placeholder="Enter your budget"
+                        required
+                      />
+                    </label>
+                  )}
 
                   <label className="focus-ring-shell block">
                     <span className="mb-1.5 block text-xs text-slate-300">Timeline</span>
