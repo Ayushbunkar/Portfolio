@@ -124,7 +124,7 @@ const getOrbitLayout = (size) => {
       coreSize,
       tagWidth,
       tagOffset,
-      ringRadius: Math.max(minRadius, Math.min(112, maxRadius)),
+      ringRadius: Math.max(minRadius, maxRadius),
       textClass: 'text-[10px]',
       iconClass: 'text-[12px]',
     }
@@ -140,7 +140,7 @@ const getOrbitLayout = (size) => {
     coreSize,
     tagWidth,
     tagOffset,
-    ringRadius: Math.max(minRadius, Math.min(132, maxRadius)),
+    ringRadius: Math.max(minRadius, maxRadius),
     textClass: 'text-[10px]',
     iconClass: 'text-[13px]',
   }
@@ -583,24 +583,26 @@ const Skills = () => {
               transition={{ duration: 11, repeat: Infinity, ease: 'linear' }}
             />
 
-            <div
-              className="orbit-core absolute left-1/2 top-1/2 z-[3] grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-white/[0.08] backdrop-blur-lg"
-              style={{ width: orbitLayout.coreSize, height: orbitLayout.coreSize }}
-            >
-              <div className="text-center">
-                <p className="font-display text-3xl font-black text-white">{pageMaxLevel}%</p>
-                <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-cyan-200">
-                  <span className="inline-flex items-center gap-1">
-                    <TechIcon iconKey={activeGroup.icon} className="text-[11px] text-cyan-200" />
-                    {activeGroup.label}
-                  </span>
-                </p>
+            <div className="orbit-core absolute inset-0 z-[3] flex items-center justify-center">
+              <div
+                className="grid place-items-center rounded-full border border-white/20 bg-white/[0.08] backdrop-blur-lg"
+                style={{ width: orbitLayout.coreSize, height: orbitLayout.coreSize }}
+              >
+                <div className="text-center">
+                  <p className="font-display text-3xl font-black text-white">{pageMaxLevel}%</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-cyan-200">
+                    <span className="inline-flex items-center gap-1">
+                      <TechIcon iconKey={activeGroup.icon} className="text-[11px] text-cyan-200" />
+                      {activeGroup.label}
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
 
             {circleTags.map((item, index) => {
               const angle = orbitAngles[index] ?? -90
-              const radius = orbitLayout.ringRadius + orbitLayout.tagOffset
+              const radius = orbitLayout.ringRadius
               const radian = (angle * Math.PI) / 180
               const x = Math.cos(radian) * radius
               const y = Math.sin(radian) * radius

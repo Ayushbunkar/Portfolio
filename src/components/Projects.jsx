@@ -6,18 +6,19 @@ import { ensureScrollTrigger, gsap } from '../utils/scrollAnimations'
 const PROJECTS = [
   {
     id: 'nova-commerce',
-    title: 'Nova Commerce',
+    title: 'Builtattic AI',
     phase: 'Impact 01',
     year: '2025',
-    type: 'SaaS Commerce Platform',
+    type: 'AI Architecture Platform',
     summary:
-      'Built a conversion-focused storefront with immersive storytelling, responsive checkout flow, and optimized navigation depth.',
-    impact: '42% conversion uplift',
-    narrative: 'Commerce flow redesigned as a cinematic conversion path from discovery to checkout.',
+      'Built an AI-powered home design platform that transforms user inputs into intelligent, structured architectural layouts using computer vision and generative AI.',
+    impact: '3x faster design generation · Reduced manual effort by 60%',
+    narrative:
+      'AI-driven workflow redesign enables seamless transition from concept to layout generation, reducing manual effort and accelerating design decisions.',
     accent: '#7c86ff',
     image:
       'https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1600&q=80',
-    stack: ['React', 'Node.js', 'MongoDB', 'Stripe'],
+    stack: ['React', 'Node.js', 'Python', 'TensorFlow', 'AWS', 'Vector DB'],
     details: [
       'Dynamic product narrative with interactive sections',
       'Checkout drop-off reduced via frictionless flow mapping',
@@ -26,18 +27,19 @@ const PROJECTS = [
   },
   {
     id: 'pulse-analytics',
-    title: 'Pulse Analytics',
+    title: 'AlcohZero',
     phase: 'Impact 02',
     year: '2025',
-    type: 'Realtime Product Dashboard',
+    type: 'AI Safety & Monitoring Platform',
     summary:
-      'Designed and engineered a realtime operations dashboard where motion communicates hierarchy and critical metric states.',
-    impact: '35% faster insight cycles',
-    narrative: 'Realtime signals were translated into visual hierarchy so teams make decisions faster.',
+      'Engineered a real-time AI safety system that detects alcohol influence and behavioral anomalies using computer vision and streaming data pipelines.',
+    impact: 'Low-latency AI detection · Scalable monitoring system · High-accuracy behavioral analysis',
+    narrative:
+      'Converted raw visual inputs into structured intelligence through optimized inference models and low-latency backend systems, enabling proactive safety interventions at scale.',
     accent: '#2dd4bf',
     image:
       'https://images.unsplash.com/photo-1518186233392-c232efbf2373?auto=format&fit=crop&w=1600&q=80',
-    stack: ['React', 'Framer Motion', 'D3', 'WebSockets'],
+    stack: ['React', 'Node.js', 'Python', 'PyTorch', 'OpenCV', 'WebSockets', 'AWS', 'Edge Inference'],
     details: [
       'Real-time charts with contextual transitions',
       'Alert layers with priority-driven visual grammar',
@@ -46,18 +48,19 @@ const PROJECTS = [
   },
   {
     id: 'orbit-social',
-    title: 'Orbit Social',
+    title: 'CardioShield AI',
     phase: 'Impact 03',
     year: '2024',
-    type: 'Community Product Experience',
+    type: 'AI Healthcare Monitoring System',
     summary:
-      'Created a high-retention social experience with fluid feed interactions, creator tools, and immersive posting journeys.',
-    impact: '120K active users',
-    narrative: 'Interaction loops were tuned to keep creators and audiences engaged for longer sessions.',
+      'Engineered a real-time AI-driven cardiovascular intelligence platform that processes streaming health data to identify anomalies and predict potential cardiac risks.',
+    impact: 'Predictive health insights · Scalable monitoring architecture · High-signal anomaly detection',
+    narrative:
+      'Developed scalable data pipelines and low-latency inference systems, transforming raw physiological signals into clinically relevant insights for continuous monitoring and preventive care.',
     accent: '#ec4899',
     image:
       'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80',
-    stack: ['Next.js', 'PostgreSQL', 'Redis', 'Socket.io'],
+    stack: ['Next.js', 'Python', 'PyTorch', 'Time-Series Analysis', 'PostgreSQL', 'Redis', 'WebSockets', 'Cloud Deployment'],
     details: [
       'Live interactions with resilient event handling',
       'Publishing workflow designed for creator speed',
@@ -82,6 +85,27 @@ const PROJECTS = [
       'Prompt systems aligned to brand and product taxonomies',
       'Review and feedback loop integrated in one workflow',
       'Multi-team collaboration with permission layers',
+    ],
+  },
+  {
+    id: 'voice-os',
+    title: 'VoiceOS',
+    phase: 'Impact 05',
+    year: '2025',
+    type: 'Voice AI Operating System',
+    summary:
+      'Built a real-time voice-first AI system that enables natural, conversational interaction with applications through speech.',
+    impact: '40% faster task execution via voice automation',
+    narrative:
+      'Designed a low-latency pipeline integrating speech-to-text, LLM reasoning, and text-to-speech with contextual memory and intent recognition for multi-step tasks and personalized interactions.',
+    accent: '#38bdf8',
+    image:
+      'https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1600&q=80',
+    stack: ['Python', 'FastAPI', 'WebRTC', 'LLMs', 'Speech APIs'],
+    details: [
+      'Streaming STT and TTS with interruption handling',
+      'Contextual memory for multi-turn task execution',
+      'Low-latency inference pipeline tuned for voice UX',
     ],
   },
 ]
@@ -165,69 +189,88 @@ const Projects = () => {
       )
 
       const panels = gsap.utils.toArray('.project-panel')
-      panels.forEach((panel) => {
+      panels.forEach((panel, index) => {
+        const isFirst = index === 0
         const media = panel.querySelector('.project-media')
         const copy = panel.querySelector('.project-copy')
         const labels = panel.querySelectorAll('.floating-label')
 
         if (media) {
-          gsap.fromTo(
-            media,
-            { scale: 1.2, opacity: 0.45, filter: 'blur(12px)' },
-            {
-              scale: 1,
-              opacity: 1,
-              filter: 'blur(0px)',
-              ease: 'none',
-              scrollTrigger: {
-                trigger: panel,
-                containerAnimation: horizontalTween,
-                start: 'left 80%',
-                end: 'center center',
-                scrub: true,
-              },
-            }
-          )
+          if (isFirst) {
+            gsap.set(media, { scale: 1, opacity: 1, filter: 'blur(0px)' })
+          } else {
+            gsap.fromTo(
+              media,
+              { scale: 1.2, opacity: 0.45, filter: 'blur(12px)' },
+              {
+                scale: 1,
+                opacity: 1,
+                filter: 'blur(0px)',
+                ease: 'none',
+                immediateRender: false,
+                scrollTrigger: {
+                  trigger: panel,
+                  containerAnimation: horizontalTween,
+                  start: 'left 80%',
+                  end: 'center center',
+                  scrub: true,
+                  invalidateOnRefresh: true,
+                },
+              }
+            )
+          }
         }
 
         if (copy) {
-          gsap.fromTo(
-            copy,
-            { opacity: 0, y: 48, filter: 'blur(10px)' },
-            {
-              opacity: 1,
-              y: 0,
-              filter: 'blur(0px)',
-              ease: 'none',
-              scrollTrigger: {
-                trigger: panel,
-                containerAnimation: horizontalTween,
-                start: 'left 72%',
-                end: 'left 38%',
-                scrub: true,
-              },
-            }
-          )
+          if (isFirst) {
+            gsap.set(copy, { opacity: 1, y: 0, filter: 'blur(0px)' })
+          } else {
+            gsap.fromTo(
+              copy,
+              { opacity: 0, y: 48, filter: 'blur(10px)' },
+              {
+                opacity: 1,
+                y: 0,
+                filter: 'blur(0px)',
+                ease: 'none',
+                immediateRender: false,
+                scrollTrigger: {
+                  trigger: panel,
+                  containerAnimation: horizontalTween,
+                  start: 'left 72%',
+                  end: 'left 38%',
+                  scrub: true,
+                  invalidateOnRefresh: true,
+                },
+              }
+            )
+          }
         }
 
         if (labels.length > 0) {
-          gsap.fromTo(
-            labels,
-            { opacity: 0, y: 12 },
-            {
-              opacity: 1,
-              y: 0,
-              stagger: 0.08,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: panel,
-                containerAnimation: horizontalTween,
-                start: 'left 62%',
-                end: 'left 45%',
-                scrub: true,
-              },
-            }
-          )
+          if (isFirst) {
+            gsap.set(labels, { opacity: 1, y: 0 })
+          } else {
+            gsap.fromTo(
+              labels,
+              { opacity: 0, y: 12 },
+              {
+                opacity: 1,
+                y: 0,
+                stagger: 0.08,
+                ease: 'none',
+                immediateRender: false,
+                scrollTrigger: {
+                  trigger: panel,
+                  containerAnimation: horizontalTween,
+                  start: 'left 62%',
+                  end: 'left 45%',
+                  scrub: true,
+                  invalidateOnRefresh: true,
+                },
+              }
+            )
+          }
         }
       })
 
@@ -348,7 +391,7 @@ const Projects = () => {
                   </div>
                 </div>
 
-                <motion.div className="project-media aspect-[4/3] sm:aspect-[6/5] min-w-0 w-full max-w-[480px] justify-self-center self-center overflow-hidden rounded-2xl border border-white/20 bg-black/20 shadow-[0_28px_90px_rgba(5,10,24,0.55)]">
+                <motion.div className="project-media relative aspect-[4/3] sm:aspect-[6/5] min-w-0 w-full max-w-[480px] justify-self-center self-center overflow-hidden rounded-2xl border border-white/20 bg-black/20 shadow-[0_28px_90px_rgba(5,10,24,0.55)]">
                   <img
                     src={project.image}
                     alt={project.title}

@@ -311,6 +311,59 @@ body.portfolio-theme ::selection {
   box-shadow: var(--shadow-soft);
 }
 
+.skills-section {
+  color: #eaf2ff;
+}
+
+.skills-section :where(h1, h2, h3, h4, h5, h6, p, span, button, li, small) {
+  color: inherit;
+}
+
+.skills-section svg {
+  color: currentColor;
+}
+
+.skills-section .glass-panel {
+  backdrop-filter: none;
+}
+
+.skills-section .skills-intro,
+.skills-section .skills-context-card,
+.skills-section .skills-card,
+.skills-section .skills-card-item,
+.skills-section .orbit-tag,
+.skills-section .orbit-core {
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+}
+
+.projects-scroll {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: thin !important;
+}
+
+.projects-scroll::-webkit-scrollbar {
+  display: block !important;
+  height: 6px !important;
+}
+
+.projects-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.projects-scroll::-webkit-scrollbar-thumb {
+  background: rgba(124, 134, 255, 0.55);
+  border-radius: 999px;
+}
+
+.project-panel {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
 .parallax-fade {
   will-change: transform, opacity;
 }
