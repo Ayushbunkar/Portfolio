@@ -54,7 +54,7 @@ const PROJECTS = [
     type: 'AI Healthcare Monitoring System',
     summary:
       'Engineered a real-time AI-driven cardiovascular intelligence platform that processes streaming health data to identify anomalies and predict potential cardiac risks.',
-    impact: 'Predictive health insights · Scalable monitoring architecture · High-signal anomaly detection',
+    impact: 'Predictive insights · Scalable monitoring',
     narrative:
       'Developed scalable data pipelines and low-latency inference systems, transforming raw physiological signals into clinically relevant insights for continuous monitoring and preventive care.',
     accent: '#ec4899',
