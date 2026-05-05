@@ -714,7 +714,7 @@ const Skills = () => {
                           {skill.name}
                         </span>
                       </p>
-                      <span className="shrink-0 min-w-[118px] rounded-full border border-white/20 bg-white/10 px-2 py-1 text-center font-mono text-[10px] uppercase tracking-[0.12em] text-slate-200">
+                      <span className="pill-badge shrink-0 min-w-[118px] rounded-full border border-white/20 bg-white/10 px-2 py-1 text-center font-mono text-[10px] uppercase tracking-[0.12em] text-slate-200">
                         {skill.type}
                       </span>
                     </div>

@@ -304,64 +304,56 @@ body.portfolio-theme ::selection {
   backdrop-filter: blur(16px);
 }
 
+.modal-shell {
+  perspective: 1800px;
+  transform-style: preserve-3d;
+}
+
+.modal-panel {
+  position: relative;
+  transform-style: preserve-3d;
+  box-shadow:
+    0 32px 90px rgba(2, 6, 18, 0.72),
+    0 8px 24px rgba(7, 18, 36, 0.4),
+    0 2px 0 rgba(255, 255, 255, 0.12) inset;
+}
+
+.modal-panel::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 45%),
+    linear-gradient(220deg, rgba(99, 102, 241, 0.18), transparent 55%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.modal-drawer {
+  transform-origin: right center;
+}
+
+html.modal-open,
+body.modal-open {
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+body.modal-open {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
 .soft-panel {
   border-radius: var(--radius-2xl);
   border: 1px solid var(--line-soft);
   background: var(--surface-1);
   box-shadow: var(--shadow-soft);
-}
-
-.skills-section {
-  color: #eaf2ff;
-}
-
-.skills-section :where(h1, h2, h3, h4, h5, h6, p, span, button, li, small) {
-  color: inherit;
-}
-
-.skills-section svg {
-  color: currentColor;
-}
-
-.skills-section .glass-panel {
-  backdrop-filter: none;
-}
-
-.skills-section .skills-intro,
-.skills-section .skills-context-card,
-.skills-section .skills-card,
-.skills-section .skills-card-item,
-.skills-section .orbit-tag,
-.skills-section .orbit-core {
-  opacity: 1 !important;
-  visibility: visible !important;
-  filter: none !important;
-}
-
-.projects-scroll {
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  scrollbar-width: thin !important;
-}
-
-.projects-scroll::-webkit-scrollbar {
-  display: block !important;
-  height: 6px !important;
-}
-
-.projects-scroll::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.projects-scroll::-webkit-scrollbar-thumb {
-  background: rgba(124, 134, 255, 0.55);
-  border-radius: 999px;
-}
-
-.project-panel {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
 }
 
 .parallax-fade {
@@ -371,6 +363,9 @@ body.portfolio-theme ::selection {
 .meaning-badge {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  line-height: 1;
+  text-align: center;
   border-radius: var(--radius-pill);
   border: 1px solid var(--line-strong);
   padding: 0.32rem 0.7rem;
@@ -380,6 +375,15 @@ body.portfolio-theme ::selection {
   text-transform: uppercase;
   color: #edf4ff;
   background: rgba(111, 168, 255, 0.14);
+}
+
+.floating-label,
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  text-align: center;
 }
 
 .text-gradient-highlight {

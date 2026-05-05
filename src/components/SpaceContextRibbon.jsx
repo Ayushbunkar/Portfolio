@@ -149,7 +149,7 @@ const SpaceContextRibbon = () => {
                     <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-200">{active.phase}</p>
                     <p className="mt-1 font-display text-base font-bold leading-tight text-white">{active.title}</p>
                     <p className="mt-2 text-xs leading-relaxed text-slate-200/90">{active.detail}</p>
-                    <p className="mt-2 rounded-full border border-white/20 bg-white/[0.06] px-2 py-1 text-[10px] uppercase tracking-[0.14em] text-slate-100">
+                    <p className="pill-badge mt-2 rounded-full border border-white/20 bg-white/[0.06] px-2 py-1 text-[10px] uppercase tracking-[0.14em] text-slate-100">
                       {active.cue}
                     </p>
                   </motion.div>

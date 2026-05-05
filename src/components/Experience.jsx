@@ -257,7 +257,7 @@ const Experience = () => {
                       {step.lensTags.map((tag) => (
                         <span
                           key={`${step.title}-${tag}`}
-                          className="rounded-full border border-white/20 bg-white/[0.06] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-slate-200"
+                          className="pill-badge rounded-full border border-white/20 bg-white/[0.06] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-slate-200"
                         >
                           {tag}
                         </span>
@@ -283,7 +283,7 @@ const Experience = () => {
                   >
                     <div className="mb-3 flex flex-wrap items-center gap-2">
                       <span className="meaning-badge">{step.phase}</span>
-                      <span className="rounded-full border border-white/20 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-300">
+                      <span className="pill-badge rounded-full border border-white/20 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-300">
                         {step.meta}
                       </span>
                     </div>

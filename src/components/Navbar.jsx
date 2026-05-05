@@ -38,6 +38,24 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.classList.add('modal-open')
+      document.documentElement.classList.add('modal-open')
+      window.dispatchEvent(new Event('modal:open'))
+    } else {
+      document.body.classList.remove('modal-open')
+      document.documentElement.classList.remove('modal-open')
+      window.dispatchEvent(new Event('modal:close'))
+    }
+
+    return () => {
+      document.body.classList.remove('modal-open')
+      document.documentElement.classList.remove('modal-open')
+      window.dispatchEvent(new Event('modal:close'))
+    }
+  }, [isMenuOpen])
+
   const handleLinkClick = (e, href) => {
     e.preventDefault()
     setIsMenuOpen(false)
@@ -51,6 +69,7 @@ const Navbar = () => {
     closed: {
       opacity: 0,
       x: '100%',
+      rotateY: -28,
       transition: {
         duration: 0.5,
         ease: [0.76, 0, 0.24, 1],
@@ -59,6 +78,7 @@ const Navbar = () => {
     open: {
       opacity: 1,
       x: 0,
+      rotateY: 0,
       transition: {
         duration: 0.5,
         ease: [0.76, 0, 0.24, 1],
@@ -153,11 +173,12 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             />
             <motion.div
-              className="fixed top-0 right-0 w-[86%] max-w-sm h-screen bg-[#12121a] z-[1001] flex flex-col"
+              className="modal-shell modal-panel modal-drawer fixed right-3 top-3 w-[92%] max-w-lg h-[calc(100vh-1.5rem)] rounded-2xl bg-[#12121a] z-[1001] flex flex-col"
               variants={menuVariants}
               initial="closed"
               animate="open"
               exit="closed"
+              style={{ transformPerspective: 1200 }}
             >
               <div className="flex flex-col justify-between h-full pt-20 pb-8 px-6 sm:px-7">
                 <div className="flex flex-col gap-2">

@@ -187,7 +187,7 @@ const Contact = () => {
           <form onSubmit={handleSubmit} className="contact-card glass-panel h-full space-y-4 p-6 sm:p-7">
             <div className="flex items-center justify-between">
               <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-indigo-200">Start a Project</p>
-              <span className="rounded-full border border-white/15 bg-white/[0.06] px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-slate-200">
+              <span className="pill-badge rounded-full border border-white/15 bg-white/[0.06] px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-slate-200">
                 Step {step} of 2
               </span>
             </div>

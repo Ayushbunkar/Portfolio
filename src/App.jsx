@@ -45,6 +45,8 @@ function App() {
     let lenis = null
     let disposeTicker = null
     let cancelled = false
+    let removeModalListeners = null
+    let lockedScrollY = 0
 
     const setupLenis = async () => {
       const { default: Lenis } = await import('lenis')
@@ -60,6 +62,25 @@ function App() {
         touchMultiplier: 1,
         syncTouch: false,
       })
+
+      const lockPage = () => {
+        lockedScrollY = window.scrollY || window.pageYOffset || 0
+        document.body.style.top = `-${lockedScrollY}px`
+        lenis?.stop()
+      }
+
+      const unlockPage = () => {
+        lenis?.start()
+        document.body.style.top = ''
+        window.scrollTo(0, lockedScrollY)
+      }
+
+      window.addEventListener('modal:open', lockPage)
+      window.addEventListener('modal:close', unlockPage)
+      removeModalListeners = () => {
+        window.removeEventListener('modal:open', lockPage)
+        window.removeEventListener('modal:close', unlockPage)
+      }
 
       lenis.on('scroll', ScrollTrigger.update)
 
@@ -81,8 +102,10 @@ function App() {
 
     return () => {
       cancelled = true
+      if (removeModalListeners) removeModalListeners()
       if (disposeTicker) disposeTicker()
       if (lenis) lenis.destroy()
+      document.body.style.top = ''
       document.documentElement.classList.remove('lenis')
       document.body.classList.remove('lenis')
     }
