@@ -11,10 +11,10 @@ const PROJECTS = [
     year: '2025',
     type: 'AI Architecture Platform',
     summary:
-      'Built an AI-powered home design platform that transforms user inputs into intelligent, structured architectural layouts using computer vision and generative AI.',
+      'Built an AI home design platform that turns inputs into structured layouts using computer vision and generative AI.',
     impact: '3x faster design generation · Reduced manual effort by 60%',
     narrative:
-      'AI-driven workflow redesign enables seamless transition from concept to layout generation, reducing manual effort and accelerating design decisions.',
+      'AI workflow redesign streamlined concept-to-layout generation, cutting effort and speeding design decisions.',
     accent: '#7c86ff',
     image:
       'https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1600&q=80',
@@ -27,15 +27,15 @@ const PROJECTS = [
   },
   {
     id: 'pulse-analytics',
-    title: 'AlcohZero',
+    title: 'AlcoZero',
     phase: 'Impact 02',
     year: '2025',
     type: 'AI Safety & Monitoring Platform',
     summary:
-      'Engineered a real-time AI safety system that detects alcohol influence and behavioral anomalies using computer vision and streaming data pipelines.',
+      'Engineered a real-time AI safety system that detects alcohol influence and behavioral anomalies via computer vision.',
     impact: 'Low-latency AI detection · Scalable monitoring system · High-accuracy behavioral analysis',
     narrative:
-      'Converted raw visual inputs into structured intelligence through optimized inference models and low-latency backend systems, enabling proactive safety interventions at scale.',
+      'Converted visual inputs into structured intelligence with optimized inference and low-latency backends for proactive safety.',
     accent: '#2dd4bf',
     image:
       'https://images.unsplash.com/photo-1518186233392-c232efbf2373?auto=format&fit=crop&w=1600&q=80',
@@ -53,10 +53,10 @@ const PROJECTS = [
     year: '2024',
     type: 'AI Healthcare Monitoring System',
     summary:
-      'Engineered a real-time AI-driven cardiovascular intelligence platform that processes streaming health data to identify anomalies and predict potential cardiac risks.',
+      'Engineered a real-time cardiovascular AI platform to spot anomalies and predict cardiac risks from streaming data.',
     impact: 'Predictive insights · Scalable monitoring',
     narrative:
-      'Developed scalable data pipelines and low-latency inference systems, transforming raw physiological signals into clinically relevant insights for continuous monitoring and preventive care.',
+      'Built scalable pipelines and low-latency inference to turn physiological signals into clinical insights for continuous care.',
     accent: '#ec4899',
     image:
       'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80',
@@ -97,7 +97,7 @@ const PROJECTS = [
       'Built a real-time voice-first AI system that enables natural, conversational interaction with applications through speech.',
     impact: '40% faster task execution via voice automation',
     narrative:
-      'Designed a low-latency pipeline integrating speech-to-text, LLM reasoning, and text-to-speech with contextual memory and intent recognition for multi-step tasks and personalized interactions.',
+      'Designed a low-latency pipeline combining STT, LLM reasoning, and TTS with memory and intent for personalized tasks.',
     accent: '#38bdf8',
     image:
       'https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1600&q=80',
