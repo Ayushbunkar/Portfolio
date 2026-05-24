@@ -243,11 +243,10 @@ const Projects = () => {
 
       gsap.fromTo(
         '.projects-intro',
-        { opacity: 0, y: 38, filter: 'blur(10px)' },
+        { opacity: 0, y: 38 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 0.9,
           ease: 'power3.out',
           scrollTrigger: {
@@ -259,11 +258,10 @@ const Projects = () => {
 
       gsap.fromTo(
         '.projects-context-card',
-        { opacity: 0, y: 20, filter: 'blur(8px)' },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 0.6,
           stagger: 0.08,
           ease: 'power2.out',
@@ -287,11 +285,10 @@ const Projects = () => {
           } else {
             gsap.fromTo(
               media,
-              { scale: 1.2, opacity: 0.45, filter: 'blur(12px)' },
+              { scale: 1.12, opacity: 0.5 },
               {
                 scale: 1,
                 opacity: 1,
-                filter: 'blur(0px)',
                 ease: 'none',
                 immediateRender: false,
                 scrollTrigger: {
@@ -313,11 +310,10 @@ const Projects = () => {
           } else {
             gsap.fromTo(
               copy,
-              { opacity: 0, y: 48, filter: 'blur(10px)' },
+              { opacity: 0, y: 48 },
               {
                 opacity: 1,
                 y: 0,
-                filter: 'blur(0px)',
                 ease: 'none',
                 immediateRender: false,
                 scrollTrigger: {
@@ -519,6 +515,7 @@ const Projects = () => {
                         className={`h-full w-full object-center ${project.imagePadding ? 'rounded-xl' : ''}`}
                         style={{ objectFit: project.imageFit ?? 'cover' }}
                         loading="lazy"
+                        decoding="async"
                       />
                     </a>
                   ) : (
@@ -572,6 +569,7 @@ const Projects = () => {
                     alt={selectedProject.title}
                     className="h-32 w-full rounded-2xl border border-white/20 object-cover sm:h-40"
                     loading="lazy"
+                    decoding="async"
                   />
 
                   <div className="flex flex-wrap items-center gap-2">

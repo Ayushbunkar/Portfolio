@@ -28,7 +28,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false)
-    }, 2500)
+    }, 1200)
     return () => clearTimeout(timer)
   }, [])
 
@@ -52,15 +52,25 @@ function App() {
       const { default: Lenis } = await import('lenis')
       if (cancelled) return
 
+      // On touch/mobile, native scroll is faster than JS smooth scroll
+      const isTouch = window.matchMedia('(pointer: coarse)').matches
+      if (isTouch) {
+        // Just sync GSAP ScrollTrigger with native scroll
+        const ScrollTrigger = ensureScrollTrigger()
+        ScrollTrigger.refresh()
+        return
+      }
+
       const ScrollTrigger = ensureScrollTrigger()
 
       lenis = new Lenis({
-        duration: 1.2,
-        lerp: 0.08,
+        duration: 1.1,
+        lerp: 0.1,
         smoothWheel: true,
-        wheelMultiplier: 0.9,
-        touchMultiplier: 1,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.4,
         syncTouch: false,
+        infinite: false,
       })
 
       const lockPage = () => {
@@ -138,7 +148,7 @@ function App() {
             key="main"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4 }}
             className="main-content"
           >
             <Navbar />
@@ -147,19 +157,27 @@ function App() {
 
             <Suspense fallback={<SectionFallback />}>
               <About />
+            </Suspense>
+            <Suspense fallback={<SectionFallback />}>
               <Skills />
+            </Suspense>
+            <Suspense fallback={<SectionFallback />}>
               <Projects />
+            </Suspense>
+            <Suspense fallback={<SectionFallback />}>
               <Experience />
-              <Marquee
-                items={[
-                  'SPACE THEME STORYLINE',
-                  'BUILD WITH PURPOSE',
-                  'MOTION WITH MEANING',
-                  'EXPERIENCE THAT CONVERTS',
-                ]}
-                direction="right"
-                speed={30}
-              />
+            </Suspense>
+            <Marquee
+              items={[
+                'SPACE THEME STORYLINE',
+                'BUILD WITH PURPOSE',
+                'MOTION WITH MEANING',
+                'EXPERIENCE THAT CONVERTS',
+              ]}
+              direction="right"
+              speed={30}
+            />
+            <Suspense fallback={<SectionFallback />}>
               <Contact />
             </Suspense>
           </motion.div>

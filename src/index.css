@@ -70,11 +70,11 @@
   0%,
   100% {
     opacity: 0.7;
-    filter: hue-rotate(0deg);
+    transform: scale(1);
   }
   50% {
     opacity: 1;
-    filter: hue-rotate(14deg);
+    transform: scale(1.04);
   }
 }
 
@@ -173,6 +173,7 @@ body.portfolio-theme ::selection {
   inset: 0;
   z-index: 0;
   overflow: hidden;
+  contain: layout style paint;
 }
 
 .space-bg-nebula {
@@ -183,7 +184,8 @@ body.portfolio-theme ::selection {
     radial-gradient(960px 620px at 82% 14%, rgba(47, 215, 195, 0.22), transparent 65%),
     radial-gradient(760px 460px at 50% 95%, rgba(255, 143, 115, 0.2), transparent 68%);
   filter: blur(8px);
-  animation: nebula-shift 14s ease-in-out infinite;
+  will-change: opacity;
+  animation: nebula-shift 18s ease-in-out infinite;
 }
 
 .space-bg-stars {
@@ -197,7 +199,8 @@ body.portfolio-theme ::selection {
     radial-gradient(circle at 12% 84%, rgba(190, 214, 255, 0.78) 0 1.1px, transparent 2px);
   background-size: 420px 420px, 380px 380px, 460px 460px, 340px 340px, 500px 500px;
   opacity: 0.34;
-  animation: star-drift 48s linear infinite;
+  will-change: transform;
+  animation: star-drift 64s linear infinite;
 }
 
 .space-bg-grid {
@@ -209,20 +212,24 @@ body.portfolio-theme ::selection {
   background-size: 72px 72px;
   mask-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.9), transparent 78%);
   opacity: 0.4;
-  animation: grid-float 12s linear infinite;
+  will-change: transform;
+  animation: grid-float 16s linear infinite;
 }
 
 .narrative-card {
   border-radius: var(--radius-2xl);
   border: 1px solid var(--line-soft);
-  background: linear-gradient(165deg, var(--surface-2), rgba(255, 255, 255, 0.02));
-  backdrop-filter: blur(16px);
+  background: linear-gradient(165deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)), rgba(10,18,34,0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .section-shell {
   position: relative;
   padding: var(--section-pad-y) 1rem;
   overflow: hidden;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 800px;
 }
 
 .section-shell::before {
@@ -298,10 +305,11 @@ body.portfolio-theme ::selection {
   border-radius: var(--radius-2xl);
   border: 1px solid var(--line-soft);
   background:
-    linear-gradient(165deg, var(--surface-2), rgba(255, 255, 255, 0.03)),
-    rgba(10, 18, 34, 0.55);
+    linear-gradient(165deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03)),
+    rgba(8,14,28,0.82);
   box-shadow: var(--shadow-strong);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .modal-shell {
@@ -357,7 +365,7 @@ body.modal-open {
 }
 
 .parallax-fade {
-  will-change: transform, opacity;
+  /* will-change removed: applied only where needed via JS */
 }
 
 .meaning-badge {
@@ -542,10 +550,90 @@ body.portfolio-theme *::-webkit-scrollbar {
 
   .section-shell {
     padding-inline: 0.85rem;
+    /* Disable content-visibility on mobile — can cause scroll jank */
+    content-visibility: visible;
   }
 
   .section-shell::before {
     background-size: 52px 52px;
+  }
+
+  /* Kill backdrop-filter on mobile — single biggest GPU win */
+  .glass-panel,
+  .narrative-card,
+  .modal-shell,
+  .soft-panel,
+  .story-card {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(8, 14, 28, 0.88) !important;
+  }
+
+  /* Stop expensive background animations on mobile */
+  .space-bg-nebula {
+    animation: none !important;
+    opacity: 0.7;
+  }
+  .space-bg-stars {
+    animation: none !important;
+  }
+  .space-bg-grid {
+    animation: none !important;
+  }
+
+  /* Reduce box-shadow complexity */
+  .glass-panel,
+  .narrative-card {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  /* Faster transitions on mobile for snappier feel */
+  * {
+    transition-duration: min(var(--tw-transition-duration, 200ms), 200ms) !important;
+  }
+
+  /* Fix mobile viewport height */
+  .hero-section,
+  [id="hero"] {
+    min-height: 100svh;
+  }
+}
+
+/* Tablet (769px–1024px) — moderate optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .glass-panel,
+  .narrative-card {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .space-bg-nebula {
+    animation-duration: 28s;
+  }
+}
+
+/* Touch devices — disable tilt/magnetic effects via pointer media */
+@media (pointer: coarse) {
+  /* No hover effects on touch */
+  .glass-panel:hover,
+  .narrative-card:hover {
+    transform: none !important;
+  }
+
+  /* Simplify animations */
+  .space-bg-nebula,
+  .space-bg-stars,
+  .space-bg-grid {
+    animation: none !important;
+  }
+
+  /* Backdrop filter is very expensive on mobile GPUs */
+  .glass-panel,
+  .narrative-card,
+  .modal-shell,
+  .soft-panel {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 }
 

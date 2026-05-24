@@ -161,17 +161,22 @@ export default function Hero() {
       const ScrollTrigger = ensureScrollTrigger()
       let scrollProgress = 0
 
+      // Skip heavy WebGL on mobile/touch
+      const isMobile = window.innerWidth <= 768 || window.matchMedia('(pointer: coarse)').matches
+      if (isMobile) return
+
       renderer = new THREE.WebGLRenderer({
         canvas,
         alpha: true,
-        antialias: true,
+        antialias: window.devicePixelRatio < 2,
         powerPreference: 'high-performance',
+        stencil: false,
       })
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.9))
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
       renderer.setClearColor(0x000000, 0)
 
       scene = new THREE.Scene()
-      scene.fog = new THREE.FogExp2(0x050b1c, 0.038)
+      // fog removed for performance
 
       camera = new THREE.PerspectiveCamera(52, 1, 0.1, 80)
       camera.position.set(0, 0.12, 8.8)
@@ -206,7 +211,7 @@ export default function Hero() {
         opacity: 0.96,
       })
 
-      const core = new THREE.Mesh(new THREE.SphereGeometry(1.86, 64, 64), planetMaterial)
+      const core = new THREE.Mesh(new THREE.SphereGeometry(1.86, 48, 48), planetMaterial)
       planetGroup.add(core)
 
       const crust = new THREE.Mesh(
@@ -227,11 +232,11 @@ export default function Hero() {
         side: THREE.BackSide,
         blending: THREE.AdditiveBlending,
       })
-      const atmosphere = new THREE.Mesh(new THREE.SphereGeometry(2.2, 48, 48), atmosphereMaterial)
+      const atmosphere = new THREE.Mesh(new THREE.SphereGeometry(2.2, 36, 36), atmosphereMaterial)
       planetGroup.add(atmosphere)
 
       const ringA = new THREE.Mesh(
-        new THREE.TorusGeometry(3.16, 0.062, 16, 240),
+        new THREE.TorusGeometry(3.16, 0.062, 12, 120),
         new THREE.MeshStandardMaterial({
           color: 0x7da3ff,
           emissive: 0x274f9f,
@@ -246,7 +251,7 @@ export default function Hero() {
       planetGroup.add(ringA)
 
       const ringB = new THREE.Mesh(
-        new THREE.TorusGeometry(2.48, 0.052, 16, 220),
+        new THREE.TorusGeometry(2.48, 0.052, 10, 100),
         new THREE.MeshStandardMaterial({
           color: 0x4ce3c8,
           emissive: 0x1e7f71,
@@ -261,7 +266,7 @@ export default function Hero() {
       planetGroup.add(ringB)
 
       const ringC = new THREE.Mesh(
-        new THREE.TorusGeometry(2.06, 0.04, 12, 200),
+        new THREE.TorusGeometry(2.06, 0.04, 8, 90),
         new THREE.MeshStandardMaterial({
           color: 0xff9b78,
           emissive: 0x7b3f2e,
@@ -334,7 +339,7 @@ export default function Hero() {
         pulseSignals.push({ curve, pulse, offset: index / nodeBlueprint.length })
       }
 
-      const starCount = 2000
+      const starCount = 1000
       const starGeometry = new THREE.BufferGeometry()
       const starPositions = new Float32Array(starCount * 3)
       const starColors = new Float32Array(starCount * 3)
@@ -375,13 +380,16 @@ export default function Hero() {
       const smoothPointer = { x: 0, y: 0 }
       const clock = new THREE.Clock()
 
+      let _ptrThrottle = null
       const onPointerMove = (event) => {
         if (prefersReducedMotion) return
-        const box = section.getBoundingClientRect()
-        const nx = ((event.clientX - box.left) / box.width) * 2 - 1
-        const ny = ((event.clientY - box.top) / box.height) * 2 - 1
-        pointer.x = nx
-        pointer.y = -ny
+        if (_ptrThrottle) return
+        _ptrThrottle = requestAnimationFrame(() => {
+          const box = section.getBoundingClientRect()
+          pointer.x = ((event.clientX - box.left) / box.width) * 2 - 1
+          pointer.y = -((event.clientY - box.top) / box.height) * 2 + 1
+          _ptrThrottle = null
+        })
       }
 
       const onResize = () => {
@@ -427,12 +435,12 @@ export default function Hero() {
         },
       })
 
-      section.addEventListener('pointermove', onPointerMove)
-      window.addEventListener('resize', onResize)
+      section.addEventListener('pointermove', onPointerMove, { passive: true })
+      window.addEventListener('resize', onResize, { passive: true })
       onResize()
 
       cleanupFns = [
-        () => section.removeEventListener('pointermove', onPointerMove),
+        () => { section.removeEventListener('pointermove', onPointerMove); if (_ptrThrottle) { cancelAnimationFrame(_ptrThrottle); _ptrThrottle = null } },
         () => window.removeEventListener('resize', onResize),
         () => materialPulse.kill(),
         () => atmospherePulse.kill(),
@@ -440,51 +448,61 @@ export default function Hero() {
         () => heroScroll.kill(),
       ]
 
+      let isHeroVisible = true
+      const heroObserver = new IntersectionObserver(
+        ([entry]) => { isHeroVisible = entry.isIntersecting },
+        { threshold: 0.01 }
+      )
+      heroObserver.observe(canvas)
+      cleanupFns.push(() => heroObserver.disconnect())
+
       const animate = () => {
         if (!mounted || !renderer || !scene || !camera) return
         animationFrameId = requestAnimationFrame(animate)
 
+        // Skip render when tab not visible or hero off-screen
+        if (document.hidden || !isHeroVisible) return
+
         const elapsed = clock.getElapsedTime()
-        smoothPointer.x += (pointer.x - smoothPointer.x) * 0.045
-        smoothPointer.y += (pointer.y - smoothPointer.y) * 0.045
+        smoothPointer.x += (pointer.x - smoothPointer.x) * 0.05
+        smoothPointer.y += (pointer.y - smoothPointer.y) * 0.05
 
         const pointerInfluenceX = prefersReducedMotion ? 0 : smoothPointer.x
         const pointerInfluenceY = prefersReducedMotion ? 0 : smoothPointer.y
 
         const targetX = 1.2 + pointerInfluenceX * 0.48
         const targetY = -0.06 - scrollProgress * 1.6 + pointerInfluenceY * 0.36
-        world.position.x += (targetX - world.position.x) * 0.06
-        world.position.y += (targetY - world.position.y) * 0.06
+        world.position.x += (targetX - world.position.x) * 0.055
+        world.position.y += (targetY - world.position.y) * 0.055
 
         world.rotation.z = Math.sin(elapsed * 0.2) * 0.03 + pointerInfluenceX * 0.04
 
         planetGroup.rotation.y = elapsed * 0.17 + pointerInfluenceX * 0.46
         planetGroup.rotation.x = Math.sin(elapsed * 0.32) * 0.11 + pointerInfluenceY * 0.24
 
-        core.rotation.y += 0.0018
-        crust.rotation.y = -elapsed * 0.12
-        crust.rotation.x = elapsed * 0.06
-        atmosphere.rotation.y = -elapsed * 0.07
+        core.rotation.y += 0.0016
+        crust.rotation.y = -elapsed * 0.11
+        crust.rotation.x = elapsed * 0.055
+        atmosphere.rotation.y = -elapsed * 0.065
 
-        ringA.rotation.z += 0.0044
+        ringA.rotation.z += 0.004
         ringA.rotation.x = Math.PI * 0.26 + Math.sin(elapsed * 0.45) * 0.055
-        ringB.rotation.x -= 0.0036
+        ringB.rotation.x -= 0.0032
         ringB.rotation.y = Math.cos(elapsed * 0.38) * 0.25
-        ringC.rotation.z += 0.005
+        ringC.rotation.z += 0.0046
 
-        pulseSignals.forEach((signal, index) => {
-          const t = (elapsed * 0.1 + signal.offset) % 1
-          const position = signal.curve.getPointAt(t)
-          signal.pulse.position.copy(position)
-          const pulseScale = 0.82 + Math.sin((elapsed + index) * 3.4) * 0.22
-          signal.pulse.scale.setScalar(pulseScale)
-        })
+        for (let s = 0; s < pulseSignals.length; s++) {
+          const sig = pulseSignals[s]
+          const t = (elapsed * 0.1 + sig.offset) % 1
+          sig.pulse.position.copy(sig.curve.getPointAt(t))
+          sig.pulse.scale.setScalar(0.82 + Math.sin((elapsed + s) * 3.4) * 0.22)
+        }
 
-        connectionGroup.rotation.y = -elapsed * 0.04 + pointerInfluenceX * 0.1
-        connectionGroup.rotation.x = pointerInfluenceY * 0.06
+        connectionGroup.rotation.y = -elapsed * 0.038 + pointerInfluenceX * 0.095
+        connectionGroup.rotation.x = pointerInfluenceY * 0.055
 
-        stars.rotation.y = -elapsed * 0.055
-        stars.rotation.x = elapsed * 0.024
+        stars.rotation.y = -elapsed * 0.05
+        stars.rotation.x = elapsed * 0.022
 
         camera.position.x = pointerInfluenceX * 0.45
         camera.position.y = 0.12 + pointerInfluenceY * 0.29 + scrollProgress * 0.16
@@ -516,11 +534,10 @@ export default function Hero() {
     const context = gsap.context(() => {
       gsap.fromTo(
         '.hero-reveal',
-        { y: 38, opacity: 0, filter: 'blur(8px)' },
+        { y: 38, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          filter: 'blur(0px)',
           duration: 0.9,
           stagger: 0.12,
           delay: 0.25,

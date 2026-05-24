@@ -92,6 +92,9 @@ const GlobalPlanetScene = () => {
       let activeSectionProgress = 0
       let activeSectionCenterLock = Boolean(SECTION_STORY[0].centerLock)
 
+      // Skip heavy WebGL on mobile/touch — GPU too weak for smooth 60fps
+      const isMobile = window.innerWidth <= 768 || window.matchMedia('(pointer: coarse)').matches
+
       const profileState = { ...MODE_PROFILES.cinematic }
       const initialTarget = toWorldTarget(SECTION_STORY[0].placement)
       const worldTarget = {
@@ -100,17 +103,20 @@ const GlobalPlanetScene = () => {
         scale: SECTION_STORY[0].scale,
       }
 
+      if (isMobile) return
+
       renderer = new THREE.WebGLRenderer({
         canvas,
         alpha: true,
-        antialias: true,
+        antialias: window.devicePixelRatio < 2,
         powerPreference: 'high-performance',
+        stencil: false,
+        depth: true,
       })
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75))
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
       renderer.setClearColor(0x000000, 0)
 
       scene = new THREE.Scene()
-      scene.fog = new THREE.FogExp2(0x060d20, 0.026)
 
       camera = new THREE.PerspectiveCamera(45, 1, 0.1, 120)
       camera.position.set(0, 0.06, 10.8)
@@ -144,7 +150,7 @@ const GlobalPlanetScene = () => {
         opacity: 0.97,
       })
 
-      const core = new THREE.Mesh(new THREE.SphereGeometry(1.74, 64, 64), planetMaterial)
+      const core = new THREE.Mesh(new THREE.SphereGeometry(1.74, 48, 48), planetMaterial)
       planetGroup.add(core)
 
       const crust = new THREE.Mesh(
@@ -165,11 +171,11 @@ const GlobalPlanetScene = () => {
         side: THREE.BackSide,
         blending: THREE.AdditiveBlending,
       })
-      const atmosphere = new THREE.Mesh(new THREE.SphereGeometry(2.06, 56, 56), atmosphereMaterial)
+      const atmosphere = new THREE.Mesh(new THREE.SphereGeometry(2.06, 40, 40), atmosphereMaterial)
       planetGroup.add(atmosphere)
 
       const bloomShell = new THREE.Mesh(
-        new THREE.SphereGeometry(2.42, 40, 40),
+        new THREE.SphereGeometry(2.42, 28, 28),
         new THREE.MeshBasicMaterial({
           color: 0x7fb6ff,
           transparent: true,
@@ -189,12 +195,12 @@ const GlobalPlanetScene = () => {
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       })
-      const halo = new THREE.Mesh(new THREE.RingGeometry(2.45, 3.24, 84), haloMaterial)
+      const halo = new THREE.Mesh(new THREE.RingGeometry(2.45, 3.24, 48), haloMaterial)
       halo.rotation.x = Math.PI * 0.15
       planetGroup.add(halo)
 
       const ringA = new THREE.Mesh(
-        new THREE.TorusGeometry(2.9, 0.054, 16, 230),
+        new THREE.TorusGeometry(2.9, 0.054, 12, 120),
         new THREE.MeshStandardMaterial({
           color: 0x79a5ff,
           emissive: 0x2b56a9,
@@ -209,7 +215,7 @@ const GlobalPlanetScene = () => {
       planetGroup.add(ringA)
 
       const ringB = new THREE.Mesh(
-        new THREE.TorusGeometry(2.32, 0.046, 14, 200),
+        new THREE.TorusGeometry(2.32, 0.046, 10, 100),
         new THREE.MeshStandardMaterial({
           color: 0x41dec9,
           emissive: 0x1e7f72,
@@ -224,7 +230,7 @@ const GlobalPlanetScene = () => {
       planetGroup.add(ringB)
 
       const ringC = new THREE.Mesh(
-        new THREE.TorusGeometry(1.98, 0.038, 12, 190),
+        new THREE.TorusGeometry(1.98, 0.038, 8, 90),
         new THREE.MeshStandardMaterial({
           color: 0xff9f7e,
           emissive: 0x7a3d2d,
@@ -317,7 +323,7 @@ const GlobalPlanetScene = () => {
       }
 
       const starsGeometry = new THREE.BufferGeometry()
-      const starsCount = 1600
+      const starsCount = 900
       const starsPositions = new Float32Array(starsCount * 3)
       const starsColors = new Float32Array(starsCount * 3)
       const starPalette = [new THREE.Color(0x8ea8ff), new THREE.Color(0x9cf8ea), new THREE.Color(0xffba9e)]
@@ -439,10 +445,15 @@ const GlobalPlanetScene = () => {
         sectionTriggerCleanups.forEach((kill) => kill())
       })
 
+      let pointerThrottleId = null
       const onPointerMove = (event) => {
         if (prefersReducedMotion) return
-        pointer.x = (event.clientX / window.innerWidth - 0.5) * 2
-        pointer.y = (event.clientY / window.innerHeight - 0.5) * 2
+        if (pointerThrottleId) return
+        pointerThrottleId = requestAnimationFrame(() => {
+          pointer.x = (event.clientX / window.innerWidth - 0.5) * 2
+          pointer.y = (event.clientY / window.innerHeight - 0.5) * 2
+          pointerThrottleId = null
+        })
       }
 
       const onPointerLeave = () => {
@@ -459,24 +470,41 @@ const GlobalPlanetScene = () => {
         camera.updateProjectionMatrix()
       }
 
-      wrapper.addEventListener('pointermove', onPointerMove)
-      wrapper.addEventListener('pointerleave', onPointerLeave)
-      window.addEventListener('resize', onResize)
-      cleanupFns.push(() => wrapper.removeEventListener('pointermove', onPointerMove))
+      wrapper.addEventListener('pointermove', onPointerMove, { passive: true })
+      wrapper.addEventListener('pointerleave', onPointerLeave, { passive: true })
+      window.addEventListener('resize', onResize, { passive: true })
+      cleanupFns.push(() => { wrapper.removeEventListener('pointermove', onPointerMove); if (pointerThrottleId) { cancelAnimationFrame(pointerThrottleId); pointerThrottleId = null } })
       cleanupFns.push(() => wrapper.removeEventListener('pointerleave', onPointerLeave))
       cleanupFns.push(() => window.removeEventListener('resize', onResize))
       cleanupFns.push(() => gsap.killTweensOf(profileState))
 
       onResize()
 
+      const lerp = THREE.MathUtils.lerp
+      let frameCount = 0
+      let isVisible = true
+
+      // Pause rendering when canvas scrolls off screen
+      const visibilityObserver = new IntersectionObserver(
+        ([entry]) => { isVisible = entry.isIntersecting },
+        { threshold: 0.01 }
+      )
+      visibilityObserver.observe(canvas)
+      cleanupFns.push(() => visibilityObserver.disconnect())
+
       const animate = () => {
         if (!mounted || !renderer || !scene || !camera) return
 
         animationFrameId = requestAnimationFrame(animate)
+
+        // Skip rendering when tab is hidden or canvas not visible
+        if (document.hidden || !isVisible) return
+
+        frameCount += 1
         const elapsed = performance.now() * 0.001
 
-        smoothPointer.x += (pointer.x - smoothPointer.x) * 0.045
-        smoothPointer.y += (pointer.y - smoothPointer.y) * 0.045
+        smoothPointer.x += (pointer.x - smoothPointer.x) * 0.05
+        smoothPointer.y += (pointer.y - smoothPointer.y) * 0.05
 
         const pointerX = prefersReducedMotion ? 0 : smoothPointer.x
         const pointerY = prefersReducedMotion ? 0 : smoothPointer.y
@@ -487,60 +515,62 @@ const GlobalPlanetScene = () => {
         const targetX = (activeSectionCenterLock ? 0 : worldTarget.x) + pointerX * (activeSectionCenterLock ? 0.56 : 0.9)
         const targetY = (activeSectionCenterLock ? 0 : worldTarget.y + travelY) + pointerY * (activeSectionCenterLock ? 0 : 0.54)
 
-        world.position.x = THREE.MathUtils.lerp(world.position.x, targetX, 0.05)
-        world.position.y = THREE.MathUtils.lerp(world.position.y, targetY, 0.05)
+        world.position.x = lerp(world.position.x, targetX, 0.055)
+        world.position.y = lerp(world.position.y, targetY, 0.055)
 
-        const nextScale = THREE.MathUtils.lerp(world.scale.x, worldTarget.scale, 0.04)
+        const nextScale = lerp(world.scale.x, worldTarget.scale, 0.045)
         world.scale.set(nextScale, nextScale, nextScale)
 
-        planetMaterial.emissiveIntensity = THREE.MathUtils.lerp(planetMaterial.emissiveIntensity, profileState.glow, 0.08)
-        atmosphereMaterial.opacity = THREE.MathUtils.lerp(atmosphereMaterial.opacity, profileState.atmosphereOpacity, 0.08)
-        haloMaterial.opacity = THREE.MathUtils.lerp(haloMaterial.opacity, profileState.haloOpacity, 0.08)
-        starsMaterial.opacity = THREE.MathUtils.lerp(starsMaterial.opacity, profileState.starOpacity, 0.06)
+        // Update materials only every other frame to save CPU
+        if (frameCount % 2 === 0) {
+          planetMaterial.emissiveIntensity = lerp(planetMaterial.emissiveIntensity, profileState.glow, 0.1)
+          atmosphereMaterial.opacity = lerp(atmosphereMaterial.opacity, profileState.atmosphereOpacity, 0.1)
+          haloMaterial.opacity = lerp(haloMaterial.opacity, profileState.haloOpacity, 0.1)
+          starsMaterial.opacity = lerp(starsMaterial.opacity, profileState.starOpacity, 0.08)
 
-        lineMaterials.forEach((material) => {
-          material.opacity = THREE.MathUtils.lerp(material.opacity, profileState.linkOpacity, 0.08)
-        })
-
-        nodeMaterials.forEach((material) => {
-          material.opacity = THREE.MathUtils.lerp(material.opacity, profileState.nodeOpacity, 0.08)
-        })
+          for (let m = 0; m < lineMaterials.length; m++) {
+            lineMaterials[m].opacity = lerp(lineMaterials[m].opacity, profileState.linkOpacity, 0.1)
+          }
+          for (let m = 0; m < nodeMaterials.length; m++) {
+            nodeMaterials[m].opacity = lerp(nodeMaterials[m].opacity, profileState.nodeOpacity, 0.1)
+          }
+        }
 
         const baseSpeed = profileState.speed
-        planetGroup.rotation.y += 0.0008 + baseSpeed * 0.0024 + pointerX * 0.0014
-        planetGroup.rotation.x = Math.sin(elapsed * 0.28) * (0.04 + baseSpeed * 0.06) + pointerY * 0.22
+        planetGroup.rotation.y += 0.0008 + baseSpeed * 0.0022 + pointerX * 0.0012
+        planetGroup.rotation.x = Math.sin(elapsed * 0.28) * (0.04 + baseSpeed * 0.055) + pointerY * 0.2
 
-        core.rotation.y += 0.0014 + baseSpeed * 0.0012
-        crust.rotation.y = -elapsed * (0.08 + baseSpeed * 0.06)
-        crust.rotation.x = elapsed * (0.05 + baseSpeed * 0.03)
-        atmosphere.rotation.y = -elapsed * 0.06
-        bloomShell.rotation.y = elapsed * 0.04
-        halo.rotation.z += 0.0009 + baseSpeed * 0.0011
+        core.rotation.y += 0.0012 + baseSpeed * 0.001
+        crust.rotation.y = -elapsed * (0.07 + baseSpeed * 0.055)
+        crust.rotation.x = elapsed * (0.045 + baseSpeed * 0.025)
+        atmosphere.rotation.y = -elapsed * 0.055
+        bloomShell.rotation.y = elapsed * 0.035
+        halo.rotation.z += 0.0008 + baseSpeed * 0.001
 
         ringA.rotation.z += profileState.ringSpeed * 0.9
         ringA.rotation.x = Math.PI * 0.26 + Math.sin(elapsed * 0.38) * 0.05
         ringB.rotation.x -= profileState.ringSpeed * 1.1
         ringB.rotation.y = Math.cos(elapsed * 0.36) * 0.24
         ringC.rotation.z += profileState.ringSpeed * 1.35
-        moonPivot.rotation.y += 0.0024 + baseSpeed * 0.0012
-        moon.rotation.y += 0.0032
+        moonPivot.rotation.y += 0.002 + baseSpeed * 0.001
+        moon.rotation.y += 0.0028
 
-        routeSignals.forEach((signal, index) => {
+        for (let s = 0; s < routeSignals.length; s++) {
+          const signal = routeSignals[s]
           const t = (elapsed * profileState.pulseSpeed + signal.offset) % 1
           const point = signal.curve.getPointAt(t)
           signal.pulse.position.copy(point)
-          const pulseScale = 0.78 + Math.sin((elapsed + index) * 4.2) * 0.2
-          signal.pulse.scale.setScalar(pulseScale)
-        })
+          signal.pulse.scale.setScalar(0.78 + Math.sin((elapsed + s) * 4.2) * 0.2)
+        }
 
-        connectionGroup.rotation.y = -elapsed * (0.035 + baseSpeed * 0.07) + pointerX * 0.09
-        connectionGroup.rotation.x = pointerY * 0.08
+        connectionGroup.rotation.y = -elapsed * (0.032 + baseSpeed * 0.065) + pointerX * 0.085
+        connectionGroup.rotation.x = pointerY * 0.075
 
-        stars.rotation.y -= 0.0003 + baseSpeed * 0.0014
-        stars.rotation.x = Math.sin(elapsed * 0.17) * 0.06
+        stars.rotation.y -= 0.00025 + baseSpeed * 0.0012
+        stars.rotation.x = Math.sin(elapsed * 0.17) * 0.055
 
-        camera.position.x = THREE.MathUtils.lerp(camera.position.x, pointerX * 0.74, 0.05)
-        camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.06 + pointerY * 0.46 + (globalProgress - 0.5) * 0.08, 0.05)
+        camera.position.x = lerp(camera.position.x, pointerX * 0.72, 0.055)
+        camera.position.y = lerp(camera.position.y, 0.06 + pointerY * 0.44 + (globalProgress - 0.5) * 0.08, 0.055)
         camera.lookAt(world.position.x * 0.18, world.position.y * 0.14, 0)
 
         renderer.render(scene, camera)

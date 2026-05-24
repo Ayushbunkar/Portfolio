@@ -84,11 +84,10 @@ const Experience = () => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         '.journey-heading',
-        { opacity: 0, y: 38, filter: 'blur(8px)' },
+        { opacity: 0, y: 38 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 0.9,
           ease: 'power3.out',
           scrollTrigger: {
@@ -100,11 +99,10 @@ const Experience = () => {
 
       gsap.fromTo(
         '.journey-context-card',
-        { opacity: 0, y: 20, filter: 'blur(8px)' },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 0.6,
           stagger: 0.08,
           ease: 'power2.out',
@@ -135,11 +133,10 @@ const Experience = () => {
         if (mainCard) {
           gsap.fromTo(
             mainCard,
-            { opacity: 0.2, y: 36, filter: 'blur(9px)' },
+            { opacity: 0.2, y: 36 },
             {
               opacity: 1,
               y: 0,
-              filter: 'blur(0px)',
               duration: 0.75,
               ease: 'power3.out',
               scrollTrigger: {
@@ -153,11 +150,10 @@ const Experience = () => {
         if (lensCard) {
           gsap.fromTo(
             lensCard,
-            { opacity: 0, x: index % 2 === 0 ? 30 : -30, filter: 'blur(8px)' },
+            { opacity: 0, x: index % 2 === 0 ? 30 : -30 },
             {
               opacity: 1,
               x: 0,
-              filter: 'blur(0px)',
               duration: 0.68,
               ease: 'power3.out',
               scrollTrigger: {

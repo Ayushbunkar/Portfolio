@@ -107,11 +107,10 @@ const About = () => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         '.about-intro',
-        { opacity: 0, y: 40, filter: 'blur(8px)' },
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 0.85,
           ease: 'power3.out',
           scrollTrigger: {
@@ -123,11 +122,10 @@ const About = () => {
 
       gsap.fromTo(
         '.about-context-card',
-        { opacity: 0, y: 24, filter: 'blur(8px)' },
+        { opacity: 0, y: 24 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 0.6,
           stagger: 0.1,
           ease: 'power2.out',
@@ -146,13 +144,11 @@ const About = () => {
             opacity: 0,
             x: index % 2 === 0 ? -42 : 42,
             y: 30,
-            filter: 'blur(10px)',
           },
           {
             opacity: 1,
             x: 0,
             y: 0,
-            filter: 'blur(0px)',
             duration: 0.8,
             ease: 'power3.out',
             scrollTrigger: {
@@ -299,8 +295,9 @@ const About = () => {
                         alt={step.title}
                         className="h-[175px] w-full object-cover sm:h-[195px] lg:h-[210px]"
                         loading="lazy"
-                        initial={{ opacity: 0, y: 10, scale: 1.04, filter: 'blur(6px)' }}
-                        whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+                        decoding="async"
+                        initial={{ opacity: 0, y: 10, scale: 1.04 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
                         viewport={{ once: true, amount: 0.25 }}
                         transition={{ duration: 0.45, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
                       />

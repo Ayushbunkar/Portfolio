@@ -248,11 +248,10 @@ const Skills = () => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         '.skills-intro',
-        { opacity: 0, y: 40, filter: 'blur(10px)' },
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 0.9,
           ease: 'power3.out',
           scrollTrigger: {
@@ -280,11 +279,10 @@ const Skills = () => {
 
       gsap.fromTo(
         '.skills-context-card',
-        { opacity: 0, y: 20, filter: 'blur(8px)' },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 0.6,
           stagger: 0.08,
           ease: 'power2.out',
@@ -314,12 +312,11 @@ const Skills = () => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         '.skills-card-item',
-        { opacity: 0, y: 18, scale: 0.98, filter: 'blur(7px)' },
+        { opacity: 0, y: 18, scale: 0.98 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          filter: 'blur(0px)',
           duration: 0.52,
           stagger: 0.06,
           ease: 'power2.out',
@@ -377,15 +374,19 @@ const Skills = () => {
       const pointer = { x: 0, y: 0 }
       const smoothPointer = { x: 0, y: 0 }
 
-      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.6))
+      // Skip orbit WebGL on mobile/touch
+      const isMobile = window.innerWidth <= 768 || window.matchMedia('(pointer: coarse)').matches
+      if (isMobile) return
+
+      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: window.devicePixelRatio < 2, stencil: false })
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
       renderer.setClearColor(0x000000, 0)
 
       scene = new THREE.Scene()
       camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100)
       camera.position.z = 7.2
 
-      const pointsCount = 700
+      const pointsCount = 350
       const positions = new Float32Array(pointsCount * 3)
       const colors = new Float32Array(pointsCount * 3)
 
@@ -452,9 +453,18 @@ const Skills = () => {
         camera.updateProjectionMatrix()
       }
 
+      let isOrbitVisible = true
+      const orbitObserver = new IntersectionObserver(
+        ([entry]) => { isOrbitVisible = entry.isIntersecting },
+        { threshold: 0.01 }
+      )
+      orbitObserver.observe(canvas)
+
       const animate = () => {
         if (!mounted || !renderer || !scene || !camera || !particles) return
         animationFrameId = requestAnimationFrame(animate)
+
+        if (document.hidden || !isOrbitVisible) return
 
         smoothPointer.x += (pointer.x - smoothPointer.x) * 0.06
         smoothPointer.y += (pointer.y - smoothPointer.y) * 0.06
@@ -470,14 +480,15 @@ const Skills = () => {
       resize()
       animate()
 
-      host.addEventListener('pointermove', onPointerMove)
-      host.addEventListener('pointerleave', onPointerLeave)
-      window.addEventListener('resize', resize)
+      host.addEventListener('pointermove', onPointerMove, { passive: true })
+      host.addEventListener('pointerleave', onPointerLeave, { passive: true })
+      window.addEventListener('resize', resize, { passive: true })
 
       const cleanup = () => {
         host.removeEventListener('pointermove', onPointerMove)
         host.removeEventListener('pointerleave', onPointerLeave)
         window.removeEventListener('resize', resize)
+        orbitObserver.disconnect()
         if (animationFrameId) cancelAnimationFrame(animationFrameId)
         geometry.dispose()
         material.dispose()

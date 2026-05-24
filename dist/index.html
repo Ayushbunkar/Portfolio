@@ -4,16 +4,31 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Ayush Bunkar - Creative Frontend Developer & UI/UX Designer" />
-    <title>Ayush Bunkar | Creative Developer</title>
-    <!-- Premium Fonts -->
+    <meta name="description" content="Ayush Bunkar - AI Developer, Full-Stack Engineer & Product Builder" />
+    <title>Ayush Bunkar | AI Developer & Product Builder</title>
+
+    <!-- DNS + connection pre-warm (render-unblocking) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-C7WqgcJn.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DF3ijS7c.css">
+    <link rel="dns-prefetch" href="https://images.unsplash.com">
+
+    <!-- Fonts: media=print trick loads non-blocking, then swaps to all -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    >
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+    </noscript>
+    <script type="module" crossorigin src="/assets/index-Cpg_1Pa4.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-C4lm7fAv.js">
+    <link rel="modulepreload" crossorigin href="/assets/framer-motion-_CTxcOPy.js">
+    <link rel="modulepreload" crossorigin href="/assets/gsap-0lJgtTtq.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-CiKxz-DT.css">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>

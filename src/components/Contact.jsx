@@ -43,11 +43,10 @@ const Contact = () => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         '.contact-intro',
-        { opacity: 0, y: 40, filter: 'blur(8px)' },
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 0.9,
           ease: 'power3.out',
           scrollTrigger: {
@@ -75,11 +74,10 @@ const Contact = () => {
 
       gsap.fromTo(
         '.contact-process-card',
-        { opacity: 0, y: 16, filter: 'blur(6px)' },
+        { opacity: 0, y: 16 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 0.55,
           stagger: 0.09,
           ease: 'power2.out',

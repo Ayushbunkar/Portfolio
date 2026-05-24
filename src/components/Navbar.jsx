@@ -17,24 +17,31 @@ const Navbar = () => {
   ]
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+    let ticking = false
 
-      // Detect active section
-      const sections = navLinks.map((link) => link.href.slice(1))
-      for (const section of [...sections].reverse()) {
-        const element = document.getElementById(section)
-        if (element) {
-          const rect = element.getBoundingClientRect()
-          if (rect.top <= 150) {
-            setActiveSection(section)
-            break
+    const handleScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        setIsScrolled(window.scrollY > 50)
+
+        // Detect active section
+        const sections = navLinks.map((link) => link.href.slice(1))
+        for (const section of [...sections].reverse()) {
+          const element = document.getElementById(section)
+          if (element) {
+            const rect = element.getBoundingClientRect()
+            if (rect.top <= 150) {
+              setActiveSection(section)
+              break
+            }
           }
         }
-      }
+        ticking = false
+      })
     }
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
