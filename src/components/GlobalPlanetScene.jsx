@@ -92,9 +92,6 @@ const GlobalPlanetScene = () => {
       let activeSectionProgress = 0
       let activeSectionCenterLock = Boolean(SECTION_STORY[0].centerLock)
 
-      // Skip heavy WebGL on mobile/touch — GPU too weak for smooth 60fps
-      const isMobile = window.innerWidth <= 768 || window.matchMedia('(pointer: coarse)').matches
-
       const profileState = { ...MODE_PROFILES.cinematic }
       const initialTarget = toWorldTarget(SECTION_STORY[0].placement)
       const worldTarget = {
@@ -103,15 +100,12 @@ const GlobalPlanetScene = () => {
         scale: SECTION_STORY[0].scale,
       }
 
-      if (isMobile) return
-
       renderer = new THREE.WebGLRenderer({
         canvas,
         alpha: true,
         antialias: window.devicePixelRatio < 2,
         powerPreference: 'high-performance',
         stencil: false,
-        depth: true,
       })
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
       renderer.setClearColor(0x000000, 0)

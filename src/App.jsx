@@ -72,6 +72,7 @@ function App() {
         syncTouch: false,
         infinite: false,
       })
+      window.__lenis = lenis
 
       const lockPage = () => {
         lockedScrollY = window.scrollY || window.pageYOffset || 0
@@ -159,13 +160,7 @@ function App() {
               <About />
             </Suspense>
             <Suspense fallback={<SectionFallback />}>
-              <Skills />
-            </Suspense>
-            <Suspense fallback={<SectionFallback />}>
               <Projects />
-            </Suspense>
-            <Suspense fallback={<SectionFallback />}>
-              <Experience />
             </Suspense>
             <Marquee
               items={[
@@ -177,6 +172,12 @@ function App() {
               direction="right"
               speed={30}
             />
+            <Suspense fallback={<SectionFallback />}>
+              <Skills />
+            </Suspense>
+            <Suspense fallback={<SectionFallback />}>
+              <Experience />
+            </Suspense>
             <Suspense fallback={<SectionFallback />}>
               <Contact />
             </Suspense>

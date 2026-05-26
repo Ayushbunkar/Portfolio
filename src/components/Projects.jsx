@@ -281,7 +281,7 @@ const Projects = () => {
 
         if (media) {
           if (isFirst) {
-            gsap.set(media, { scale: 1, opacity: 1, filter: 'blur(0px)' })
+            gsap.set(media, { scale: 1, opacity: 1 })
           } else {
             gsap.fromTo(
               media,
@@ -306,7 +306,7 @@ const Projects = () => {
 
         if (copy) {
           if (isFirst) {
-            gsap.set(copy, { opacity: 1, y: 0, filter: 'blur(0px)' })
+            gsap.set(copy, { opacity: 1, y: 0 })
           } else {
             gsap.fromTo(
               copy,
@@ -433,7 +433,7 @@ const Projects = () => {
           {PROJECTS.map((project) => (
             <article
               key={project.id}
-              className="project-panel relative min-h-screen w-screen overflow-hidden px-4 pb-2 pt-26 sm:px-7 sm:pb-4 sm:pt-30 lg:px-14 lg:pt-36"
+              className="project-panel relative min-h-screen w-screen overflow-hidden px-4 pb-2 pt-24 sm:px-7 sm:pb-4 sm:pt-28 lg:px-14 lg:pt-36"
               style={{
                 background: `radial-gradient(circle at 18% 18%, ${project.accent}2f, transparent 42%), radial-gradient(circle at 78% 82%, rgba(124,134,255,0.12), transparent 45%), #050913`,
               }}
@@ -488,7 +488,7 @@ const Projects = () => {
                     <button
                       type="button"
                       onClick={() => setSelectedProject(project)}
-                      className="beam-button rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-white/18"
+                      className="beam-button rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-white/18 active:scale-95"
                     >
                       Open Details
                     </button>
@@ -525,9 +525,9 @@ const Projects = () => {
                       className={`h-full w-full object-center ${project.imagePadding ? 'rounded-xl' : ''}`}
                       style={{ objectFit: project.imageFit ?? 'cover' }}
                       loading="lazy"
+                      decoding="async"
                     />
                   )}
-
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
                   <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_24%_22%,rgba(255,255,255,0.26),transparent_36%)] opacity-45" />
                 </motion.div>
@@ -536,6 +536,8 @@ const Projects = () => {
           ))}
         </div>
       </div>
+
+
 
       <AnimatePresence>
         {selectedProject && (

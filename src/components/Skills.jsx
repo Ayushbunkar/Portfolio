@@ -374,10 +374,6 @@ const Skills = () => {
       const pointer = { x: 0, y: 0 }
       const smoothPointer = { x: 0, y: 0 }
 
-      // Skip orbit WebGL on mobile/touch
-      const isMobile = window.innerWidth <= 768 || window.matchMedia('(pointer: coarse)').matches
-      if (isMobile) return
-
       renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: window.devicePixelRatio < 2, stencil: false })
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
       renderer.setClearColor(0x000000, 0)

@@ -65,10 +65,22 @@ const Navbar = () => {
 
   const handleLinkClick = (e, href) => {
     e.preventDefault()
+    // Close menu first
     setIsMenuOpen(false)
-    const target = document.querySelector(href)
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' })
+
+    const id = href.replace('#', '')
+    const target = document.getElementById(id)
+    if (!target) return
+
+    // Use Lenis if available (desktop), else native scroll with navbar offset
+    const lenis = window.__lenis
+    if (lenis) {
+      // Small delay lets the mobile menu close animation finish
+      setTimeout(() => lenis.scrollTo(target, { offset: -80, duration: 1.2 }), 50)
+    } else {
+      const navbarHeight = 80
+      const top = target.getBoundingClientRect().top + window.scrollY - navbarHeight
+      setTimeout(() => window.scrollTo({ top, behavior: 'smooth' }), 50)
     }
   }
 
