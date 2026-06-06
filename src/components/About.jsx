@@ -50,8 +50,8 @@ const IMAGE_PANEL_STEPS = [
 ]
 
 const STATS = [
-  { value: 3, suffix: '+', label: 'Years Crafting Interfaces' },
-  { value: 50, suffix: '+', label: 'Projects Delivered' },
+  { value: 2, suffix: '+', label: 'Years Crafting Interfaces' },
+  { value: 10, suffix: '', label: 'Projects Delivered' },
   { value: 92, suffix: '%', label: 'Repeat Client Satisfaction' },
   { value: 100, suffix: '%', label: 'Performance-Focused Builds' },
 ]

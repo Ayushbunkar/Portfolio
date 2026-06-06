@@ -22,7 +22,7 @@ const TAGS = [
 ]
 
 const HERO_STATS = [
-  { value: '50+', label: 'Premium Builds' },
+  { value: '10', label: 'Projects' },
   { value: '98%', label: 'Client Delight' },
   { value: '24/7', label: 'Performance Focus' },
 ]
@@ -681,9 +681,9 @@ export default function Hero() {
                 </div>
 
                 <div className="mt-5 rounded-2xl border border-white/15 bg-black/28 p-4">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.17em] text-cyan-200">Premium Direction</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.17em] text-cyan-200">Design Direction</p>
                   <p className="mt-1 text-sm text-slate-200/95">
-                    Identity is now unmistakable: bold, technical, and premium before the user scrolls.
+                    Identity is now unmistakable: bold, technical, and focused before the user scrolls.
                   </p>
                 </div>
               </div>
