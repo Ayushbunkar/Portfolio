@@ -5,8 +5,9 @@ import { ensureScrollTrigger, gsap } from '../utils/scrollAnimations'
 import builtatticImage from '../lib/builtatticai.png'
 import cardioShieldImage from '../lib/heart.png'
 import cardioShieldModalImage from '../lib/heartopendetails.png'
-import voiceOsImage from '../lib/voice os.png'
 import alcoZeroImage from '../lib/alcozero.png'
+import multiajentresearchImage from '../lib/multiajentresearcg.png'
+import summrixAiImage from '../lib/summrixai.png'
 
 const PROJECTS = [
   {
@@ -93,7 +94,7 @@ const PROJECTS = [
     id: 'orbit-social',
     title: 'CardioShield AI',
     phase: 'Impact 03',
-    year: '2024',
+    year: '2025',
     type: 'AI Healthcare Monitoring System',
     summary:
       'Engineered a real-time cardiovascular AI platform to spot anomalies and predict cardiac risks from streaming data.',
@@ -126,72 +127,81 @@ const PROJECTS = [
     ],
   },
   {
-    id: 'astra-ai',
-    title: 'Astra AI Studio',
+    id: 'multi-agent-system',
+    title: 'Multi Agent Research System',
     phase: 'Impact 04',
-    year: '2025',
-    type: 'Multi-Agent RAG Workflow Platform',
+    year: '2026',
+    type: 'Multi-Agent Research Platform',
     summary:
-      'Engineered a multi-agent AI workflow platform using RAG and LLMs to generate context-aware campaign and product content aligned with brand guidelines.',
-    impact: '58% higher content throughput · Reduced manual effort · Improved grounded accuracy',
+      'Built a multi-agent research platform that coordinates AI agents to gather context and generate structured outputs for faster workflows.',
+    impact: 'Live research workflow · Multi-agent orchestration · GitHub-backed source',
     narrative:
-      'Built a RAG pipeline with vector retrieval and multi-agent orchestration to boost accuracy, reduce hallucinations, and scale content production.',
+      'Designed to demonstrate coordinated agent behavior, this project combines retrieval, reasoning, and presentation so research stay organized and usable.',
     modalSummary:
-      'Astra coordinates retrieval, drafting, validation, and optimization agents to produce brand-aligned content with grounded citations.',
+      'Multi Agent Research System coordinates multiple AI agents to research topics, structure findings, and present results in a clear workflow.',
     modalNarrative:
-      'Vector retrieval supplies approved context while orchestration logic routes tasks, retries failures, and enforces tone consistency.',
+      'The system is focused on practical agent collaboration, with each step handling a specific part of the research flow so output remains consistent and easy to review.',
     accent: '#f59e0b',
-    image:
-      'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1600&q=80',
-    stack: ['Python', 'FastAPI', 'React', 'OpenAI API', 'RAG', 'Vector DB', 'Multi-Agent Systems', 'REST APIs'],
+    image: multiajentresearchImage,
+    primaryLink: 'https://multi-ajent-system.vercel.app/',
+    stack: ['React', 'Python', 'LLMs', 'RAG', 'Multi-Agent Systems', 'REST APIs', 'Vercel'],
     highlights: [
-      'RAG-based grounding for factual accuracy',
-      'Multi-agent orchestration for quality control',
-      'Realtime workflow dashboard for teams',
+      'Multi-agent workflow for research and synthesis',
+      'Live deployment for quick project review',
+      'Source code available on GitHub for transparency',
     ],
     modalDetails: [
-      'Agent roles for retrieval, drafting, QA, and optimization',
-      'RAG pipeline with vector DB and prompt templates',
-      'FastAPI orchestration with a React control panel',
+      'Research flow split across specialized agent roles',
+      'Live Vercel deployment for easy access',
+      'GitHub repository for source code and iteration',
+    ],
+    links: [
+      { label: 'Live Project', url: 'https://multi-ajent-system.vercel.app/' },
+      { label: 'GitHub Repo', url: 'https://github.com/Ayushbunkar/MultiAjentSystem' },
     ],
     details: [
-      'Multi-agent architecture for generation, retrieval, validation, and optimization',
-      'RAG pipeline with vector retrieval for grounded responses',
-      'Orchestrated agent collaboration with FastAPI services and React UI',
+      'Multi-agent orchestration for structured research output',
+      'Public deployment and repository links for quick validation',
+      'Focused showcase for AI workflow and product presentation',
     ],
   },
   {
     id: 'voice-os',
-    title: 'VoiceOS',
+    title: 'Summrix AI',
     phase: 'Impact 05',
     year: '2025',
-    type: 'Voice AI Operating System',
+    type: 'AI Meeting Assistant & RAG Platform',
     summary:
-      'Built a real-time voice-first AI system that enables natural, conversational interaction with applications through speech.',
-    impact: '40% faster task execution via voice automation',
+      'Built an AI meeting assistant that transcribes audio, generates structured summaries, and supports chat over meeting history through a live web experience.',
+    impact: 'Transcribe · Summarize · Chat · Live deployed project',
     narrative:
-      'Designed a low-latency pipeline combining STT, LLM reasoning, and TTS with memory and intent for personalized tasks.',
+      'The project centers on a calm meeting workflow: upload audio or a link, generate accurate transcripts, and turn conversations into actionable notes.',
     modalSummary:
-      'VoiceOS enables hands-free app control with streaming speech, intent routing, and contextual responses across multi-step tasks.',
+      'Summrix AI combines transcription, summarization, and RAG chat so teams can review meetings, decisions, and action items in one place.',
     modalNarrative:
-      'Low-latency voice pipelines support interruption handling, session memory, and tool execution for reliable task completion.',
+      'The backend uses FastAPI, Supabase, Whisper, Deepgram, Mistral, and pgvector to process meetings, store context, and answer follow-up questions.',
     accent: '#38bdf8',
-    image: voiceOsImage,
-    stack: ['Python', 'FastAPI', 'WebRTC', 'LLMs', 'Speech APIs'],
+    image: summrixAiImage,
+    primaryLink: 'https://summrix-ai.vercel.app/',
+    stack: ['Python', 'TypeScript', 'FastAPI', 'Chainlit', 'Supabase', 'Whisper', 'Deepgram', 'Mistral', 'pgvector'],
     highlights: [
-      'Voice-first task automation with low latency',
-      'Intent routing and tool execution',
-      'Context-aware responses across sessions',
+      'Meeting transcription from audio files or YouTube links',
+      'Structured summaries with action items, decisions, and questions',
+      'RAG chat over stored meeting history with live deployment',
     ],
     modalDetails: [
-      'Streaming STT and TTS with barge-in support',
-      'Intent classification with multi-step routing',
-      'Context memory for personalized voice flows',
+      'Supabase PostgreSQL storage with pgvector and row-level security',
+      'Parallel LLM calls for title, summary, and insight extraction',
+      'Chainlit frontend for file upload, streaming output, and downloads',
+    ],
+    links: [
+      { label: 'Live Project', url: 'https://summrix-ai.vercel.app/' },
+      { label: 'GitHub Repo', url: 'https://github.com/Ayushbunkar/Summrix-AI' },
     ],
     details: [
-      'Streaming STT and TTS with interruption handling',
-      'Contextual memory for multi-turn task execution',
-      'Low-latency inference pipeline tuned for voice UX',
+      'Production-style AI meeting assistant with calm, user-friendly UX',
+      'Designed to showcase end-to-end transcription and summarization',
+      'Includes authenticated workflows, storage, and transcript chat',
     ],
   },
 ]
