@@ -27,7 +27,7 @@ const PROJECTS = [
       'The pipeline ingests site images and dimensions, extracts constraints with computer vision, and synthesizes multiple layout options with zoning and circulation logic.',
     accent: '#7c86ff',
     image: builtatticImage,
-    primaryLink: 'https://www.builtattic.com/',
+    primaryLink: 'https://www.builtattic.info/',
     imageFit: 'contain',
     imageBg: 'rgba(8, 12, 22, 0.7)',
     imagePadding: '0.75rem',
@@ -43,8 +43,7 @@ const PROJECTS = [
       'Evaluation loop to score layouts for circulation and adjacency',
     ],
     links: [
-      { label: 'Builtattic Info', url: 'https://www.builtattic.info/' },
-      { label: 'Builtattic', url: 'https://www.builtattic.com/' },
+      { label: 'Info One', url: 'https://www.builtattic.info/' },
     ],
     details: [
       'Dynamic product narrative with interactive sections',
